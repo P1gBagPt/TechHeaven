@@ -175,7 +175,11 @@ namespace TechHeaven
             return UTF8.GetString(Results);
         }
 
-
-
+        protected void lb_logout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("main_page.aspx");
+        }
     }
 }

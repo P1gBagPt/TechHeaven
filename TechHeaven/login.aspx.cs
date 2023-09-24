@@ -19,7 +19,7 @@ namespace TechHeaven
         {
 
         }
-        public static string respostanome;
+        public static string respostanome, respostaRole;
         public static int respostaTwoFactor, respostaverify, respostaId;
 
         protected void btn_login_Click(object sender, EventArgs e)
@@ -72,7 +72,13 @@ namespace TechHeaven
             cmd.Parameters.Add(retorno_id);
 
 
-            //mycon.Open();
+            MySqlParameter retorno_role = new MySqlParameter();
+            retorno_role.ParameterName = "@retorno_role";
+            retorno_role.Direction = ParameterDirection.Output;
+            retorno_role.MySqlDbType = MySqlDbType.VarChar;
+            cmd.Parameters.Add(retorno_role);
+
+           
             cmd.ExecuteNonQuery();
 
             int respostaSP = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
@@ -83,6 +89,7 @@ namespace TechHeaven
                 respostaTwoFactor = Convert.ToInt32(cmd.Parameters["@retorno_twofactor"].Value);
                 respostaverify = Convert.ToInt32(cmd.Parameters["@retorno_verify"].Value); ;
                 respostaId = Convert.ToInt32(cmd.Parameters["@retorno_id"].Value);
+                respostaRole = cmd.Parameters["@retorno_role"].Value.ToString();
             }
            
 
@@ -106,6 +113,9 @@ namespace TechHeaven
                     Session["user_username"] = respostanome;
                     Session["user_email"] = respostaemail;
                     Session["twoFactor"] = respostaTwoFactor;
+                    Session["role"] = respostaRole;
+
+                    Console.WriteLine(Session["role"].ToString());
 
                     Response.Redirect("main_page.aspx");
                 }

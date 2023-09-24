@@ -14702,6 +14702,13 @@
     <Compile Include="master_page.Master.designer.cs">
       <DependentUpon>master_page.Master</DependentUpon>
     </Compile>
+    <Compile Include="master_page_admin.Master.cs">
+      <DependentUpon>master_page_admin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="master_page_admin.Master.designer.cs">
+      <DependentUpon>master_page_admin.Master</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="register.aspx.cs">
       <DependentUpon>register.aspx</DependentUpon>
@@ -14802,6 +14809,7 @@
     <Content Include="assets\fontawesome\webfonts\fa-thin-100.ttf" />
     <Content Include="assets\fontawesome\webfonts\fa-thin-100.woff" />
     <Content Include="assets\fontawesome\webfonts\fa-thin-100.woff2" />
+    <Content Include="master_page_admin.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

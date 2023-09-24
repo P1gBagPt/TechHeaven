@@ -105,7 +105,7 @@
                                 </div>
 
                                 <div class="form-group register_text">
-                                    <asp:TextBox class="form-control form-control-lg" ID="register_username" runat="server" MaxLength="50" placeholder="Username" Style="font-size: 20px;"></asp:TextBox>
+                                    <asp:TextBox class="form-control form-control-lg" ID="register_username" runat="server" MaxLength="10" placeholder="Username" Style="font-size: 20px;"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" CssClass="error-message" runat="server" ControlToValidate="register_username" ErrorMessage="Username is Required" ForeColor="Red"></asp:RequiredFieldValidator>
                                 </div>
 

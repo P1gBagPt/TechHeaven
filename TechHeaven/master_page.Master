@@ -103,29 +103,82 @@
                             </div>
                             <!-- End .compare-dropdown -->
 
+                            <%if (Session["user_email"] == null || Session["role"] == null)
+                                {%>
                             <div class="wishlist">
-                                <% if (Session["user_email"] == null)
-                                    {%>
+
                                 <a href="login.aspx" title="Account">
                                     <div class="icon">
                                         <i class="fa-light fa-circle-user"></i>
                                     </div>
                                     <p>Account</p>
                                 </a>
-
-                                <%}
-                                else
+                            </div>
+                            <%}
+                                if ((String)Session["role"] == "1")
                                 {%>
+                            <div class="wishlist">
+
                                 <a href="account.aspx" title="Account">
                                     <div class="icon">
                                         <i class="fa-light fa-circle-user"></i>
                                     </div>
                                     <p><%= Session["user_username"] %></p>
                                 </a>
-
-                                <%}%>
                             </div>
 
+
+                            <%}
+                                if ((String)Session["role"] == "2")
+                                { %>
+                                                        <ul class="menu usermenu">
+     <li>
+                                    <div class="wishlist">
+                                    <a href="account.aspx" title="Account">
+                                        <div class="icon">
+                                            <i class="fa-light fa-circle-user"></i>
+                                        </div>
+                                        <p><%= Session["user_username"] %></p>
+
+                                    </a>
+                                        </div>
+
+                                    <div class="megamenu megamenu-md megamenu2 megamenu-md2">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-12">
+                                                <div class="menu-col">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <ul>
+                                                                <li><a href="category-list.html">Account</a></li>
+                                                                <li><a href="category-2cols.html">Administrative</a></li>
+                                                                <li><asp:LinkButton ID="lb_logout" runat="server" OnClick="lb_logout_Click">Logout</asp:LinkButton></li>
+                                                            </ul>                                                          
+                                                        </div>
+                                                        <!-- End .col-md-6 -->
+
+
+                                                    </div>
+                                                    <!-- End .row -->
+                                                </div>
+                                                <!-- End .menu-col -->
+                                            </div>
+                                            <!-- End .col-md-8 -->
+
+
+                                        </div>
+                                        <!-- End .row -->
+                                    </div>
+                                    <!-- End .megamenu megamenu-md -->
+                                </li>
+                            </ul>
+
+
+
+
+
+
+                            <%}%>
 
                             <div class="wishlist">
                                 <a href="login.aspx" title="Wishlist">
@@ -158,7 +211,7 @@
                                                 <span class="cart-product-info">
                                                     <span class="cart-product-qty">1</span>
                                                     x $84.00
-                                            </span>
+                                                </span>
                                             </div>
                                             <!-- End .product-cart-details -->
 
@@ -180,7 +233,7 @@
                                                 <span class="cart-product-info">
                                                     <span class="cart-product-qty">1</span>
                                                     x $76.00
-                                            </span>
+                                                </span>
                                             </div>
                                             <!-- End .product-cart-details -->
 
