@@ -171,6 +171,15 @@
                 transform: translateY(0);
                 transition-duration: .35s;
             }
+
+
+        .icon {
+            font-size: 2.8rem;
+        }
+
+        .card h2 {
+            font-size: 20px;
+        }
     </style>
 
 </asp:Content>
@@ -199,6 +208,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Addresses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cards-tab" data-toggle="tab" href="#cards" role="tab" aria-controls="cards" aria-selected="false">Cards</a>
                             </li>
                         </ul>
                     </div>
@@ -286,50 +298,54 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <!--ADDRESSES-->
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Experience</label>
+                                    <div class="card text-center">
+                                        <a href="add_address.aspx">
+                                            <div class="card-body">
+                                                <div class="icon">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </div>
+                                                <h2>Add Address</h2>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>Expert</p>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card title</h5>
+                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="tab-pane fade" id="cards" role="tabpanel" aria-labelledby="cards-tab">
+                            <!--CARDS   -->
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Hourly Rate</label>
+                                    <div class="card text-center">
+                                        <a href="add_card.aspx">
+                                            <div class="card-body">
+                                                <div class="icon">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </div>
+                                                <h2>Add Card</h2>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>10$/hr</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Total Projects</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>230</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>English Level</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>Expert</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label>Availability</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>6 months</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>Your Bio</label><br />
-                                    <p>Your detail description</p>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card title</h5>
+                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

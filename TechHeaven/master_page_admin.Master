@@ -4,15 +4,132 @@
 
 <html>
 <head runat="server">
-    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="TecHeaven">
+    <meta name="application-name" content="TecHeaven">
+    <link rel="stylesheet" href="assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
+
+    <title>TecHeaven Administration</title>
+
+    <link href="admin_assets/css/app.css" rel="stylesheet">
+
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            </asp:ContentPlaceHolder>
+        <div class="wrapper">
+            <nav id="sidebar" class="sidebar js-sidebar">
+                <div class="sidebar-content js-simplebar">
+                    <a class="sidebar-brand" href="main_page_admin.html">
+                        <img src="assets/images/logo.png" alt="Molla Logo" width="205" height="30">
+                    </a>
+
+                    <ul class="sidebar-nav">
+                        <li class="sidebar-header"></li>
+
+                        <li class="sidebar-item active">
+                            <a class="sidebar-link" href="index.html">
+                                <i class="align-middle" data-feather="sliders"></i><span class="align-middle">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-header">Products
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="index.html">
+                                <i class="align-middle" data-feather="sliders"></i><span class="align-middle">Products Action</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-header">Sales
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="ui-buttons.html">
+                                <i class="align-middle" data-feather="square"></i><span class="align-middle">Buttons</span>
+                            </a>
+                        </li>
+
+
+
+                        <li class="sidebar-header">Clients
+                        </li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="charts-chartjs.html">
+                                <i class="align-middle" data-feather="bar-chart-2"></i><span class="align-middle">Charts</span>
+                            </a>
+                        </li>
+
+
+                        <li class="sidebar-header"></li>
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="charts-chartjs.html">
+                                <i class="align-middle" data-feather="bar-chart-2"></i><span class="align-middle">Charts</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </nav>
+
+            <div class="main1">
+                <nav class="navbar navbar-expand navbar-light navbar-bg">
+                    <a class="sidebar-toggle js-sidebar-toggle">
+                        <i class="hamburger align-self-center"></i>
+                    </a>
+
+                    <div class="navbar-collapse collapse">
+                        <ul class="navbar-nav navbar-align">
+                            
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                                    <i class="align-middle" data-feather="settings"></i>
+                                </a>
+
+                                <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                                    <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" />
+                                    <span class="text-dark"><%= Session["user_username"] %></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i>Profile</a>
+                                    <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i>Analytics</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i>Settings & Privacy</a>
+                                    <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i>Help Center</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Log out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+
+
+
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+
+
+
+
+
+            </div>
+
         </div>
     </form>
 </body>

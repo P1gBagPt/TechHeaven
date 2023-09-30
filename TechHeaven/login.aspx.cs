@@ -49,7 +49,7 @@ namespace TechHeaven
             retorno_username.ParameterName = "@retorno_username";
             retorno_username.Direction = ParameterDirection.Output;
             retorno_username.MySqlDbType = MySqlDbType.VarChar;
-            retorno_username.Size = 50;
+            retorno_username.Size = 10;
             cmd.Parameters.Add(retorno_username);
 
 
@@ -114,8 +114,6 @@ namespace TechHeaven
                     Session["user_email"] = respostaemail;
                     Session["twoFactor"] = respostaTwoFactor;
                     Session["role"] = respostaRole;
-
-                    Console.WriteLine(Session["role"].ToString());
 
                     Response.Redirect("main_page.aspx");
                 }

@@ -7807,14 +7807,12 @@ p {
 .owl-testimonials-photo.owl-theme .owl-nav [class*='owl-'] {
     top: 110px
 }
-.form-group {
-    margin-bottom: 2rem
-}
+
 .form-group .form-control, .form-group .select-custom {
     margin-bottom: 0
 }
 .form-control {
-    height: 40px;
+    height: 35px;
     padding: .85rem 2rem;
     font-size: 1.4rem;
     line-height: 1.5;
@@ -7826,6 +7824,7 @@ p {
     margin-bottom: 2rem;
     transition: all 0.3s;
     box-shadow: none
+	color: black;
 }
 select.form-control:not([size]):not([multiple]) {
     height: 40px

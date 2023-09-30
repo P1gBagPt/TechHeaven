@@ -118,6 +118,8 @@
   <ItemGroup>
     <Content Include="account.aspx" />
     <Content Include="activation.aspx" />
+    <Content Include="add_address.aspx" />
+    <Content Include="admin_assets\css\app.css" />
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\headerFooterStyle.css" />
     <Content Include="assets\css\main.min.css" />
@@ -14663,6 +14665,7 @@
     <Content Include="lib\jquery\jquery.min.js" />
     <Content Include="login.aspx" />
     <Content Include="main_page.aspx" />
+    <Content Include="main_page_admin.aspx" />
     <Content Include="register.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -14681,6 +14684,13 @@
     <Compile Include="activation.aspx.designer.cs">
       <DependentUpon>activation.aspx</DependentUpon>
     </Compile>
+    <Compile Include="add_address.aspx.cs">
+      <DependentUpon>add_address.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="add_address.aspx.designer.cs">
+      <DependentUpon>add_address.aspx</DependentUpon>
+    </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -14694,6 +14704,13 @@
     </Compile>
     <Compile Include="main_page.aspx.designer.cs">
       <DependentUpon>main_page.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main_page_admin.aspx.cs">
+      <DependentUpon>main_page_admin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main_page_admin.aspx.designer.cs">
+      <DependentUpon>main_page_admin.aspx</DependentUpon>
     </Compile>
     <Compile Include="master_page.Master.cs">
       <DependentUpon>master_page.Master</DependentUpon>
@@ -14810,6 +14827,7 @@
     <Content Include="assets\fontawesome\webfonts\fa-thin-100.woff" />
     <Content Include="assets\fontawesome\webfonts\fa-thin-100.woff2" />
     <Content Include="master_page_admin.Master" />
+    <Content Include="admin_assets\css\app.css.map" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

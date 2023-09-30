@@ -42,6 +42,15 @@ namespace TechHeaven
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// lbl_logout_user control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbl_logout_user;
+
+        /// <summary>
         /// lb_logout control.
         /// </summary>
         /// <remarks>

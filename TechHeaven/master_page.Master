@@ -117,31 +117,17 @@
                             <%}
                                 if ((String)Session["role"] == "1")
                                 {%>
-                            <div class="wishlist">
-
-                                <a href="account.aspx" title="Account">
-                                    <div class="icon">
-                                        <i class="fa-light fa-circle-user"></i>
-                                    </div>
-                                    <p><%= Session["user_username"] %></p>
-                                </a>
-                            </div>
-
-
-                            <%}
-                                if ((String)Session["role"] == "2")
-                                { %>
-                                                        <ul class="menu usermenu">
-     <li>
+                            <ul class="menu usermenu">
+                                <li>
                                     <div class="wishlist">
-                                    <a href="account.aspx" title="Account">
-                                        <div class="icon">
-                                            <i class="fa-light fa-circle-user"></i>
-                                        </div>
-                                        <p><%= Session["user_username"] %></p>
+                                        <a href="account.aspx" title="Account">
+                                            <div class="icon">
+                                                <i class="fa-light fa-circle-user"></i>
+                                            </div>
+                                            <p><%= Session["user_username"] %></p>
 
-                                    </a>
-                                        </div>
+                                        </a>
+                                    </div>
 
                                     <div class="megamenu megamenu-md megamenu2 megamenu-md2">
                                         <div class="row no-gutters">
@@ -150,10 +136,11 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <ul>
-                                                                <li><a href="category-list.html">Account</a></li>
-                                                                <li><a href="category-2cols.html">Administrative</a></li>
-                                                                <li><asp:LinkButton ID="lb_logout" runat="server" OnClick="lb_logout_Click">Logout</asp:LinkButton></li>
-                                                            </ul>                                                          
+                                                                <li><a href="account.aspx"><i class="fa-light fa-circle-user" style="margin-right: 5px;"></i>Account</a></li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lbl_logout_user" runat="server" OnClick="lb_logout_Click"><i class="fa-solid fa-right-from-bracket" style="margin-right: 5px;"></i>Logout</asp:LinkButton>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                         <!-- End .col-md-6 -->
 
@@ -174,10 +161,51 @@
                             </ul>
 
 
+                            <%}
+                                if ((String)Session["role"] == "2")
+                                { %>
+                            <ul class="menu usermenu">
+                                <li>
+                                    <div class="wishlist">
+                                        <a href="account.aspx" title="Account">
+                                            <div class="icon">
+                                                <i class="fa-light fa-circle-user"></i>
+                                            </div>
+                                            <p><%= Session["user_username"] %></p>
+
+                                        </a>
+                                    </div>
+
+                                    <div class="megamenu megamenu-md megamenu2 megamenu-md2">
+                                        <div class="row no-gutters">
+                                            <div class="col-md-12">
+                                                <div class="menu-col">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <ul>
+                                                                <li><a href="account.aspx"><i class="fa-light fa-circle-user" style="margin-right: 5px;"></i>Account</a></li>
+                                                                <li><a href="main_page_admin.aspx"><i class="fa-light fa-circle-user" style="margin-right: 5px;"></i>Administrative</a></li>
+                                                                <li>
+                                                                    <asp:LinkButton ID="lb_logout" runat="server" OnClick="lb_logout_Click"><i class="fa-solid fa-right-from-bracket" style="margin-right: 5px;"></i>Logout</asp:LinkButton></li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- End .col-md-6 -->
 
 
+                                                    </div>
+                                                    <!-- End .row -->
+                                                </div>
+                                                <!-- End .menu-col -->
+                                            </div>
+                                            <!-- End .col-md-8 -->
 
 
+                                        </div>
+                                        <!-- End .row -->
+                                    </div>
+                                    <!-- End .megamenu megamenu-md -->
+                                </li>
+                            </ul>
                             <%}%>
 
                             <div class="wishlist">
@@ -540,10 +568,22 @@
             <!-- End .header -->
 
 
+
+
+
+
+
             <div>
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>
             </div>
+
+
+
+
+
+
+
 
 
             <!-- End .main -->
