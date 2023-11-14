@@ -14,7 +14,12 @@ namespace TechHeaven
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string email_user = Master.DecryptString(Request.QueryString["m_uti"]);
+            if (Session["isLogged"] == null)
+            {
+                Response.Redirect("login.aspx");
+            }
+            else { 
+                string email_user = Master.DecryptString(Request.QueryString["m_uti"]);
 
             MySqlConnection myConn = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
@@ -29,6 +34,7 @@ namespace TechHeaven
             myConn.Open();
             myCommand.ExecuteNonQuery();
             myConn.Close();
+            }
         }
     }
 }

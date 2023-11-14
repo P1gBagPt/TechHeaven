@@ -13,11 +13,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Globalization;
+using System.Data.SqlClient;
 
 namespace TechHeaven
 {
     public partial class account : System.Web.UI.Page
     {
+        public static MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString());
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -143,9 +145,69 @@ namespace TechHeaven
                     btn_2fa.ForeColor = Color.Red;
                 }
 
+                try
+                {
+                    List<addresses> lst_moradas = new List<addresses>();
+
+                    
+                    string query = "SELECT * FROM addresses WHERE addresses.userId = " + Session["UserId"].ToString();
+
+
+                    using (SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["atec_casConnectionString"].ConnectionString))
+                    {
+                        using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                        {
+                            myConn.Open();
+
+                            using (SqlDataReader dr = myCommand.ExecuteReader())
+                            {
+                                while (dr.Read())
+                                {
+                                    var moradas_address = new addresses();
+
+                                    moradas_address.name = dr.GetString(0);
+                                    moradas_address.address = dr.GetString(1);
+                                    moradas_address.floor = dr.GetString(2);
+                                    moradas_address.zipcode = dr.GetString(3);
+                                    moradas_address.location = dr.GetString(4);
+                                    moradas_address.city = dr.GetString(5);
+                                    moradas_address.phone = dr.GetString(6);
+
+                                    lst_moradas.Add(moradas_address);
+                                }
+                            }
+                        }
+                    }
+
+                    Repeater1.DataSource = lst_moradas;
+                    Repeater1.DataBind();
+
+                }
+                catch(Exception ex)
+                {
+
+                }
+
             }
         }
 
+        public class addresses
+        {
+            public string name { get; set; }
+
+            public string address { get; set; }
+
+            public string floor { get; set; }
+
+            public string zipcode { get; set; }
+
+            public string location { get; set; }
+
+            public string city { get; set; }
+
+            public string phone { get; set; }
+
+        }
 
         protected void btn_2fa_Click(object sender, EventArgs e)
         {

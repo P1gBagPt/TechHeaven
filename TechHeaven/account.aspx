@@ -312,39 +312,49 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Card title</h5>
-                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <contenttemplate>
+                                    <asp:Repeater ID="Repeater1" runat="server">
+                                        <ItemTemplate>
+                                            <div class="col-md-6">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <asp:Label ID="lbl_address_name" runat="server"><%# Eval("name") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_address" runat="server"><%# Eval("address") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_floor" runat="server"><%# Eval("floor") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_zipcode" runat="server"><%# Eval("zipcode") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_location" runat="server"><%# Eval("location") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_city" runat="server"><%# Eval("city") %></asp:Label>
+                                                        <asp:Label ID="lbl_address_phone" runat="server"><%# Eval("phone") %></asp:Label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </contenttemplate>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="cards" role="tabpanel" aria-labelledby="cards-tab">
-                            <!--CARDS   -->
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card text-center">
-                                        <a href="add_card.aspx">
-                                            <div class="card-body">
-                                                <div class="icon">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </div>
-                                                <h2>Add Card</h2>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card">
+                    </div>
+                    <div class="tab-pane fade" id="cards" role="tabpanel" aria-labelledby="cards-tab">
+                        <!--CARDS   -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card text-center">
+                                    <a href="add_card.aspx">
                                         <div class="card-body">
-                                            <h5 class="card-title">Card title</h5>
-                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                            <div class="icon">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </div>
+                                            <h2>Add Card</h2>
                                         </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
                                     </div>
                                 </div>
                             </div>
