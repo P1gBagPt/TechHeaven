@@ -35,7 +35,7 @@ namespace TechHeaven
 
             /*cmd.Parameters.AddWithValue("@f_email", login_email.Text);
             cmd.Parameters.AddWithValue("@f_password", Master.EncryptString(login_password.Text));*/
-
+            //TEMP
             cmd.Parameters.AddWithValue("@f_email", "marcarpremio@gmail.com");
             cmd.Parameters.AddWithValue("@f_password", Master.EncryptString("!Password1"));
 

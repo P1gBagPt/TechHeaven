@@ -13,5 +13,10 @@ namespace TechHeaven
         {
 
         }
+
+        protected void btn_logout_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
