@@ -135,7 +135,6 @@
                             <i class="bi bi-box-seam"></i><span>Products</span>
                         </a>
                     </li>
-                <!-- End Tables Nav -->
 
                 <!-- Sales -->
                 <!-- Sales -->
@@ -148,7 +147,18 @@
                         <i class="bi bi-graph-up-arrow"></i><span>Sales</span>
                     </a>
                 </li>
-                <!-- End Forms Nav -->
+
+                <!-- Categories -->
+                <!-- Categories -->
+                <!-- Categories -->
+                <!-- Categories -->
+                <!-- Categories -->
+                <!-- Categories -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="bo_categories.aspx">
+                        <i class="bi bi-tag"></i><span>Categories</span>
+                    </a>
+                </li>
 
                 <!-- Brands -->
                 <!-- Brands -->
@@ -161,7 +171,7 @@
                         <i class="bi bi-microsoft"></i><span>Brands</span>
                     </a>
                 </li>
-              
+
                 <!-- End Forms Nav -->
 
             </ul>
