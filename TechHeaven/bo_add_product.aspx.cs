@@ -33,20 +33,20 @@ namespace TechHeaven
 
             SqlCommand myCommand = new SqlCommand();
             myCommand.CommandType = CommandType.StoredProcedure;
-            myCommand.CommandText = "inserir_produto";
+            myCommand.CommandText = "insert_product";
 
             myCommand.Connection = myConn;
 
-            myCommand.Parameters.AddWithValue("@nome", tb_nome.Text);
-            myCommand.Parameters.AddWithValue("@descricao", tb_descricao.Text);
-            myCommand.Parameters.AddWithValue("@numero_artigo", tb_numero_artigo.Text);
-            myCommand.Parameters.AddWithValue("@preco", tb_preco.Text);
+            myCommand.Parameters.AddWithValue("@name", tb_nome.Text);
+            myCommand.Parameters.AddWithValue("@description", tb_descricao.Text);
+            myCommand.Parameters.AddWithValue("@code", tb_numero_artigo.Text);
+            myCommand.Parameters.AddWithValue("@price", tb_preco.Text);
             myCommand.Parameters.AddWithValue("@stock", tb_stock.Text);
-            myCommand.Parameters.AddWithValue("@categoria", ddl_categoria.SelectedValue);
-            myCommand.Parameters.AddWithValue("@imagem", imgBinary);
+            myCommand.Parameters.AddWithValue("@category", ddl_categoria.SelectedValue);
+            myCommand.Parameters.AddWithValue("@image", imgBinary);
             myCommand.Parameters.AddWithValue("@ct", contentType);
-            myCommand.Parameters.AddWithValue("@estado", 1);
-            myCommand.Parameters.AddWithValue("@marca", ddl_marca.SelectedValue);
+            myCommand.Parameters.AddWithValue("@status", 1);
+            myCommand.Parameters.AddWithValue("@brand", ddl_marca.SelectedValue);
 
             SqlParameter valor = new SqlParameter();
             valor.ParameterName = "@retorno";

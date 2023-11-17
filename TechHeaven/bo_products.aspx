@@ -40,8 +40,6 @@
 
                             <a href="bo_add_product.aspx">Add product</a>
 
-
-
                             <!-- Primary Color Bordered Table -->
                             <table class="table table-bordered border-primary">
                                 <asp:Repeater ID="Repeater1" runat="server">
@@ -64,23 +62,23 @@
                                     <ItemTemplate>
                                         <tbody>
                                             <tr>
-                                                <td scope="row" class='<%# GetStockColor(Eval("stock")) %>'><%# Eval("stock")%></td>
-                                                <td scope="row"><%# Eval("marca")%></td>
-                                                <td scope="row"><%# Eval("nome")%></td>
+                                                <td scope="row" class='<%# GetStockColor(Eval("quantity")) %>'><%# Eval("quantity")%></td>
+                                                <td scope="row"><%# Eval("brand")%></td>
+                                                <td scope="row"><%# Eval("name")%></td>
                                                 <td scope="row"><%# Eval("codigoArtigo")%></td>
-                                                <td scope="row"><%# Eval("preco")%> €</td>
-                                                <td scope="row"><%# Eval("descricao")%></td>
-                                                <td scope="row"><%# Eval("categoria")%></td>
+                                                <td scope="row"><%# Eval("price")%> €</td>
+                                                <td scope="row"><%# Eval("description")%></td>
+                                                <td scope="row"><%# Eval("category")%></td>
                                                 <td scope="row">
-                                                    <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_produto") %>'>
+                                                    <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_products") %>'>
                                                         <img src="admin_assets/img/editar.png" alt="Edit" />
                                                     </asp:LinkButton>
                                                 </td>
                                                 <td scope="row">
-                                                    <asp:Image ID="imgEstado" runat="server" ImageUrl='<%# Convert.ToBoolean(Eval("estado")) ? "admin_assets/img/sim.png" : "admin_assets/img/nao.png" %>' />
+                                                    <asp:Image ID="imgEstado" runat="server" ImageUrl='<%# Convert.ToBoolean(Eval("status")) ? "admin_assets/img/sim.png" : "admin_assets/img/nao.png" %>' />
                                                 </td>
                                                 <td scope="row">
-                                                    <asp:LinkButton ID="lb_activate_deactivate" runat="server" CssClass='<%# Convert.ToBoolean(Eval("estado")) ? "btn btn-danger" : "btn btn-success" %>' CommandArgument='<%# Eval("id_produto") %>' OnCommand="lb_activate_deactivate_Command" CommandName="AtivarDesativar"><%# Convert.ToBoolean(Eval("estado")) ? "Desativar" : "Ativar" %></asp:LinkButton>
+                                                    <asp:LinkButton ID="lb_activate_deactivate" runat="server" CssClass='<%# Convert.ToBoolean(Eval("status")) ? "btn btn-danger" : "btn btn-success" %>' CommandArgument='<%# Eval("id_products") %>' OnCommand="lb_activate_deactivate_Command" CommandName="AtivarDesativar"><%# Convert.ToBoolean(Eval("status")) ? "Desativar" : "Ativar" %></asp:LinkButton>
                                                 </td>
   
                                             </tr>

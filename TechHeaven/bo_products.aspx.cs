@@ -40,8 +40,6 @@ namespace TechHeaven
             }
             catch (Exception ex)
             {
-
-
             }
         }
 
@@ -50,20 +48,52 @@ namespace TechHeaven
             if (e.CommandName == "Edit")
             {
                 int productId = Convert.ToInt32(e.CommandArgument);
-                Response.Redirect($"bo_editar_produto.aspx?productId={productId}");
+                Response.Redirect($"bo_edit_product.aspx?productId={productId}");
             }
         }
 
         protected void lb_activate_deactivate_Command(object sender, CommandEventArgs e)
         {
+            // Obtenha o ID do produto a partir dos dados do item atual (usando Eval, por exemplo).
+            //int produtoID = Convert.ToInt32(Eval("id_produto"));
+            if (e.CommandName == "AtivarDesativar")
+            {
+                int produtoID = Convert.ToInt32(e.CommandArgument);
 
+                // Crie uma conexão com o banco de dados.
+                using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString()))
+                {
+                    // Abra a conexão.
+                    con.Open();
+
+                    // Consulta SQL para atualizar o estado do produto.
+                    string query = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
+
+                    // Crie e configure o comando SQL.
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@produtoID", produtoID);
+
+                        // Execute a consulta.
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        // Verifique se a consulta foi executada com sucesso.
+                        if (rowsAffected > 0)
+                        {
+                            // Atualize a interface do usuário para refletir a mudança no estado do produto, se necessário.
+                            BindDataIntoRepeater();
+
+                        }
+                    }
+                }
+            }
         }
 
         // Get data from database/repository
         static DataTable GetDataFromDb()
         {
-            var con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString());
-            var query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category AS categoria, b.brand_name AS marca " +
+            var con = new SqlConnection(ConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString());
+            var query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
             "FROM products p " +
             "LEFT JOIN categories c ON p.category = c.id_category " +
             "LEFT JOIN brands b ON p.brand = b.id_brand;";
@@ -219,13 +249,13 @@ namespace TechHeaven
                 int produtoID = Convert.ToInt32(e.CommandArgument);
 
                 // Crie uma conexão com o banco de dados.
-                using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["autoparts_ConnectionString"].ToString()))
+                using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString()))
                 {
                     // Abra a conexão.
                     con.Open();
 
                     // Consulta SQL para atualizar o estado do produto.
-                    string query = "UPDATE products SET status = CASE WHEN estado = 1 THEN 0 ELSE 1 END WHERE id_product = @produtoID";
+                    string query = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
 
                     // Crie e configure o comando SQL.
                     using (SqlCommand cmd = new SqlCommand(query, con))
