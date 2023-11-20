@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -17,6 +18,11 @@ namespace TechHeaven
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
         private int _pageSize = 10;
+        public static string search;
+        public static string query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
+            "FROM products p " +
+            "LEFT JOIN categories c ON p.category = c.id_category " +
+            "LEFT JOIN brands b ON p.brand = b.id_brand;";
         private int CurrentPage
         {
             get
@@ -36,7 +42,7 @@ namespace TechHeaven
         {
             try
             {
-                BindDataIntoRepeater();
+                BindDataIntoRepeater(query);
             }
             catch (Exception ex)
             {
@@ -81,7 +87,7 @@ namespace TechHeaven
                         if (rowsAffected > 0)
                         {
                             // Atualize a interface do usuário para refletir a mudança no estado do produto, se necessário.
-                            BindDataIntoRepeater();
+                            BindDataIntoRepeater(query);
 
                         }
                     }
@@ -90,15 +96,10 @@ namespace TechHeaven
         }
 
         // Get data from database/repository
-        static DataTable GetDataFromDb()
+        static DataTable GetDataFromDb(string query)
         {
             var con = new SqlConnection(ConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString());
-            var query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
-            "FROM products p " +
-            "LEFT JOIN categories c ON p.category = c.id_category " +
-            "LEFT JOIN brands b ON p.brand = b.id_brand;";
-
-
+           
             var da = new SqlDataAdapter(query, con);
             var dt = new DataTable();
 
@@ -121,9 +122,9 @@ namespace TechHeaven
         }
 
         // Bind PagedDataSource into Repeater
-        private void BindDataIntoRepeater()
+        private void BindDataIntoRepeater(string query)
         {
-            var dt = GetDataFromDb();
+            var dt = GetDataFromDb(query);
             _pgsource.DataSource = dt.DefaultView;
             _pgsource.AllowPaging = true;
             // Number of items to be displayed in the Repeater
@@ -186,29 +187,29 @@ namespace TechHeaven
         protected void lbFirst_Click(object sender, EventArgs e)
         {
             CurrentPage = 0;
-            BindDataIntoRepeater();
+            BindDataIntoRepeater(query);
         }
         protected void lbLast_Click(object sender, EventArgs e)
         {
             CurrentPage = (Convert.ToInt32(ViewState["TotalPages"]) - 1);
-            BindDataIntoRepeater();
+            BindDataIntoRepeater(query);
         }
         protected void lbPrevious_Click(object sender, EventArgs e)
         {
             CurrentPage -= 1;
-            BindDataIntoRepeater();
+            BindDataIntoRepeater(query);
         }
         protected void lbNext_Click(object sender, EventArgs e)
         {
             CurrentPage += 1;
-            BindDataIntoRepeater();
+            BindDataIntoRepeater(query);
         }
 
         protected void rptPaging_ItemCommand(object source, DataListCommandEventArgs e)
         {
             if (!e.CommandName.Equals("newPage")) return;
             CurrentPage = Convert.ToInt32(e.CommandArgument.ToString());
-            BindDataIntoRepeater();
+            BindDataIntoRepeater(query);
         }
 
         protected void rptPaging_ItemDataBound(object sender, DataListItemEventArgs e)
@@ -239,6 +240,24 @@ namespace TechHeaven
             }
         }
 
+        protected void lb_search_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "search")
+            {
+                search = tb_search.Text;
+
+                
+                query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
+            "FROM products p " +
+            "LEFT JOIN categories c ON p.category = c.id_category " +
+            "LEFT JOIN brands b ON p.brand = b.id_brand " +
+            "WHERE status = 'true' AND(p.name LIKE '%" + search + "%' OR p.product_code LIKE '%" + search + "%')";
+                
+                BindDataIntoRepeater(query);
+
+
+            }
+        }
 
         protected void lb_ativar_desativar_Click(object sender, CommandEventArgs e)
         {
@@ -269,7 +288,7 @@ namespace TechHeaven
                         if (rowsAffected > 0)
                         {
                             // Atualize a interface do usuário para refletir a mudança no estado do produto, se necessário.
-                            BindDataIntoRepeater();
+                            BindDataIntoRepeater(query);
 
                         }
                     }

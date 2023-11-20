@@ -14939,6 +14939,7 @@
     <Content Include="assets\main.js" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\css\line-awesome.min.css" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\fonts\line-awesomeeb4f.svg" />
+    <Content Include="bo_add_brand.aspx" />
     <Content Include="bo_add_category.aspx" />
     <Content Include="bo_add_product.aspx" />
     <Content Include="bo_brands.aspx" />
@@ -14978,6 +14979,13 @@
     </Compile>
     <Compile Include="add_address.aspx.designer.cs">
       <DependentUpon>add_address.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_add_brand.aspx.cs">
+      <DependentUpon>bo_add_brand.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_add_brand.aspx.designer.cs">
+      <DependentUpon>bo_add_brand.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_add_category.aspx.cs">
       <DependentUpon>bo_add_category.aspx</DependentUpon>

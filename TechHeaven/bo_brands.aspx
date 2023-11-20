@@ -24,7 +24,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Brands</h5>
 
-                        <a href="bo_adicionar_marca.aspx">Add brand</a>
+                        <a href="bo_add_brand.aspx">Add brand</a>
 
                         <table class="table table-bordered border-primary">
                             <asp:Repeater ID="Repeater1" runat="server">

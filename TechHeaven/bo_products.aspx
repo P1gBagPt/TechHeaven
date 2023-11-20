@@ -37,8 +37,16 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Products</h5>
-
-                            <a href="bo_add_product.aspx">Add product</a>
+                            <div class="row">
+                                <div class="col-6">
+                                     <a href="bo_add_product.aspx">Add product</a> | To add stock you need to edit the product
+                                </div>
+                                <div class="col-6 text-end">
+                                    <asp:TextBox ID="tb_search" runat="server" placeholder="Search Product"></asp:TextBox>
+                                    <asp:LinkButton ID="lb_search" runat="server" OnCommand="lb_search_Command" CommandName="search"><i class="bi bi-search"></i></asp:LinkButton>
+                                </div>
+                            </div>
+                           
 
                             <!-- Primary Color Bordered Table -->
                             <table class="table table-bordered border-primary">
