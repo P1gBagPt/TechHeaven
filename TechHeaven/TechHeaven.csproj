@@ -14939,7 +14939,9 @@
     <Content Include="assets\main.js" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\css\line-awesome.min.css" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\fonts\line-awesomeeb4f.svg" />
+    <Content Include="bo_add_category.aspx" />
     <Content Include="bo_add_product.aspx" />
+    <Content Include="bo_brands.aspx" />
     <Content Include="bo_categories.aspx" />
     <Content Include="bo_edit_product.aspx" />
     <Content Include="bo_products.aspx" />
@@ -14977,12 +14979,26 @@
     <Compile Include="add_address.aspx.designer.cs">
       <DependentUpon>add_address.aspx</DependentUpon>
     </Compile>
+    <Compile Include="bo_add_category.aspx.cs">
+      <DependentUpon>bo_add_category.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_add_category.aspx.designer.cs">
+      <DependentUpon>bo_add_category.aspx</DependentUpon>
+    </Compile>
     <Compile Include="bo_add_product.aspx.cs">
       <DependentUpon>bo_add_product.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="bo_add_product.aspx.designer.cs">
       <DependentUpon>bo_add_product.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_brands.aspx.cs">
+      <DependentUpon>bo_brands.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_brands.aspx.designer.cs">
+      <DependentUpon>bo_brands.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_categories.aspx.cs">
       <DependentUpon>bo_categories.aspx</DependentUpon>
