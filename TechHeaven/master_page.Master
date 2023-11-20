@@ -115,7 +115,7 @@
                                 </a>
                             </div>
                             <%}
-                                if ((String)Session["role"] == "1")
+                                if (Session["role"] != null && (int)Session["role"] == 2)
                                 {%>
                             <ul class="menu usermenu">
                                 <li>
@@ -162,7 +162,7 @@
 
 
                             <%}
-                                if ((String)Session["role"] == "2")
+                                if (Session["role"] != null && (int)Session["role"] == 1)
                                 { %>
                             <ul class="menu usermenu">
                                 <li>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -14,26 +15,30 @@ namespace TechHeaven
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["isLogged"] == null)
+            if (Session["activation"] != null)
             {
-                Response.Redirect("login.aspx");
-            }
-            else { 
                 string email_user = Master.DecryptString(Request.QueryString["m_uti"]);
 
-            MySqlConnection myConn = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
-            MySqlCommand myCommand = new MySqlCommand();
+                SqlCommand myCommand = new SqlCommand();
 
-            myCommand.Parameters.AddWithValue("@user_email", email_user);
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "account_activation";
 
-            myCommand.CommandText = "account_activation";
-            myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.Connection = myConn;
 
-            myCommand.Connection = myConn;
-            myConn.Open();
-            myCommand.ExecuteNonQuery();
-            myConn.Close();
+                myCommand.Parameters.AddWithValue("@email", email_user);
+
+              
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+                myConn.Close();
+                lbl_nome.Text = email_user;
+            }
+            else
+            {
+                Response.Redirect("login.aspx");
             }
         }
     }

@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using System.Data.SqlClient;
 
 namespace TechHeaven
 {
@@ -19,87 +20,83 @@ namespace TechHeaven
         {
 
         }
-        public static string respostanome, respostaRole;
-        public static int respostaTwoFactor, respostaverify, respostaId;
-
+        public static string respostanome;
+        public static int respostaId, respostaRole;
+        public bool respostaTwoFactor, respostaverify;
         protected void btn_login_Click(object sender, EventArgs e)
         {
-            MySqlConnection mycon = Master.GetSetConn;
+            SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
-            MySqlCommand cmd = new MySqlCommand();
+            SqlCommand myCommand = new SqlCommand();
+            myCommand.CommandType = CommandType.StoredProcedure;
+            myCommand.CommandText = "user_login";  // Corrected the stored procedure name
 
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "login_user";
+            myCommand.Connection = myConn;
 
-            cmd.Connection = mycon;
+            myCommand.Parameters.AddWithValue("@email", login_email.Text);
+            myCommand.Parameters.AddWithValue("@password", Master.EncryptString(login_password.Text));
 
-            /*cmd.Parameters.AddWithValue("@f_email", login_email.Text);
-            cmd.Parameters.AddWithValue("@f_password", Master.EncryptString(login_password.Text));*/
-            //TEMP
-            cmd.Parameters.AddWithValue("@f_email", "marcarpremio@gmail.com");
-            cmd.Parameters.AddWithValue("@f_password", Master.EncryptString("!Password1"));
-
-            MySqlParameter valor_retorno = new MySqlParameter();
-            valor_retorno.ParameterName = "@retorno";
-            valor_retorno.Direction = ParameterDirection.Output;
-            valor_retorno.MySqlDbType = MySqlDbType.Int64;
-            cmd.Parameters.Add(valor_retorno);
-
-            MySqlParameter retorno_username = new MySqlParameter();
-            retorno_username.ParameterName = "@retorno_username";
+            SqlParameter retorno_username = new SqlParameter();
+            retorno_username.ParameterName = "@return_username";
             retorno_username.Direction = ParameterDirection.Output;
-            retorno_username.MySqlDbType = MySqlDbType.VarChar;
-            retorno_username.Size = 10;
-            cmd.Parameters.Add(retorno_username);
+            retorno_username.SqlDbType = SqlDbType.VarChar;
+            retorno_username.Size = 50;
+            myCommand.Parameters.Add(retorno_username);
 
-
-            MySqlParameter retorno_twofactor = new MySqlParameter();
-            retorno_twofactor.ParameterName = "@retorno_twofactor";
+            SqlParameter retorno_twofactor = new SqlParameter();
+            retorno_twofactor.ParameterName = "@return_twofactor";
             retorno_twofactor.Direction = ParameterDirection.Output;
-            retorno_twofactor.MySqlDbType = MySqlDbType.Int64;
-            cmd.Parameters.Add(retorno_twofactor);
+            retorno_twofactor.SqlDbType = SqlDbType.Bit;
+            myCommand.Parameters.Add(retorno_twofactor);
 
-            MySqlParameter retorno_verify = new MySqlParameter();
-            retorno_verify.ParameterName = "@retorno_verify";
+            SqlParameter retorno_verify = new SqlParameter();
+            retorno_verify.ParameterName = "@return_verify";
             retorno_verify.Direction = ParameterDirection.Output;
-            retorno_verify.MySqlDbType = MySqlDbType.Int64;
-            cmd.Parameters.Add(retorno_verify);
+            retorno_verify.SqlDbType = SqlDbType.Bit;
+            myCommand.Parameters.Add(retorno_verify);
 
-            MySqlParameter retorno_id = new MySqlParameter();
-            retorno_id.ParameterName = "@retorno_id";
+            SqlParameter retorno_id = new SqlParameter();
+            retorno_id.ParameterName = "@return_id";
             retorno_id.Direction = ParameterDirection.Output;
-            retorno_id.MySqlDbType = MySqlDbType.Int64;
-            cmd.Parameters.Add(retorno_id);
+            retorno_id.SqlDbType = SqlDbType.Int;
+            myCommand.Parameters.Add(retorno_id);
 
-
-            MySqlParameter retorno_role = new MySqlParameter();
-            retorno_role.ParameterName = "@retorno_role";
+            SqlParameter retorno_role = new SqlParameter();
+            retorno_role.ParameterName = "@return_role";
             retorno_role.Direction = ParameterDirection.Output;
-            retorno_role.MySqlDbType = MySqlDbType.VarChar;
-            cmd.Parameters.Add(retorno_role);
+            retorno_role.SqlDbType = SqlDbType.Int;
+            myCommand.Parameters.Add(retorno_role);
 
-           
-            cmd.ExecuteNonQuery();
+            SqlParameter valor = new SqlParameter();
+            valor.ParameterName = "@return";
+            valor.Direction = ParameterDirection.Output;
+            valor.SqlDbType = SqlDbType.Int;
+            myCommand.Parameters.Add(valor);
 
-            int respostaSP = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
+            myConn.Open();
+            myCommand.ExecuteNonQuery();
+
+            int respostaSP = Convert.ToInt32(myCommand.Parameters["@return"].Value);
             
             if(respostaSP == 0)
             {
-                respostanome = cmd.Parameters["@retorno_username"].Value.ToString();
-                respostaTwoFactor = Convert.ToInt32(cmd.Parameters["@retorno_twofactor"].Value);
-                respostaverify = Convert.ToInt32(cmd.Parameters["@retorno_verify"].Value); ;
-                respostaId = Convert.ToInt32(cmd.Parameters["@retorno_id"].Value);
-                respostaRole = cmd.Parameters["@retorno_role"].Value.ToString();
+                respostanome = myCommand.Parameters["@return_username"].Value.ToString();
+                object twofactorValue = myCommand.Parameters["@return_twofactor"].Value;
+                respostaTwoFactor = twofactorValue != DBNull.Value && Convert.ToBoolean(twofactorValue);
+                object verifyValue = myCommand.Parameters["@return_verify"].Value;
+                respostaverify = verifyValue != DBNull.Value && Convert.ToBoolean(verifyValue);
+                respostaId = Convert.ToInt32(myCommand.Parameters["@return_id"].Value);
+                respostaRole = Convert.ToInt32(myCommand.Parameters["@return_role"].Value);
             }
            
 
-            mycon.Close();
+            myConn.Close();
 
             string respostaemail = login_email.Text;
 
             if (respostaSP == 0)
             {
-                if (respostaverify == 0)
+                if (respostaverify == false)
                 {
                     lbl_erro.Text = "Account not activated";
                     lbl_erro_enviar.Text = "To activate the account click here";

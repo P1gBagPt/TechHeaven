@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Net;
+using System.Data.SqlClient;
 
 namespace TechHeaven
 {
@@ -148,7 +149,8 @@ namespace TechHeaven
 
         protected void SubmitRegister_Click(object sender, EventArgs e)
         {
-            MySqlConnection mycon = Master.GetSetConn;
+            SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
             if (pass_forte == 1)
             {
                 if (register_password.Text == register_password_agn.Text)
@@ -166,29 +168,32 @@ namespace TechHeaven
             {
                 try
                 {
-                    if (mycon != null)
+                    if (myConn != null)
                     {
-                        MySqlCommand cmd = new MySqlCommand();
+                        SqlCommand myCommand = new SqlCommand();
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.CommandText = "user_register";
 
-                        cmd.Parameters.AddWithValue("@p_email", register_email.Text);
-                        cmd.Parameters.AddWithValue("@p_firstName", register_firstName.Text);
-                        cmd.Parameters.AddWithValue("@p_lastName", register_lastName.Text);
-                        cmd.Parameters.AddWithValue("@p_username", register_username.Text);
-                        cmd.Parameters.AddWithValue("@p_password", encryptedPassword);
+                        myCommand.Connection = myConn;
 
-                        MySqlParameter valor = new MySqlParameter();
-                        valor.ParameterName = "@retorno";
+                        myCommand.Parameters.AddWithValue("@email", register_email.Text);
+                        myCommand.Parameters.AddWithValue("@firstName", register_firstName.Text);
+                        myCommand.Parameters.AddWithValue("@lastName", register_lastName.Text);
+                        myCommand.Parameters.AddWithValue("@username", register_username.Text);
+                        myCommand.Parameters.AddWithValue("@password", encryptedPassword);
+
+                        SqlParameter valor = new SqlParameter();
+                        valor.ParameterName = "@return";
                         valor.Direction = ParameterDirection.Output;
-                        valor.MySqlDbType = MySqlDbType.Int64;
+                        valor.SqlDbType = SqlDbType.Int;
+                        myCommand.Parameters.Add(valor);
 
-                        cmd.Parameters.Add(valor);
+                        myConn.Open();
+                        myCommand.ExecuteNonQuery();
+                        myConn.Close();
 
-                        cmd.CommandText = "register_principal";
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Connection = mycon;
-                        cmd.ExecuteNonQuery();
-                        int respostaSP = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
+                       
+                        int respostaSP = Convert.ToInt32(myCommand.Parameters["@return"].Value);
 
                         if (respostaSP == 0)
                         {
@@ -231,6 +236,7 @@ namespace TechHeaven
                                 lbl_mensagem.Visible = false;
                                 lbl_erro.Text = "Email sent sucessfully. Verify your mail invoice";
                                 lbl_erro.ForeColor = System.Drawing.Color.Green;
+                                Session["activation"] = true;
                             }
                             catch (Exception ex)
                             {

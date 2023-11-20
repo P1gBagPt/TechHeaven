@@ -14947,6 +14947,7 @@
     <Content Include="bo_edit_product.aspx" />
     <Content Include="bo_products.aspx" />
     <Content Include="bo_roles.aspx" />
+    <Content Include="bo_users.aspx" />
     <Content Include="lib\bootstrap\bootstrap.min.css" />
     <Content Include="lib\isotope\jquery.isotope.min.js" />
     <Content Include="lib\jquery.appear\jquery.appear.min.js" />
@@ -15034,6 +15035,13 @@
     </Compile>
     <Compile Include="bo_roles.aspx.designer.cs">
       <DependentUpon>bo_roles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_users.aspx.cs">
+      <DependentUpon>bo_users.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_users.aspx.designer.cs">
+      <DependentUpon>bo_users.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
