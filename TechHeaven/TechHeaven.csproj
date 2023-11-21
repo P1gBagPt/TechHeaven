@@ -14945,6 +14945,7 @@
     <Content Include="bo_brands.aspx" />
     <Content Include="bo_categories.aspx" />
     <Content Include="bo_edit_product.aspx" />
+    <Content Include="bo_edit_users.aspx" />
     <Content Include="bo_products.aspx" />
     <Content Include="bo_roles.aspx" />
     <Content Include="bo_users.aspx" />
@@ -15021,6 +15022,12 @@
     </Compile>
     <Compile Include="bo_edit_product.aspx.designer.cs">
       <DependentUpon>bo_edit_product.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_edit_users.aspx.cs">
+      <DependentUpon>bo_edit_users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_edit_users.aspx.designer.cs">
+      <DependentUpon>bo_edit_users.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_products.aspx.cs">
       <DependentUpon>bo_products.aspx</DependentUpon>

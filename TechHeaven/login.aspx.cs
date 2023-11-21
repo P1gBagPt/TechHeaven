@@ -149,6 +149,8 @@ namespace TechHeaven
 
                 lbl_erro.Text = "Email sent successfully. Verify your email inbox";
                 lbl_erro.ForeColor = System.Drawing.Color.Green;
+                Session["activation"] = true;
+
             }
             catch (Exception ex)
             {

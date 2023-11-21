@@ -17,9 +17,9 @@ namespace TechHeaven
         int _firstIndex, _lastIndex;
         private int _pageSize = 10;
         public static string search;
-        public static string query = "SELECT u.email, u.firstName, u.lastName, u.username, u.NIF, u.verify, u.tfa, u.newsletter, u.roleId AS role " +
+        public static string query = "SELECT u.id, u.email, u.firstName, u.lastName, u.username, u.NIF, u.verify, u.tfa, u.newsletter, r.role_name AS role " +
             "FROM users u " +
-            "LEFT JOIN roles r ON u.role = r.id_role;";
+            "LEFT JOIN roles r ON u.roleId = r.id_role;";
 
         private int CurrentPage
         {
@@ -171,10 +171,14 @@ namespace TechHeaven
             lnkPage.BackColor = Color.FromName("#0398fc");
             lnkPage.ForeColor = Color.White;
         }
-
+     
         protected void edit_user_Command(object sender, CommandEventArgs e)
         {
-
+            if (e.CommandName == "Edit")
+            {
+                int userId = Convert.ToInt32(e.CommandArgument);
+                Response.Redirect($"bo_edit_users.aspx?userId={userId}");
+            }
         }
     }
 }
