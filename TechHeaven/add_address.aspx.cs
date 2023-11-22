@@ -25,36 +25,30 @@ namespace TechHeaven
 
         protected void submit_address_Click(object sender, EventArgs e)
         {
-            MySqlConnection myConn = null; // Declare the MySqlConnection variable outside the try block
 
             try
             {
-                //myConn = Master.GetSetConn; // Initialize the MySqlConnection inside the try block
-
-                MySqlCommand myCommand = new MySqlCommand();
-
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlCommand myCommand = new SqlCommand();
                 myCommand.CommandType = CommandType.StoredProcedure;
                 myCommand.CommandText = "insert_address";
+
                 myCommand.Connection = myConn;
 
-                myCommand.Parameters.AddWithValue("@p_name", address_name.Text);
-                myCommand.Parameters.AddWithValue("@p_address", address_address.Text);
-                myCommand.Parameters.AddWithValue("@p_floor", address_floor.Text);
-                myCommand.Parameters.AddWithValue("@p_zipcode", address_zipcode.Text);
-                myCommand.Parameters.AddWithValue("@p_location", address_location.Text);
-                myCommand.Parameters.AddWithValue("@p_city", address_city.Text);
-                myCommand.Parameters.AddWithValue("@p_phone", address_phone.Text);
-                myCommand.Parameters.AddWithValue("@p_userId", Convert.ToInt32(Session["UserId"]));
+
+                myCommand.Parameters.AddWithValue("@userId", Convert.ToInt32(Session["userId"]));
+                myCommand.Parameters.AddWithValue("@name", address_name.Text);
+                myCommand.Parameters.AddWithValue("@address", address_address.Text);
+                myCommand.Parameters.AddWithValue("@floor", address_floor.Text);
+                myCommand.Parameters.AddWithValue("@zipcode", address_zipcode.Text);
+                myCommand.Parameters.AddWithValue("@location", address_location.Text);
+                myCommand.Parameters.AddWithValue("@city", address_city.Text);
+                myCommand.Parameters.AddWithValue("@phone", address_phone.Text);
 
                
-
-                // Check if the connection is closed before opening it
-                if (myConn.State != ConnectionState.Open)
-                {
-                    myConn.Open();
-                }
-
+                myConn.Open();
                 myCommand.ExecuteNonQuery();
+                myConn.Close();
 
                 Response.Redirect("account.aspx");
 
@@ -63,14 +57,6 @@ namespace TechHeaven
             {
                 lbl_erro.Visible = true;
                 lbl_erro.Text = ex.ToString();
-            }
-            finally
-            {
-                // Always close the connection when done
-                if (myConn != null && myConn.State != ConnectionState.Closed)
-                {
-                    myConn.Close();
-                }
             }
 
 

@@ -185,34 +185,38 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-    <ContentTemplate>
-    <div class="container emp-profile">
-        <div>
-            <div class="row top">
+        <ContentTemplate>
+            <div class="container emp-profile">
+                <div>
+                    <div class="row top">
 
-                <div class="col-md-12">
-                    <div class="profile-head">
-                        <h5>
-                            <asp:Label runat="server" ID="lbl_nameTop">-</asp:Label>
-                            <br />
-                            <br />
+                        <div class="col-md-12">
+                            <div class="profile-head">
+                                <h5>
+                                    <asp:Label runat="server" ID="lbl_nameTop">-</asp:Label>
+                                    <br />
+                                    <br />
 
-                        </h5>
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Addresses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="cards-tab" data-toggle="tab" href="#cards" role="tab" aria-controls="cards" aria-selected="false">Orders</a>
-                            </li>
-                        </ul>
+                                </h5>
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Addresses</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="cards-tab" data-toggle="tab" href="#cards" role="tab" aria-controls="cards" aria-selected="false">Cards</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Orders</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
+
 
 
                     <div class="row">
@@ -223,9 +227,6 @@
                                 <p>Email</p>
                                 <asp:Label ID="lbl_email" runat="server" class="label-user-email"></asp:Label>
 
-
-
-
                                 <asp:Label ID="lbl_news" runat="server" Visible="False" Enabled="False"></asp:Label>
 
 
@@ -233,137 +234,189 @@
 
                             </div>
                         </div>
-                
-            <div class="col-md-8">
-                <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>First Name</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="tb_first_name" runat="server" class="tb-user-info" MaxLength="50"></asp:TextBox>
-                            </div>
-                            <div class="col-md-2">
-                                <label>Last Name</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="tb_last_name" runat="server" class="tb-user-info" MaxLength="50"></asp:TextBox>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>NIF</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="tb_NIF" runat="server" class="tb-user-info" MaxLength="9" TextMode="SingleLine" onkeypress="return isNumber(event)"></asp:TextBox>
-                            </div>
-                            <div class="col-md-2">
-                                <label>Phone Number</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:TextBox ID="tb_phoneNumber" runat="server" class="tb-user-info" MaxLength="100" TextMode="Phone"></asp:TextBox>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label>Newsletter</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:LinkButton ID="lb_save_news" runat="server" OnCommand="lb_save_news_Command" CommandName="news" class="btn-save"></asp:LinkButton>
-                            </div>
-                            <div class="col-md-2">
-                                <label>2FA</label>
-                            </div>
-                            <div class="col-md-4">
-                                <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save" ></asp:LinkButton>
 
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <asp:LinkButton ID="btn_save" class="btn-save" runat="server" OnClick="btn_save_Click">Save</asp:LinkButton>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <asp:Label ID="lbl_sucesso" runat="server" Enabled="False" Visible="False"></asp:Label>
-                            </div>
-                            <div class="col-md-6">
-                                <asp:Label ID="lbl_erro" runat="server" Enabled="False" Visible="False"></asp:Label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <!--ADDRESSES-->
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card text-center">
-                                    <a href="add_address.aspx">
-                                        <div class="card-body">
-                                            <div class="icon">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </div>
-                                            <h2>Add Address</h2>
+                        <div class="col-md-8">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>First Name</label>
                                         </div>
-                                    </a>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="tb_first_name" runat="server" class="tb-user-info" MaxLength="50"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Last Name</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="tb_last_name" runat="server" class="tb-user-info" MaxLength="50"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>NIF</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="tb_NIF" runat="server" class="tb-user-info" MaxLength="9" TextMode="SingleLine" onkeypress="return isNumber(event)"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Phone Number</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="tb_phoneNumber" runat="server" class="tb-user-info" MaxLength="100" TextMode="Phone"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>Newsletter</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lb_save_news" runat="server" OnCommand="lb_save_news_Command" CommandName="news" class="btn-save"></asp:LinkButton>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>2FA</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save"></asp:LinkButton>
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="btn_save" class="btn-save" runat="server" OnClick="btn_save_Click">Save</asp:LinkButton>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <asp:Label ID="lbl_sucesso" runat="server" Enabled="False" Visible="False"></asp:Label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <asp:Label ID="lbl_erro" runat="server" Enabled="False" Visible="False"></asp:Label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <contenttemplate>
-                                <asp:Repeater ID="Repeater1" runat="server">
-                                    <ItemTemplate>
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <!--ADDRESSES-->
+                                    <div class="row">
+                                        <asp:Panel ID="panel_add_address" runat="server" CssClass="col-md-6">
+                                            <div class="col-md-12">
+                                                <div class="card text-center">
+                                                    <a href="add_address.aspx">
+                                                        <div class="card-body">
+                                                            <div class="icon">
+                                                                <i class="fa-solid fa-plus"></i>
+                                                            </div>
+                                                            <h2>Add Address</h2>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </asp:Panel>
+                                        <asp:Repeater ID="Repeater1" runat="server">
+                                            <ItemTemplate>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <b>Name: </b>
+                                                            <asp:Label ID="lbl_address_name" runat="server"><%# Eval("name") %></asp:Label>
+                                                            <br />
+                                                            <b>Address: </b>
+                                                            <asp:Label ID="lbl_address_address" runat="server"><%# Eval("address") %></asp:Label>
+                                                            <br />
+                                                            <b>Floor: </b>
+                                                            <asp:Label ID="lbl_address_floor" runat="server"><%# Eval("floor") %></asp:Label>
+                                                            <br />
+                                                            <b>Zipcode: </b>
+                                                            <asp:Label ID="lbl_address_zipcode" runat="server"><%# Eval("zipcode") %></asp:Label>
+                                                            <br />
+                                                            <b>Location: </b>
+                                                            <asp:Label ID="lbl_address_location" runat="server"><%# Eval("location") %></asp:Label>
+                                                            <br />
+                                                            <b>City: </b>
+                                                            <asp:Label ID="lbl_address_city" runat="server"><%# Eval("city") %></asp:Label>
+                                                            <br />
+                                                            <b>Phone: </b>
+                                                            <asp:Label ID="lbl_address_phone" runat="server"><%# Eval("phone") %></asp:Label>
+
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <asp:LinkButton ID="lb_edit_address" runat="server" OnCommand="lb_edit_address_Command" CommandName="edit_address" CommandArgument='<%# Eval("id") %>'>Edit</asp:LinkButton>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <asp:LinkButton ID="lb_delete_address" runat="server" OnCommand="lb_delete_address_Command" CommandName="delete_address" CommandArgument='<%# Eval("id") %>'>Delete</asp:LinkButton>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="tab-pane fade" id="cards" role="tabpanel" aria-labelledby="cards-tab">
+                                    <!--CARDS-->
+                                    <div class="row">
+                                        <asp:Panel ID="panel2" runat="server" CssClass="col-md-6">
+                                            <div class="col-md-12">
+                                                <div class="card text-center">
+                                                    <a href="add_card.aspx">
+                                                        <div class="card-body">
+                                                            <div class="icon">
+                                                                <i class="fa-solid fa-plus"></i>
+                                                            </div>
+                                                            <h2>Add Cards</h2>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </asp:Panel>
+
                                         <div class="col-md-6">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <asp:Label ID="lbl_address_name" runat="server"><%# Eval("name") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_address" runat="server"><%# Eval("address") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_floor" runat="server"><%# Eval("floor") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_zipcode" runat="server"><%# Eval("zipcode") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_location" runat="server"><%# Eval("location") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_city" runat="server"><%# Eval("city") %></asp:Label>
-                                                    <asp:Label ID="lbl_address_phone" runat="server"><%# Eval("phone") %></asp:Label>
+                                                    
+
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </contenttemplate>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="cards" role="tabpanel" aria-labelledby="cards-tab">
-                    <!--CARDS   -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card text-center">
-                                <a href="add_card.aspx">
-                                    <div class="card-body">
-                                        <div class="icon">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </div>
-                                        <h2>Add Card</h2>
+
                                     </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
                                 </div>
+
+
+                                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                    <!--ORDERS-->
+                                    <div class="row">
+                                        <asp:Panel ID="panel1" runat="server" CssClass="col-md-6">
+                                           
+                                        </asp:Panel>
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    sdf
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
-    </div>
-            </ContentTemplate>
-</asp:UpdatePanel>
+        </ContentTemplate>
+    </asp:UpdatePanel>
     <script>
         function isNumber(event) {
             var charCode = (event.which) ? event.which : event.keyCode;
