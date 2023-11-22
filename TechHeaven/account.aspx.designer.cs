@@ -15,6 +15,15 @@ namespace TechHeaven
     {
 
         /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+
+        /// <summary>
         /// lbl_nameTop control.
         /// </summary>
         /// <remarks>
@@ -40,33 +49,6 @@ namespace TechHeaven
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbl_email;
-
-        /// <summary>
-        /// rbl_newsletter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rbl_newsletter;
-
-        /// <summary>
-        /// SqlDataSource1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
-
-        /// <summary>
-        /// btn_save_newsletter control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_save_newsletter;
 
         /// <summary>
         /// lbl_news control.
@@ -114,13 +96,22 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.TextBox tb_phoneNumber;
 
         /// <summary>
-        /// btn_2fa control.
+        /// lb_save_news control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_2fa;
+        protected global::System.Web.UI.WebControls.LinkButton lb_save_news;
+
+        /// <summary>
+        /// lb_save_tfa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lb_save_tfa;
 
         /// <summary>
         /// btn_save control.

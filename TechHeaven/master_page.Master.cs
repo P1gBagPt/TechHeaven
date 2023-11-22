@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-using MySql.Data.MySqlClient;
 using System.Xml.Linq;
 using System.Configuration;
 using System.Security.Cryptography;
@@ -14,38 +13,11 @@ namespace TechHeaven
 {
     public partial class master_page : System.Web.UI.MasterPage
     {
-        MySqlConnection mycon;
-        string connString;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
-            connString = "server=localhost; Uid=root; password=; persistsecurityinfo=True; database=techeaven; SslMode=none";
-
-            try
-            {
-                mycon = new MySqlConnection();
-                mycon.ConnectionString = connString;
-                mycon.Open();
-            }
-            catch (MySqlException ex)
-            {
-                throw ex;
-            }
+           
         }
-
-        public MySqlConnection GetSetConn
-        {
-            get
-            {
-                // Get value of control on master page  
-                return mycon;
-            }
-            set
-            {
-                // Set new value for control on master page  
-                mycon = mycon;
-            }
-        }
-
 
         public string EncryptString(string Message)
         {

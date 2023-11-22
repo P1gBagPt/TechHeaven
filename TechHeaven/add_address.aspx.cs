@@ -29,7 +29,7 @@ namespace TechHeaven
 
             try
             {
-                myConn = Master.GetSetConn; // Initialize the MySqlConnection inside the try block
+                //myConn = Master.GetSetConn; // Initialize the MySqlConnection inside the try block
 
                 MySqlCommand myCommand = new MySqlCommand();
 

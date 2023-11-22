@@ -19,111 +19,344 @@ namespace TechHeaven
 {
     public partial class account : System.Web.UI.Page
     {
-        public static MySqlConnection con = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString());
+        public static SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                if (Session["isLogged"] == null)
+                {
+                    Response.Redirect("login.aspx");
+                }
+                else
+                {
+                    SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                    SqlCommand myCommand = new SqlCommand();
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.CommandText = "user_info";
+
+                    myCommand.Connection = myConn;
+
+                    myCommand.Parameters.AddWithValue("@userId", Session["userId"]);
+
+                    SqlParameter return_firstName = new SqlParameter();
+                    return_firstName.ParameterName = "@return_firstName";
+                    return_firstName.Direction = ParameterDirection.Output;
+                    return_firstName.SqlDbType = SqlDbType.VarChar;
+                    return_firstName.Size = 50;
+                    myCommand.Parameters.Add(return_firstName);
+
+
+                    SqlParameter return_lastName = new SqlParameter();
+                    return_lastName.ParameterName = "@return_lastName";
+                    return_lastName.Direction = ParameterDirection.Output;
+                    return_lastName.SqlDbType = SqlDbType.VarChar;
+                    return_lastName.Size = 50;
+                    myCommand.Parameters.Add(return_lastName);
+
+                    SqlParameter return_username = new SqlParameter();
+                    return_username.ParameterName = "@return_username";
+                    return_username.Direction = ParameterDirection.Output;
+                    return_username.SqlDbType = SqlDbType.VarChar;
+                    return_username.Size = 10;
+                    myCommand.Parameters.Add(return_username);
+
+
+
+                    SqlParameter return_phone = new SqlParameter();
+                    return_phone.ParameterName = "@return_phone";
+                    return_phone.Direction = ParameterDirection.Output;
+                    return_phone.SqlDbType = SqlDbType.VarChar;
+                    return_phone.Size = 100;
+                    myCommand.Parameters.Add(return_phone);
+
+
+                    SqlParameter return_nif = new SqlParameter();
+                    return_nif.ParameterName = "@return_nif";
+                    return_nif.Direction = ParameterDirection.Output;
+                    return_nif.SqlDbType = SqlDbType.Int;
+                    myCommand.Parameters.Add(return_nif);
+
+
+                    SqlParameter return_2fa = new SqlParameter();
+                    return_2fa.ParameterName = "@return_2fa";
+                    return_2fa.Direction = ParameterDirection.Output;
+                    return_2fa.SqlDbType = SqlDbType.Bit;
+                    myCommand.Parameters.Add(return_2fa);
+
+
+                    SqlParameter return_newsletter = new SqlParameter();
+                    return_newsletter.ParameterName = "@return_newsletter";
+                    return_newsletter.Direction = ParameterDirection.Output;
+                    return_newsletter.SqlDbType = SqlDbType.Bit;
+                    myCommand.Parameters.Add(return_newsletter);
+
+
+                    SqlParameter valor = new SqlParameter();
+                    valor.ParameterName = "@return";
+                    valor.Direction = ParameterDirection.Output;
+                    valor.SqlDbType = SqlDbType.Int;
+                    myCommand.Parameters.Add(valor);
+
+
+                    myConn.Open();
+                    myCommand.ExecuteNonQuery();
+
+                    int respostaSP = Convert.ToInt32(myCommand.Parameters["@return"].Value);
+
+                    string respostafirstName = myCommand.Parameters["@return_firstName"].Value.ToString();
+                    string respostalastName = myCommand.Parameters["@return_lastName"].Value.ToString();
+                    string respostausername = myCommand.Parameters["@return_username"].Value.ToString();
+                    string respostaPhonenumber = myCommand.Parameters["@return_phone"].Value.ToString();
+
+                    object resposta_nifValue = myCommand.Parameters["@return_nif"].Value;
+
+                    int resposta_nif;
+                    if (resposta_nifValue != DBNull.Value)
+                    {
+                        resposta_nif = Convert.ToInt32(resposta_nifValue);
+                    }
+                    else
+                    {
+                        // Handle the case where the database value is NULL
+                        resposta_nif = 0; // Set a default value or handle it as per your application logic
+                    }
+
+                    object tfa2Value = myCommand.Parameters["@return_2fa"].Value;
+                    bool tfa2;
+                    if (tfa2Value != DBNull.Value)
+                    {
+                        tfa2 = Convert.ToBoolean(tfa2Value);
+                    }
+                    else
+                    {
+                        // Handle the case where the database value is NULL
+                        tfa2 = false; // Set a default value or handle it as per your application logic
+                    }
+
+                    object newsletterValue = myCommand.Parameters["@return_newsletter"].Value;
+                    bool respostaNewsletter;
+                    if (newsletterValue != DBNull.Value)
+                    {
+                        respostaNewsletter = Convert.ToBoolean(newsletterValue);
+                    }
+                    else
+                    {
+                        // Handle the case where the database value is NULL
+                        respostaNewsletter = false; // Set a default value or handle it as per your application logic
+                    }
+
+
+                    myConn.Close();
+
+
+
+
+
+                    lbl_nameTop.Text = respostafirstName + " " + respostalastName + " Profile";
+
+                    tb_first_name.Text = respostafirstName;
+                    tb_last_name.Text = respostalastName;
+
+                    lbl_username.Text = respostausername;
+                    lbl_email.Text = Session["user_email"].ToString();
+
+                    tb_phoneNumber.Text = respostaPhonenumber;
+                    tb_NIF.Text = resposta_nif.ToString();
+
+
+                    if (respostaNewsletter == true)
+                    {
+                        lb_save_news.Text = "Disable";
+                        lb_save_news.ForeColor = Color.Red;
+
+                    }
+                    else
+                    {
+                        lb_save_news.Text = "Enable";
+                        lb_save_news.ForeColor = Color.White;
+                    }
+
+                    if (tfa2 == false)
+                    {
+                        lb_save_tfa.Text = "Setup";
+                        lb_save_tfa.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        lb_save_tfa.Text = "Remove";
+                        lb_save_tfa.ForeColor = Color.Red;
+                    }
+
+                    try
+                    {
+                        List<addresses> lst_moradas = new List<addresses>();
+
+
+                        string query = "SELECT * FROM addresses WHERE addresses.userId = " + Session["UserId"].ToString();
+
+                        using (SqlConnection myConn2 = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
+                        {
+                            using (SqlCommand myCommand2 = new SqlCommand(query, myConn2))
+                            {
+                                myConn.Open();
+
+                                using (SqlDataReader dr = myCommand2.ExecuteReader())
+                                {
+                                    while (dr.Read())
+                                    {
+                                        var moradas_address = new addresses();
+
+                                        moradas_address.name = dr.GetString(0);
+                                        moradas_address.address = dr.GetString(1);
+                                        moradas_address.floor = dr.GetString(2);
+                                        moradas_address.zipcode = dr.GetString(3);
+                                        moradas_address.location = dr.GetString(4);
+                                        moradas_address.city = dr.GetString(5);
+                                        moradas_address.phone = dr.GetString(6);
+
+                                        lst_moradas.Add(moradas_address);
+                                    }
+                                }
+                            }
+                        }
+
+                        Repeater1.DataSource = lst_moradas;
+                        Repeater1.DataBind();
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                }
+            }
             if (Session["isLogged"] == null)
             {
                 Response.Redirect("login.aspx");
             }
             else
             {
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "user_info";
 
-                MySqlConnection mycon = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
-                MySqlCommand cmd = new MySqlCommand();
+                myCommand.Connection = myConn;
 
-                cmd.Parameters.AddWithValue("@f_id", Session["userId"]);
+                myCommand.Parameters.AddWithValue("@userId", Session["userId"]);
 
-
-                MySqlParameter valor_retorno = new MySqlParameter();
-                valor_retorno.ParameterName = "@retorno";
-                valor_retorno.Direction = ParameterDirection.Output;
-                valor_retorno.MySqlDbType = MySqlDbType.Int64;
-                cmd.Parameters.Add(valor_retorno);
-
-
-                MySqlParameter retorno_firstName = new MySqlParameter();
-                retorno_firstName.ParameterName = "@retorno_firstName";
-                retorno_firstName.Direction = ParameterDirection.Output;
-                retorno_firstName.MySqlDbType = MySqlDbType.VarChar;
-                retorno_firstName.Size = 50;
-                cmd.Parameters.Add(retorno_firstName);
+                SqlParameter return_firstName = new SqlParameter();
+                return_firstName.ParameterName = "@return_firstName";
+                return_firstName.Direction = ParameterDirection.Output;
+                return_firstName.SqlDbType = SqlDbType.VarChar;
+                return_firstName.Size = 50;
+                myCommand.Parameters.Add(return_firstName);
 
 
-                MySqlParameter retorno_lastName = new MySqlParameter();
-                retorno_lastName.ParameterName = "@retorno_lastName";
-                retorno_lastName.Direction = ParameterDirection.Output;
-                retorno_lastName.MySqlDbType = MySqlDbType.VarChar;
-                retorno_lastName.Size = 50;
-                cmd.Parameters.Add(retorno_lastName);
+                SqlParameter return_lastName = new SqlParameter();
+                return_lastName.ParameterName = "@return_lastName";
+                return_lastName.Direction = ParameterDirection.Output;
+                return_lastName.SqlDbType = SqlDbType.VarChar;
+                return_lastName.Size = 50;
+                myCommand.Parameters.Add(return_lastName);
+
+                SqlParameter return_username = new SqlParameter();
+                return_username.ParameterName = "@return_username";
+                return_username.Direction = ParameterDirection.Output;
+                return_username.SqlDbType = SqlDbType.VarChar;
+                return_username.Size = 10;
+                myCommand.Parameters.Add(return_username);
 
 
-                MySqlParameter retorno_username = new MySqlParameter();
-                retorno_username.ParameterName = "@retorno_username";
-                retorno_username.Direction = ParameterDirection.Output;
-                retorno_username.MySqlDbType = MySqlDbType.VarChar;
-                retorno_username.Size = 50;
-                cmd.Parameters.Add(retorno_username);
+
+                SqlParameter return_phone = new SqlParameter();
+                return_phone.ParameterName = "@return_phone";
+                return_phone.Direction = ParameterDirection.Output;
+                return_phone.SqlDbType = SqlDbType.VarChar;
+                return_phone.Size = 100;
+                myCommand.Parameters.Add(return_phone);
 
 
-                MySqlParameter retorno_phoneNumber = new MySqlParameter();
-                retorno_phoneNumber.ParameterName = "@retorno_phoneNumber";
-                retorno_phoneNumber.Direction = ParameterDirection.Output;
-                retorno_phoneNumber.MySqlDbType = MySqlDbType.VarChar;
-                retorno_phoneNumber.Size = 100;
-                cmd.Parameters.Add(retorno_phoneNumber);
-
-                MySqlParameter retorno_nif = new MySqlParameter();
-                retorno_nif.ParameterName = "@retorno_nif";
-                retorno_nif.Direction = ParameterDirection.Output;
-                retorno_nif.MySqlDbType = MySqlDbType.Int64;
-                retorno_nif.Size = 9;
-                cmd.Parameters.Add(retorno_nif);
-
-                MySqlParameter retorno_2fa = new MySqlParameter();
-                retorno_2fa.ParameterName = "@retorno_2fa";
-                retorno_2fa.Direction = ParameterDirection.Output;
-                retorno_2fa.MySqlDbType = MySqlDbType.Int64;
-                retorno_2fa.Size = 1;
-                cmd.Parameters.Add(retorno_2fa);
-
-                MySqlParameter retorno_newsletter = new MySqlParameter();
-                retorno_newsletter.ParameterName = "@retorno_newsletter";
-                retorno_newsletter.Direction = ParameterDirection.Output;
-                retorno_newsletter.MySqlDbType = MySqlDbType.Int64;
-                retorno_newsletter.Size = 1;
-                cmd.Parameters.Add(retorno_newsletter);
-
-                cmd.CommandText = "user_info";
-                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter return_nif = new SqlParameter();
+                return_nif.ParameterName = "@return_nif";
+                return_nif.Direction = ParameterDirection.Output;
+                return_nif.SqlDbType = SqlDbType.Int;
+                myCommand.Parameters.Add(return_nif);
 
 
-                cmd.Connection = mycon;
-                mycon.Open();
-                cmd.ExecuteNonQuery();
+                SqlParameter return_2fa = new SqlParameter();
+                return_2fa.ParameterName = "@return_2fa";
+                return_2fa.Direction = ParameterDirection.Output;
+                return_2fa.SqlDbType = SqlDbType.Bit;
+                myCommand.Parameters.Add(return_2fa);
 
 
-                int respostaSP = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
+                SqlParameter return_newsletter = new SqlParameter();
+                return_newsletter.ParameterName = "@return_newsletter";
+                return_newsletter.Direction = ParameterDirection.Output;
+                return_newsletter.SqlDbType = SqlDbType.Bit;
+                myCommand.Parameters.Add(return_newsletter);
 
-                string respostafirstName = cmd.Parameters["@retorno_firstName"].Value.ToString();
-                string respostalastName = cmd.Parameters["@retorno_lastName"].Value.ToString();
-                string respostausername = cmd.Parameters["@retorno_username"].Value.ToString();
-                string respostaPhonenumber = cmd.Parameters["@retorno_phoneNumber"].Value.ToString();
-                int resposta_nif = Convert.ToInt32(cmd.Parameters["@retorno_nif"].Value);
-                int tfa2 = Convert.ToInt32(cmd.Parameters["@retorno_2fa"].Value);
-                int respostaNewsletter = Convert.ToInt32(cmd.Parameters["@retorno_newsletter"].Value);
 
-                mycon.Close();
+                SqlParameter valor = new SqlParameter();
+                valor.ParameterName = "@return";
+                valor.Direction = ParameterDirection.Output;
+                valor.SqlDbType = SqlDbType.Int;
+                myCommand.Parameters.Add(valor);
 
-                if (respostaNewsletter == 1)
+
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+
+                int respostaSP = Convert.ToInt32(myCommand.Parameters["@return"].Value);
+
+                string respostafirstName = myCommand.Parameters["@return_firstName"].Value.ToString();
+                string respostalastName = myCommand.Parameters["@return_lastName"].Value.ToString();
+                string respostausername = myCommand.Parameters["@return_username"].Value.ToString();
+                string respostaPhonenumber = myCommand.Parameters["@return_phone"].Value.ToString();
+
+                object resposta_nifValue = myCommand.Parameters["@return_nif"].Value;
+
+                int resposta_nif;
+                if (resposta_nifValue != DBNull.Value)
                 {
-                    rbl_newsletter.SelectedValue = "Enable";
+                    resposta_nif = Convert.ToInt32(resposta_nifValue);
                 }
-                else if (respostaNewsletter == 0)
+                else
                 {
-                    rbl_newsletter.SelectedValue = "Disabled";
+                    // Handle the case where the database value is NULL
+                    resposta_nif = 0; // Set a default value or handle it as per your application logic
                 }
+
+                object tfa2Value = myCommand.Parameters["@return_2fa"].Value;
+                bool tfa2;
+                if (tfa2Value != DBNull.Value)
+                {
+                    tfa2 = Convert.ToBoolean(tfa2Value);
+                }
+                else
+                {
+                    // Handle the case where the database value is NULL
+                    tfa2 = false; // Set a default value or handle it as per your application logic
+                }
+
+                object newsletterValue = myCommand.Parameters["@return_newsletter"].Value;
+                bool respostaNewsletter;
+                if (newsletterValue != DBNull.Value)
+                {
+                    respostaNewsletter = Convert.ToBoolean(newsletterValue);
+                }
+                else
+                {
+                    // Handle the case where the database value is NULL
+                    respostaNewsletter = false; // Set a default value or handle it as per your application logic
+                }
+
+
+                myConn.Close();
 
                 lbl_nameTop.Text = respostafirstName + " " + respostalastName + " Profile";
 
@@ -134,15 +367,29 @@ namespace TechHeaven
                 lbl_email.Text = Session["user_email"].ToString();
 
                 tb_phoneNumber.Text = respostaPhonenumber;
+                tb_NIF.Text = resposta_nif.ToString();
 
-                if (tfa2 == 0)
+                if (respostaNewsletter == true)
                 {
-                    btn_2fa.Text = "Setup";
+                    lb_save_news.Text = "Disable";
+                    lb_save_news.ForeColor = Color.Red;
+
                 }
                 else
                 {
-                    btn_2fa.Text = "Remove";
-                    btn_2fa.ForeColor = Color.Red;
+                    lb_save_news.Text = "Enable";
+                    lb_save_news.ForeColor = Color.White;
+                }
+
+                if (tfa2 == false)
+                {
+                    lb_save_tfa.Text = "Setup";
+                    lb_save_tfa.ForeColor = Color.White;
+                }
+                else
+                {
+                    lb_save_tfa.Text = "Remove";
+                    lb_save_tfa.ForeColor = Color.Red;
                 }
 
                 try
@@ -152,14 +399,13 @@ namespace TechHeaven
                     
                     string query = "SELECT * FROM addresses WHERE addresses.userId = " + Session["UserId"].ToString();
 
-
-                    using (SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["atec_casConnectionString"].ConnectionString))
+                    using (SqlConnection myConn2 = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
                     {
-                        using (SqlCommand myCommand = new SqlCommand(query, myConn))
+                        using (SqlCommand myCommand2 = new SqlCommand(query, myConn2))
                         {
                             myConn.Open();
 
-                            using (SqlDataReader dr = myCommand.ExecuteReader())
+                            using (SqlDataReader dr = myCommand2.ExecuteReader())
                             {
                                 while (dr.Read())
                                 {
@@ -209,18 +455,7 @@ namespace TechHeaven
 
         }
 
-        protected void btn_2fa_Click(object sender, EventArgs e)
-        {
-            /*if (tfa2 == false)
-            {
-
-            }
-            else if (tfa2 == true)
-            {
-
-            }*/
-        }
-
+       
         protected void btn_save_Click(object sender, EventArgs e)
         {
             int auxNIF;
@@ -268,70 +503,76 @@ namespace TechHeaven
                 lbl_sucesso.Text = ex.ToString();
             }
         }
+   
 
-        int auxNews;
-
-        protected void btn_save_newsletter_Click(object sender, EventArgs e)
+        protected void lb_save_tfa_Command(object sender, CommandEventArgs e)
         {
-            try
+            if (e.CommandName == "tfa")
             {
-                if (rbl_newsletter.SelectedItem.Text == "Enable")
-                {
-                    auxNews = 1;
-                }
-                else if (rbl_newsletter.SelectedItem.Text == "Disabled")
-                {
-                    auxNews = 0;
-                }
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "update_tfa";
 
-                // Update the newsletter preference
-                UpdateNewsletterPreference(auxNews);
-
-                if (auxNews == 1)
+                if (lb_save_tfa.Text == "Setup")
                 {
-                    lbl_news.Text = "You have enabled newsletter";
+                    myCommand.Parameters.AddWithValue("@tfa", true);
+                    lb_save_tfa.Text = "Remove";
+                    lb_save_tfa.ForeColor = Color.Red;
+
 
                 }
-                else if (auxNews == 0)
+                else if (lb_save_tfa.Text == "Remove")
                 {
-                    lbl_news.Text = "You have disabled newsletter";
+                    myCommand.Parameters.AddWithValue("@tfa", false);
+                    lb_save_tfa.Text = "Setup";
+                    lb_save_tfa.ForeColor = Color.White;
+
                 }
 
-                Response.Redirect("account.aspx");
-            }
-            catch (Exception ex)
-            {
-                lbl_news.Text = ex.ToString();
+                myCommand.Connection = myConn;
+
+                myCommand.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["UserId"]));
+
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+                myConn.Close();
             }
         }
 
-
-
-
-        private void UpdateNewsletterPreference(int newsletter)
+        protected void lb_save_news_Command(object sender, CommandEventArgs e)
         {
-            try
+            if (e.CommandName == "news")
             {
-                // Perform the database update here based on the newsletter value
-                MySqlConnection mycon = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
-                MySqlCommand cmd = new MySqlCommand();
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "update_newsletter";
 
-                cmd.Parameters.AddWithValue("@p_Userid", Convert.ToInt32(Session["UserId"]));
-                cmd.Parameters.AddWithValue("@p_newsletter", Convert.ToInt32(newsletter));
+                if (lb_save_tfa.Text == "Setup")
+                {
+                    myCommand.Parameters.AddWithValue("@newsletter", true);
+                    lb_save_news.Text = "Disable";
+                    lb_save_news.ForeColor = Color.Red;
 
-                cmd.CommandText = "account_newsletter_update";
-                cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Connection = mycon;
-                mycon.Open();
-                cmd.ExecuteNonQuery();
-                mycon.Close();
-            }
-            catch (Exception ex)
-            {
-                throw ex; // Handle the exception as needed.
+                }
+                else if (lb_save_tfa.Text == "Remove")
+                {
+                    myCommand.Parameters.AddWithValue("@newsletter", false);
+                    lb_save_news.Text = "Enable";
+                    lb_save_news.ForeColor = Color.White;
+
+                }
+
+                myCommand.Connection = myConn;
+
+                myCommand.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["UserId"]));
+
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+                myConn.Close();
             }
         }
-
     }
 }
