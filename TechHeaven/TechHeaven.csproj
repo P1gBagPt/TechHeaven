@@ -117,6 +117,7 @@
     <Content Include="account.aspx" />
     <Content Include="activation.aspx" />
     <Content Include="add_address.aspx" />
+    <Content Include="add_card.aspx" />
     <Content Include="admin_assets\css\style.css" />
     <Content Include="admin_assets\img\apple-touch-icon.png" />
     <Content Include="admin_assets\img\card.jpg" />
@@ -14981,6 +14982,13 @@
     </Compile>
     <Compile Include="add_address.aspx.designer.cs">
       <DependentUpon>add_address.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="add_card.aspx.cs">
+      <DependentUpon>add_card.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="add_card.aspx.designer.cs">
+      <DependentUpon>add_card.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_add_brand.aspx.cs">
       <DependentUpon>bo_add_brand.aspx</DependentUpon>
