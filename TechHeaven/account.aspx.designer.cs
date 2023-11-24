@@ -51,13 +51,13 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.Label lbl_email;
 
         /// <summary>
-        /// lbl_news control.
+        /// lbl_balance control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_news;
+        protected global::System.Web.UI.WebControls.Label lbl_balance;
 
         /// <summary>
         /// tb_first_name control.
@@ -166,6 +166,15 @@ namespace TechHeaven
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel panel2;
+
+        /// <summary>
+        /// Repeater2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater Repeater2;
 
         /// <summary>
         /// panel1 control.

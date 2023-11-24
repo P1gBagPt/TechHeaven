@@ -99,7 +99,7 @@ namespace TechHeaven
         static DataTable GetDataFromDb(string query)
         {
             var con = new SqlConnection(ConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString());
-           
+
             var da = new SqlDataAdapter(query, con);
             var dt = new DataTable();
 
@@ -127,26 +127,18 @@ namespace TechHeaven
             var dt = GetDataFromDb(query);
             _pgsource.DataSource = dt.DefaultView;
             _pgsource.AllowPaging = true;
-            // Number of items to be displayed in the Repeater
             _pgsource.PageSize = _pageSize;
             _pgsource.CurrentPageIndex = CurrentPage;
-            // Keep the Total pages in View State
             ViewState["TotalPages"] = _pgsource.PageCount;
-            // Example: "Page 1 of 10"
-            //lblpage.Text = "Página " + (CurrentPage + 1) + " de " + _pgsource.PageCount;
-            // Enable First, Last, Previous, Next buttons
             lbPrevious.Enabled = !_pgsource.IsFirstPage;
             lbNext.Enabled = !_pgsource.IsLastPage;
-            /*lbFirst.Enabled = !_pgsource.IsFirstPage;
-            lbLast.Enabled = !_pgsource.IsLastPage;*/
 
-            // Bind data into repeater
             Repeater1.DataSource = _pgsource;
             Repeater1.DataBind();
 
-            // Call the function to do paging
             HandlePaging();
         }
+
 
         private void HandlePaging()
         {
@@ -261,39 +253,32 @@ namespace TechHeaven
 
         protected void lb_ativar_desativar_Click(object sender, CommandEventArgs e)
         {
-            // Obtenha o ID do produto a partir dos dados do item atual (usando Eval, por exemplo).
-            //int produtoID = Convert.ToInt32(Eval("id_produto"));
             if (e.CommandName == "AtivarDesativar")
             {
                 int produtoID = Convert.ToInt32(e.CommandArgument);
 
-                // Crie uma conexão com o banco de dados.
                 using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString()))
                 {
-                    // Abra a conexão.
                     con.Open();
 
-                    // Consulta SQL para atualizar o estado do produto.
                     string query = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
 
-                    // Crie e configure o comando SQL.
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.Parameters.AddWithValue("@produtoID", produtoID);
 
-                        // Execute a consulta.
                         int rowsAffected = cmd.ExecuteNonQuery();
 
-                        // Verifique se a consulta foi executada com sucesso.
                         if (rowsAffected > 0)
                         {
-                            // Atualize a interface do usuário para refletir a mudança no estado do produto, se necessário.
+                            // Update the user interface to reflect the change in the product status, if necessary.
                             BindDataIntoRepeater(query);
-
                         }
                     }
                 }
             }
         }
+
+
     }
 }

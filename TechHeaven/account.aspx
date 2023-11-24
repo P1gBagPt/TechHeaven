@@ -226,8 +226,10 @@
                                 <asp:Label ID="lbl_username" runat="server" class="label-user-email"></asp:Label>
                                 <p>Email</p>
                                 <asp:Label ID="lbl_email" runat="server" class="label-user-email"></asp:Label>
+                                <p>Balance</p>
+                                <asp:Label ID="lbl_balance" runat="server" class="label-user-email"></asp:Label>
 
-                                <asp:Label ID="lbl_news" runat="server" Visible="False" Enabled="False"></asp:Label>
+
 
 
 
@@ -376,16 +378,41 @@
                                                 </div>
                                             </div>
                                         </asp:Panel>
+                                        <asp:Repeater ID="Repeater2" runat="server">
+                                            <ItemTemplate>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <b>Name: </b>
+                                                            <asp:Label ID="lbl_name" runat="server"><%# Eval("name") %></asp:Label>
+                                                            <br />
+                                                            <b>Number: </b>
+                                                            <asp:Label ID="lbl_number" runat="server"><%# Eval("number") %></asp:Label>
+                                                            <br />
+                                                            <b>CVV: </b>
+                                                            <asp:Label ID="lbl_cvv" runat="server"><%# Eval("cvv") %></asp:Label>
+                                                            <br />
+                                                            <b>Valid: </b>
+                                                            <asp:Label ID="lbl_valid" runat="server"><%# Eval("valid") %></asp:Label>
+                                                            <br />
+                                                            <b>Card type: </b>
+                                                            <asp:Label ID="lbl_cardType" runat="server"><%# Eval("cardTypeName") %></asp:Label>
 
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <asp:LinkButton ID="lb_edit_card" runat="server" OnCommand="lb_edit_card_Command" CommandName="edit_card" CommandArgument='<%# Eval("id") %>'>Edit</asp:LinkButton>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <asp:LinkButton ID="lb_delete_card" runat="server" OnCommand="lb_delete_card_Command" CommandName="delete_card" CommandArgument='<%# Eval("id") %>'>Delete</asp:LinkButton>
+                                                                </div>
+                                                            </div>
 
-
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+
 
                                     </div>
                                 </div>
@@ -395,7 +422,6 @@
                                     <!--ORDERS-->
                                     <div class="row">
                                         <asp:Panel ID="panel1" runat="server" CssClass="col-md-6">
-                                           
                                         </asp:Panel>
                                         <div class="col-md-12">
                                             <div class="card">

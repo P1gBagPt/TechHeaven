@@ -24,19 +24,17 @@ namespace TechHeaven
                 SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
                 SqlCommand myCommand = new SqlCommand();
                 myCommand.CommandType = CommandType.StoredProcedure;
-                myCommand.CommandText = "insert_address";
+                myCommand.CommandText = "insert_card";
 
                 myCommand.Connection = myConn;
 
-
                 myCommand.Parameters.AddWithValue("@userId", Convert.ToInt32(Session["userId"]));
                 myCommand.Parameters.AddWithValue("@name", card_name.Text);
-                myCommand.Parameters.AddWithValue("@number", Convert.ToInt32(card_number.Text));
+                myCommand.Parameters.AddWithValue("@number", card_number.Text);
                 myCommand.Parameters.AddWithValue("@cvv", Convert.ToInt32(cvv.Text));
-                myCommand.Parameters.AddWithValue("@expiration", expiration.Text);
-                myCommand.Parameters.AddWithValue("@location", address_location.Text);
-                myCommand.Parameters.AddWithValue("@city", DropDownList1.SelectedValue);
-                myCommand.Parameters.AddWithValue("@phone", address_phone.Text);
+                myCommand.Parameters.AddWithValue("@valid", Convert.ToString(expiration.Text));
+                myCommand.Parameters.AddWithValue("@cardTypeID", DropDownList1.SelectedValue);
+               
 
 
                 myConn.Open();

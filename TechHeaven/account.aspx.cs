@@ -33,6 +33,7 @@ namespace TechHeaven
                 else
                 {
                     LoadUserInfo();
+
                 }
             }
             LoadUserInfo();
@@ -54,44 +55,50 @@ namespace TechHeaven
             public string city { get; set; }
 
             public string phone { get; set; }
-
         }
 
-       
+        public class cards
+        {
+            public int id { get; set; }
+
+            public string name { get; set; }
+
+            public string number { get; set; }
+
+            public int cvv { get; set; }
+
+            public string valid { get; set; }
+
+            public int cardTypeID { get; set; }
+
+            public int userId { get; set; }
+            // Adicione a propriedade para armazenar o nome do tipo de cartão
+            public string cardTypeName { get; set; }
+        }
+
+
         protected void btn_save_Click(object sender, EventArgs e)
         {
-            int auxNIF;
             try
             {
+                //user_info_update
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "user_info_update";
+                myCommand.Connection = myConn;
 
-                MySqlConnection mycon = new MySqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
-                MySqlCommand cmd = new MySqlCommand();
-
-                cmd.Parameters.AddWithValue("@p_UserId", Convert.ToInt32(Session["UserId"]));
-                cmd.Parameters.AddWithValue("@p_FirstName", tb_first_name.Text);
-                cmd.Parameters.AddWithValue("@p_LastName", tb_last_name.Text);
-                cmd.Parameters.AddWithValue("@p_PhoneNumber", tb_phoneNumber.Text);
-
-                if (tb_NIF.Text == "")
-                {
-                    auxNIF = 0;
-                }
-                else
-                {
-                    auxNIF = int.Parse(tb_NIF.Text);
-                }
-
-                cmd.Parameters.AddWithValue("@p_NIF", Convert.ToInt32(auxNIF));
+                myCommand.Parameters.AddWithValue("@userId", Session["userId"]);
+                myCommand.Parameters.AddWithValue("@firstName", tb_first_name.Text);
+                myCommand.Parameters.AddWithValue("@lastName", tb_last_name.Text);
+                myCommand.Parameters.AddWithValue("@phoneNumber", tb_phoneNumber.Text);
+                myCommand.Parameters.AddWithValue("@nif", Convert.ToInt32(tb_NIF.Text));
 
 
-                cmd.CommandText = "account_information_update";
-                cmd.CommandType = CommandType.StoredProcedure;
-
-
-                cmd.Connection = mycon;
-                mycon.Open();
-                cmd.ExecuteNonQuery();
-                mycon.Close();
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+                myConn.Close();
+               
 
                 lbl_sucesso.Enabled = true;
                 lbl_sucesso.Visible = true;
@@ -100,7 +107,7 @@ namespace TechHeaven
                 lbl_sucesso.ForeColor = Color.Green;
 
             }
-            catch (MySqlException ex)
+            catch (Exception ex)
             {
                 lbl_sucesso.Text = ex.ToString();
             }
@@ -134,7 +141,7 @@ namespace TechHeaven
 
                 myCommand.Connection = myConn;
 
-                myCommand.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["UserId"]));
+                myCommand.Parameters.AddWithValue("@userID", Convert.ToInt32(Session["userId"]));
 
                 myConn.Open();
                 myCommand.ExecuteNonQuery();
@@ -241,12 +248,24 @@ namespace TechHeaven
                 return_newsletter.SqlDbType = SqlDbType.Bit;
                 myCommand.Parameters.Add(return_newsletter);
 
+                SqlParameter return_balance = new SqlParameter();
+                return_balance.ParameterName = "@return_balance";
+                return_balance.Direction = ParameterDirection.Output;
+                return_balance.SqlDbType = SqlDbType.Decimal;
+                myCommand.Parameters.Add(return_balance);
+
 
                 SqlParameter return_total_address = new SqlParameter();
                 return_total_address.ParameterName = "@return_total_address";
                 return_total_address.Direction = ParameterDirection.Output;
                 return_total_address.SqlDbType = SqlDbType.Int;
                 myCommand.Parameters.Add(return_total_address);
+
+                SqlParameter return_total_cards = new SqlParameter();
+                return_total_cards.ParameterName = "@return_total_cards";
+                return_total_cards.Direction = ParameterDirection.Output;
+                return_total_cards.SqlDbType = SqlDbType.Int;
+                myCommand.Parameters.Add(return_total_cards);
 
                 SqlParameter valor = new SqlParameter();
                 valor.ParameterName = "@return";
@@ -303,8 +322,10 @@ namespace TechHeaven
                     respostaNewsletter = false; // Set a default value or handle it as per your application logic
                 }
 
+                decimal balanceValue = Convert.ToDecimal(myCommand.Parameters["@return_balance"].Value);
 
                 int respostaAddress = Convert.ToInt32(myCommand.Parameters["@return_total_address"].Value);
+                int respostaCards = Convert.ToInt32(myCommand.Parameters["@return_total_cards"].Value);
 
 
                 myConn.Close();
@@ -314,7 +335,13 @@ namespace TechHeaven
                     panel_add_address.Visible = false;
                 }
 
+                if (respostaCards == 5)
+                {
+                    panel2.Visible = false;
+                }
+
                 lbl_nameTop.Text = respostafirstName + " " + respostalastName + " Profile";
+                lbl_balance.Text = balanceValue.ToString() + " €";
                 tb_first_name.Text = respostafirstName;
                 tb_last_name.Text = respostalastName;
                 lbl_username.Text = respostausername;
@@ -345,6 +372,7 @@ namespace TechHeaven
                 }
 
                 LoadUserAddresses();
+                LoadUserCards();
             }
         }
 
@@ -391,6 +419,63 @@ namespace TechHeaven
             }
         }
 
+
+        
+
+        private void LoadUserCards()
+        {
+            try
+            {
+                List<cards> lst_cards = new List<cards>();
+                string query = "SELECT c.*, ct.name AS cardTypeName FROM cards c " +
+                                       "JOIN card_type ct ON c.cardTypeID = ct.id_type_card " +
+                                       "WHERE c.status = 1 AND c.userId = " + Session["userId"].ToString();
+
+                using (SqlConnection myConn2 = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
+                {
+                    using (SqlCommand myCommand2 = new SqlCommand(query, myConn2))
+                    {
+                        myConn2.Open(); // Open the connection
+
+                        using (SqlDataReader dr = myCommand2.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                var cards_users = new cards();
+
+                                cards_users.id = Convert.ToInt32(dr["id_card"]);
+                                cards_users.name = dr["name"].ToString();
+                                cards_users.number = dr["number"].ToString();
+                                cards_users.cvv = Convert.ToInt32(dr["cvv"]);
+                                cards_users.valid = dr["valid"].ToString();
+                                cards_users.cardTypeID = Convert.ToInt32(dr["cardTypeID"]);
+                                cards_users.userId = Convert.ToInt32(dr["userId"]);
+
+                                cards_users.cardTypeName = dr["cardTypeName"].ToString();
+
+                                lst_cards.Add(cards_users);
+                            }
+                        }
+                    }
+                }
+
+                Repeater2.DataSource = lst_cards;
+                Repeater2.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
         protected void lb_delete_address_Command(object sender, CommandEventArgs e)
         {
             if (e.CommandName == "delete_address")
@@ -428,6 +513,47 @@ namespace TechHeaven
         }
 
         protected void lb_edit_address_Command(object sender, CommandEventArgs e)
+        {
+
+        }
+
+        protected void lb_delete_card_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "delete_card")
+            {
+                int cardId = Convert.ToInt32(e.CommandArgument);
+                Console.WriteLine("Address ID: " + cardId); // Add this line
+                // Crie uma conexão com o banco de dados.
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
+                {
+                    // Abra a conexão.
+                    con.Open();
+
+                    // Consulta SQL para atualizar o estado do produto.
+                    string query = "UPDATE cards SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_card = @cardID";
+
+                    // Crie e configure o comando SQL.
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@cardID", cardId);
+
+
+                        // Execute a consulta.
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        // Verifique se a consulta foi executada com sucesso.
+                        if (rowsAffected > 0)
+                        {
+                            // Atualize a interface do usuário para refletir a mudança no estado do produto, se necessário.
+                            LoadUserCards();
+
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void lb_edit_card_Command(object sender, CommandEventArgs e)
         {
 
         }

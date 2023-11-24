@@ -402,6 +402,7 @@
     <Content Include="admin_assets\vendor\tinymce\themes\silver\theme.min.js" />
     <Content Include="admin_assets\vendor\tinymce\tinymce.js" />
     <Content Include="admin_assets\vendor\tinymce\tinymce.min.js" />
+    <Content Include="all_products.aspx" />
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\headerFooterStyle.css" />
     <Content Include="assets\css\main.min.css" />
@@ -14989,6 +14990,13 @@
     </Compile>
     <Compile Include="add_card.aspx.designer.cs">
       <DependentUpon>add_card.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="all_products.aspx.cs">
+      <DependentUpon>all_products.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="all_products.aspx.designer.cs">
+      <DependentUpon>all_products.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_add_brand.aspx.cs">
       <DependentUpon>bo_add_brand.aspx</DependentUpon>
