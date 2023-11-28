@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="header-right">
-                           
+
                             <!-- End .compare-dropdown -->
 
                             <%if (Session["user_email"] == null || Session["role"] == null)
@@ -193,17 +193,14 @@
                             </div>
                             <!-- End .compare-dropdown -->
 
-                            <div class="dropdown cart-dropdown">
-                                <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <div class="wishlist">
+                                <a href="cart.aspx" title="Cart">
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
-                                        <span class="cart-count">2</span>
+                                        <span class="wishlist-count badge">3</span>
                                     </div>
                                     <p>Cart</p>
                                 </a>
-
-                               
-                                <!-- End .dropdown-menu -->
                             </div>
                             <!-- End .cart-dropdown -->
                         </div>
@@ -254,8 +251,8 @@
                                     <li>
                                         <a href="all_products.aspx">Shop</a>
                                     </li>
-                                   
-                                    
+
+
                                 </ul>
                                 <!-- End .menu -->
                             </nav>

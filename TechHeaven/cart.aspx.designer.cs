@@ -11,7 +11,7 @@ namespace TechHeaven
 {
 
 
-    public partial class all_products
+    public partial class cart
     {
 
         /// <summary>
@@ -24,24 +24,6 @@ namespace TechHeaven
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
 
         /// <summary>
-        /// lbl_erro control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_erro;
-
-        /// <summary>
-        /// sortby control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList sortby;
-
-        /// <summary>
         /// Repeater1 control.
         /// </summary>
         /// <remarks>
@@ -51,57 +33,75 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.Repeater Repeater1;
 
         /// <summary>
-        /// lbPrevious control.
+        /// lbl_vazio control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbPrevious;
+        protected global::System.Web.UI.WebControls.Label lbl_vazio;
 
         /// <summary>
-        /// rptPaging control.
+        /// btn_esvaziar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList rptPaging;
+        protected global::System.Web.UI.WebControls.Button btn_esvaziar;
 
         /// <summary>
-        /// lbNext control.
+        /// btn_continuar_comprar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbNext;
+        protected global::System.Web.UI.WebControls.Button btn_continuar_comprar;
 
         /// <summary>
-        /// lb_clean_filters control.
+        /// checkout_panel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lb_clean_filters;
+        protected global::System.Web.UI.WebControls.Panel checkout_panel;
 
         /// <summary>
-        /// Repeater2 control.
+        /// RadioButtonList1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater2;
+        protected global::System.Web.UI.WebControls.RadioButtonList RadioButtonList1;
 
         /// <summary>
-        /// Repeater3 control.
+        /// ltShipping control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater Repeater3;
+        protected global::System.Web.UI.WebControls.Literal ltShipping;
+
+        /// <summary>
+        /// ltTotal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal ltTotal;
+
+        /// <summary>
+        /// btn_checkout control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_checkout;
     }
 }

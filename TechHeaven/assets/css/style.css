@@ -12483,7 +12483,6 @@ button:focus {
     border-top: none
 }
 .table.table-summary thead th:last-child, .table.table-summary tbody td:last-child {
-    text-align: right;
     min-width: 100px
 }
 .table.table-summary .summary-total td {
@@ -12779,13 +12778,13 @@ button:focus {
     width: 120px
 }
 .table.table-cart .total-col {
-    width: 80px
+    width: 100px
 }
 .table.table-cart .quantity-col {
-    width: 135px
+    width: 180px
 }
 .cart-product-quantity {
-    width: 100px
+    width: 135px
 }
 .cart-product-quantity .form-control {
     padding: .85rem 2.6rem;

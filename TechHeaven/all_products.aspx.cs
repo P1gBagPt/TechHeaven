@@ -244,7 +244,80 @@ namespace TechHeaven
 
         protected void lb_add_cart_Command(object sender, CommandEventArgs e)
         {
+            if (e.CommandName == "add_cart")
+            {
 
+                try
+                {
+
+                    if (Session["userId"] == null)
+                    {
+                        Response.Redirect("login.aspx");
+                    }
+                    else
+                    {
+
+
+                        int id_user = Convert.ToInt32(Session["userId"].ToString());
+                        int productId = int.Parse(e.CommandArgument.ToString());
+                        int quantidade = Convert.ToInt32(1);
+
+                        SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+                        SqlCommand myCommand = new SqlCommand();
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.CommandText = "add_cart";
+
+                        myCommand.Connection = myConn;
+
+                        myCommand.Parameters.AddWithValue("@idUser", id_user);
+                        myCommand.Parameters.AddWithValue("@idProduto", productId);
+                        myCommand.Parameters.AddWithValue("@quantity", quantidade);
+
+                        SqlParameter valor = new SqlParameter();
+                        valor.ParameterName = "@return";
+                        valor.Direction = ParameterDirection.Output;
+                        valor.SqlDbType = SqlDbType.Int;
+
+                        myCommand.Parameters.Add(valor);
+
+                        myConn.Open();
+                        myCommand.ExecuteNonQuery();
+
+                        int resposta = Convert.ToInt32(myCommand.Parameters["@return"].Value);
+
+                        myConn.Close();
+
+                        if (resposta == 3)
+                        {
+                            lbl_erro.Enabled = true;
+                            lbl_erro.Visible = true;
+                            lbl_erro.Text = "A quantidade do carrinho é o stock existente!";
+                            lbl_erro.ForeColor = System.Drawing.Color.Red;
+                        }
+
+                        if (resposta == 2)
+                        {
+                            lbl_erro.Enabled = true;
+                            lbl_erro.Visible = true;
+                            lbl_erro.Text = "Carrinho atualizado com sucesso!";
+                            lbl_erro.ForeColor = System.Drawing.Color.Green;
+                        }
+
+                        if (resposta == 1)
+                        {
+                            lbl_erro.Enabled = true;
+                            lbl_erro.Visible = true;
+                            lbl_erro.Text = "Produto adicionado ao carrinho!";
+                            lbl_erro.ForeColor = System.Drawing.Color.Green;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
         }
 
         protected void lb_clean_filters_Command(object sender, CommandEventArgs e)
@@ -353,7 +426,7 @@ namespace TechHeaven
 
             }
             else
-            {               
+            {
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
     "FROM products p " +
     "LEFT JOIN categories c ON p.category = c.id_category " +
@@ -404,7 +477,7 @@ namespace TechHeaven
 
 
 
-        
+
 
 
 

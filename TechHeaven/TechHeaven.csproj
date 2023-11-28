@@ -14941,6 +14941,7 @@
     <Content Include="assets\main.js" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\css\line-awesome.min.css" />
     <Content Include="assets\vendor\line-awesome\line-awesome\line-awesome\fonts\line-awesomeeb4f.svg" />
+    <Content Include="billing.aspx" />
     <Content Include="bo_add_brand.aspx" />
     <Content Include="bo_add_category.aspx" />
     <Content Include="bo_add_product.aspx" />
@@ -14951,6 +14952,7 @@
     <Content Include="bo_products.aspx" />
     <Content Include="bo_roles.aspx" />
     <Content Include="bo_users.aspx" />
+    <Content Include="cart.aspx" />
     <Content Include="lib\bootstrap\bootstrap.min.css" />
     <Content Include="lib\isotope\jquery.isotope.min.js" />
     <Content Include="lib\jquery.appear\jquery.appear.min.js" />
@@ -14997,6 +14999,13 @@
     </Compile>
     <Compile Include="all_products.aspx.designer.cs">
       <DependentUpon>all_products.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="billing.aspx.cs">
+      <DependentUpon>billing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="billing.aspx.designer.cs">
+      <DependentUpon>billing.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_add_brand.aspx.cs">
       <DependentUpon>bo_add_brand.aspx</DependentUpon>
@@ -15065,6 +15074,13 @@
     </Compile>
     <Compile Include="bo_users.aspx.designer.cs">
       <DependentUpon>bo_users.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="cart.aspx.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="cart.aspx.designer.cs">
+      <DependentUpon>cart.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>

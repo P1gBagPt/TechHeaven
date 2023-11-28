@@ -26,6 +26,7 @@
                             </ol>
                         </div>
                         <!-- End .container -->
+                        <asp:Label ID="lbl_erro" runat="server" Visible="False" Enabled="False"></asp:Label>
                     </nav>
                     <!-- End .breadcrumb-nav -->
 
