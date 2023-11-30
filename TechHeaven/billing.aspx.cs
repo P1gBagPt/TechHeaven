@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Net.Mail;
 using System.Net;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace TechHeaven
 {
@@ -200,19 +201,207 @@ namespace TechHeaven
 
 
 
-            if(proceed == true)
+            if (proceed == true)
             {
+
+                //ORDER INFO
+                int selectedValue = Convert.ToInt32(ddl_address.SelectedValue);
+
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+                SqlCommand cmd = new SqlCommand();
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "order_proceed";
+
+                cmd.Connection = myConn;
+
+                cmd.Parameters.AddWithValue("@userId", id_user);
+                cmd.Parameters.AddWithValue("@total", total);
+                cmd.Parameters.AddWithValue("@data_encomenda", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                cmd.Parameters.AddWithValue("@pagamento", 1);
+                cmd.Parameters.AddWithValue("@addressID", selectedValue);
+
+
+
+                SqlParameter retorno = new SqlParameter("@retorno", SqlDbType.Int);
+                retorno.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(retorno);
+
+
+
+                myConn.Open();
+                cmd.ExecuteNonQuery();
+                encomenda_id = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
+                Session["EncomendaID"] = encomenda_id;
+                myConn.Close();
+
+                try
+                {
+                    //BILLINGS
+                    SqlConnection myConn2 = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+
+                    SqlCommand cmd2 = new SqlCommand();
+
+                    cmd2.CommandType = CommandType.StoredProcedure;
+                    cmd2.CommandText = "billing_order";
+
+                    cmd2.Connection = myConn2;
+
+                    cmd2.Parameters.AddWithValue("@userId", id_user);
+                    cmd2.Parameters.AddWithValue("@addressID", selectedValue);
+                    cmd2.Parameters.AddWithValue("@encomenda_id", encomenda_id);
+                    cmd2.Parameters.AddWithValue("@nome", tb_firstname.Text);
+                    cmd2.Parameters.AddWithValue("@alcunha", tb_lastname.Text);
+                    cmd2.Parameters.AddWithValue("@rua", tb_address.Text);
+                    cmd2.Parameters.AddWithValue("@apartamento", tb_address_floor.Text);
+                    cmd2.Parameters.AddWithValue("@codigoPostal", tb_zipcode.Text);
+                    cmd2.Parameters.AddWithValue("@pais", tb_state.Text);
+                    cmd2.Parameters.AddWithValue("@cidade", tb_city.Text);
+                    cmd2.Parameters.AddWithValue("@telemovel", tb_phonenumber.Text);
+
+
+                    SqlParameter retorno2 = new SqlParameter("@retorno", SqlDbType.Int);
+                    retorno2.Direction = ParameterDirection.Output;
+                    cmd2.Parameters.Add(retorno2);
+
+
+
+                    myConn2.Open();
+                    cmd2.ExecuteNonQuery();
+
+                    myConn2.Close();
+
+
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    lbShipping.Text = ex.Message;
+
+                }
                 try
                 {
 
-                }catch (Exception ex)
-                {
+
+
+                    string html = "<h1 style=\"font-family: Arial, sans-serif;\">Techeaven</h1><br/>" +
+                    "<h2>Order Number " + encomenda_id + "</h2><br/><br/>" +
+                    "<h3>Personal Information</h3><br/>" +
+                    string.Format("<p>First Name: <b>{0}</b> | Last Name: <b>{1}</b></p><br/>", tb_firstname.Text, tb_lastname.Text) +
+                    string.Format("<p>Phone Number: <b>{0}</b></p><br/><br/>", tb_phonenumber.Text) +
+                    "<h3>Shipping Details</h3><br/>" +
+                    string.Format("<p>Address: <b>{0}</b> | Floor: <b>{1}</b></p><br/>", tb_address.Text, tb_address_floor.Text) +
+                    string.Format("<p>Country: <b>{0}</b> | City: <b>{1}</b></p><br/>", tb_state.Text, tb_city.Text) +
+                    string.Format("<p>Zipcode: <b>{0}</b></p><br/><br/>", tb_zipcode.Text) +
+                    "<h3>Products purchased</h3><br/>";
+
+                    List<ProdutoCarrinho> produtosNoCarrinho = ObterProdutosDoCarrinho(encomenda_id, id_user);
+
+                    foreach (var produto in produtosNoCarrinho)
+                    {
+                        html += $"<img src=\"data:{produto.ContentTypeImagem};base64,{Convert.ToBase64String(produto.Imagem)}\" style=\"max-width: 100px; margin-right: 10px; border: 1px solid black;\" />";
+
+
+                        html += string.Format("<p>Product Name: <b>{0}</b> | Brand: <b>{1}</b> | Product Code: <b>{2}</b> <br/> Stock: <b>{3}</b> | Total: <b>€{4:F2}</b></p>",
+                            produto.NomeProduto, produto.Marca, produto.NumeroArtigo, produto.Quantidade, produto.PrecoTotal);
+
+                        html += "<hr style=\"border: 1px solid #ddd;\"/>";
+
+                    }
+
+                    html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+
+                    GerarPdfEnviarEmail(html, encomenda_id, email_user);
+
+
+
 
                 }
+                catch (Exception ex)
+                {
+                    lbShipping.Text = ex.Message;
+
+                }
+
+
+
             }
 
-
         }
+
+        public List<ProdutoCarrinho> ObterProdutosDoCarrinho(int encomenda_id, int id_user)
+        {
+            List<ProdutoCarrinho> produtos = new List<ProdutoCarrinho>();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString();
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                string query = @"
+    SELECT
+    p.name AS NomeProduto,
+    p.price AS PrecoArtigo,
+    c.quantity AS Quantidade,
+    m.brand_name AS Marca,
+    p.product_code AS NumeroArtigo,
+    c.quantity * p.price AS PrecoTotal,
+    p.image AS ImagemProduto,
+    p.contenttype AS ContentTypeImagem
+FROM cart c
+INNER JOIN products p ON c.productID = p.id_products
+INNER JOIN brands m ON p.brand = m.id_brand
+WHERE c.userID = @id_user
+    AND c.orderID = @encomenda_id";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@encomenda_id", encomenda_id);
+                    cmd.Parameters.AddWithValue("@id_user", id_user);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ProdutoCarrinho produto = new ProdutoCarrinho
+                            {
+                                NomeProduto = reader["NomeProduto"].ToString(),
+                                PrecoArtigo = Convert.ToDecimal(reader["PrecoArtigo"]),
+                                Quantidade = Convert.ToInt32(reader["Quantidade"]),
+                                Marca = reader["Marca"].ToString(),
+                                NumeroArtigo = reader["NumeroArtigo"].ToString(),
+                                PrecoTotal = Convert.ToDecimal(reader["PrecoTotal"]),
+                                Imagem = reader["ImagemProduto"] as byte[],
+                                ContentTypeImagem = reader["ContentTypeImagem"].ToString()
+                            };
+                            produtos.Add(produto);
+                        }
+                    }
+                }
+
+                con.Close();
+            }
+
+            return produtos;
+        }
+
+        public class ProdutoCarrinho
+        {
+            public string NomeProduto { get; set; }
+            public decimal PrecoArtigo { get; set; }
+            public int Quantidade { get; set; }
+            public string Marca { get; set; }
+            public string NumeroArtigo { get; set; }
+            public decimal PrecoTotal { get; set; }
+            public byte[] Imagem { get; set; }
+            public string ContentTypeImagem { get; set; }
+        }
+
 
         private void BindDataIntoRepeater(string query)
         {
@@ -245,44 +434,55 @@ namespace TechHeaven
 
         public void GerarPdfEnviarEmail(string html, int encomenda_id, string email_user)
         {
-            // Gere o PDF
-            var pdfDocument = PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4);
-            string caminhoDaPastaPDFs = Server.MapPath("~/PDFS");
-            string nomeDoArquivoPDF = encomenda_id + ".pdf"; // Use o número da encomenda como nome do arquivo
-            string caminhoDoPDF = Path.Combine(caminhoDaPastaPDFs, nomeDoArquivoPDF);
-            pdfDocument.Save(caminhoDoPDF);
+            try
+            {
+                // Gere o PDF
+                var pdfDocument = PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4);
+                string caminhoDaPastaPDFs = Server.MapPath("~/PDFS");
+                string nomeDoArquivoPDF = encomenda_id + ".pdf"; // Use o número da encomenda como nome do arquivo
+                string caminhoDoPDF = Path.Combine(caminhoDaPastaPDFs, nomeDoArquivoPDF);
+                pdfDocument.Save(caminhoDoPDF);
 
-            // Envie o PDF por email
-            MailMessage mail = new MailMessage();
-            SmtpClient servidor = new SmtpClient();
+                // Envie o PDF por email
+                MailMessage mail = new MailMessage();
+                SmtpClient servidor = new SmtpClient();
 
-            mail.From = new MailAddress(ConfigurationManager.AppSettings["SMTP_USER"]);
-            mail.To.Add(new MailAddress(email_user));
-            mail.Subject = "Encomenda numero " + encomenda_id;
-            mail.IsBodyHtml = true;
+                mail.From = new MailAddress(ConfigurationManager.AppSettings["SMTP_USER"]);
+                mail.To.Add(new MailAddress(email_user));
+                mail.Subject = "Order Number " + encomenda_id;
+                mail.IsBodyHtml = true;
 
-            // Anexe o PDF ao email
-            MemoryStream pdfStream = new MemoryStream(File.ReadAllBytes(caminhoDoPDF));
-            Attachment anexo = new Attachment(pdfStream, nomeDoArquivoPDF, "application/pdf");
-            mail.Attachments.Add(anexo);
+                // Anexe o PDF ao email
+                MemoryStream pdfStream = new MemoryStream(File.ReadAllBytes(caminhoDoPDF));
+                Attachment anexo = new Attachment(pdfStream, nomeDoArquivoPDF, "application/pdf");
+                mail.Attachments.Add(anexo);
 
-            // Corpo do email
-            mail.Body = "<h1>Autoparts</h1><br/>" +
-                "<h2>Encomenda Numero " + encomenda_id + "</h2>";
+                // Corpo do email
+                mail.Body = "<h1>Techeaven</h1><br/>" +
+                    "<h2>Order number " + encomenda_id + "</h2>";
 
-            servidor.Host = ConfigurationManager.AppSettings["SMTP_HOST"];
-            servidor.Port = int.Parse(ConfigurationManager.AppSettings["SMTP_PORT"]);
+                servidor.Host = ConfigurationManager.AppSettings["SMTP_HOST"];
+                servidor.Port = int.Parse(ConfigurationManager.AppSettings["SMTP_PORT"]);
 
-            string smtpUtilizador = ConfigurationManager.AppSettings["SMTP_USER"];
-            string smtpPassword = ConfigurationManager.AppSettings["SMTP_PASS"];
+                string smtpUtilizador = ConfigurationManager.AppSettings["SMTP_USER"];
+                string smtpPassword = ConfigurationManager.AppSettings["SMTP_PASS"];
 
-            servidor.Credentials = new NetworkCredential(smtpUtilizador, smtpPassword);
-            servidor.EnableSsl = true;
+                servidor.Credentials = new NetworkCredential(smtpUtilizador, smtpPassword);
+                servidor.EnableSsl = true;
 
-            servidor.Send(mail);
-            Session["EncomendaID"] = encomenda_id;
-            Response.Redirect("donecheck.aspx");
+                servidor.Send(mail);
+
+                // Redirect after sending the email
+                Session["EncomendaID"] = encomenda_id;
+                Server.Transfer("donecheck.aspx");
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                lbShipping.Text = ex.Message;
+            }
         }
+
 
 
 

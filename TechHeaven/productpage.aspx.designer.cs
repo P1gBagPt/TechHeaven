@@ -11,97 +11,88 @@ namespace TechHeaven
 {
 
 
-    public partial class master_page
+    public partial class productpage
     {
 
         /// <summary>
-        /// head control.
+        /// lbl_erro control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.WebControls.Label lbl_erro;
 
         /// <summary>
-        /// form1 control.
+        /// main_product_image control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Image main_product_image;
 
         /// <summary>
-        /// ScriptManager1 control.
+        /// lbl_nome control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        protected global::System.Web.UI.WebControls.Label lbl_nome;
 
         /// <summary>
-        /// lbl_logout_user control.
+        /// lbl_preco control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbl_logout_user;
+        protected global::System.Web.UI.WebControls.Label lbl_preco;
 
         /// <summary>
-        /// lb_logout control.
+        /// tb_quantidade control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lb_logout;
+        protected global::System.Web.UI.WebControls.TextBox tb_quantidade;
 
         /// <summary>
-        /// Panel1 control.
+        /// btn_adicionar_carrinho control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
+        protected global::System.Web.UI.WebControls.Button btn_adicionar_carrinho;
 
         /// <summary>
-        /// lt_wishlist control.
+        /// lb_add_wishlist control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lt_wishlist;
+        protected global::System.Web.UI.WebControls.LinkButton lb_add_wishlist;
 
         /// <summary>
-        /// Panel2 control.
+        /// lb_categoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel2;
+        protected global::System.Web.UI.WebControls.LinkButton lb_categoria;
 
         /// <summary>
-        /// lt_cart control.
+        /// lbl_descricao control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal lt_cart;
-
-        /// <summary>
-        /// ContentPlaceHolder1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
+        protected global::System.Web.UI.WebControls.Label lbl_descricao;
     }
 }

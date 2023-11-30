@@ -80,13 +80,13 @@
                                                         <td class="product-col">
                                                             <div class="product">
                                                                 <figure class="product-media">
-                                                                    <a href="'<%# "product.aspx?productId=" + Eval("id_products") %>'">
+                                                                    <a href="'<%# "productpage.aspx?productId=" + Eval("id_products") %>'">
                                                                         <img src='data:<%# Eval("contenttype") %>;base64,<%# Convert.ToBase64String((byte[])Eval("image")) %>' alt='<%# Eval("name") %>' class="img-fluid">
                                                                     </a>
                                                                 </figure>
 
                                                                 <h3 class="product-title">
-                                                                    <a href='<%# "produto.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a>
+                                                                    <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a>
                                                                 </h3>
                                                                 <!-- End .product-title -->
                                                             </div>

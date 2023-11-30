@@ -69,7 +69,7 @@
                                                                 <asp:Panel ID="Panel1" runat="server">
                                                                     <span class="product-label label-new">New</span>
                                                                 </asp:Panel>
-                                                                <a href='<%# "produto.aspx?productId=" + Eval("id_products") %>'>
+                                                                <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
                                                                     <asp:Image ID="img_produto" runat="server" class="product-image" Style="width: 202.75px; height: 202.75px" />
                                                                 </a>
                                                             </figure>
@@ -109,7 +109,7 @@
                                                                     <a href="#"><%# Eval("category")%></a>
                                                                 </div>
                                                                 <!-- End .product-cat -->
-                                                                <h3 class="product-title"><a href='<%# "produto.aspx?productId=" + Eval("id_products") %>'><%# Eval("name")%></a></h3>
+                                                                <h3 class="product-title"><a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name")%></a></h3>
                                                                 <!-- End .product-title -->
 
                                                                 <div class="product-content">

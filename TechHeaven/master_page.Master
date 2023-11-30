@@ -183,21 +183,27 @@
                             <%}%>
 
                             <div class="wishlist">
-                                <a href="login.aspx" title="Wishlist">
+                                <a href="account.aspx" title="Wishlist">
                                     <div class="icon">
                                         <i class="icon-heart-o"></i>
-                                        <span class="wishlist-count badge">3</span>
+                                        <asp:Panel ID="Panel1" runat="server">
+                                            <span class="wishlist-count badge"><asp:Literal ID="lt_wishlist" runat="server"></asp:Literal></span>
+                                        </asp:Panel>
                                     </div>
                                     <p>Wishlist</p>
                                 </a>
                             </div>
+
+
                             <!-- End .compare-dropdown -->
 
                             <div class="wishlist">
                                 <a href="cart.aspx" title="Cart">
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
-                                        <span class="wishlist-count badge">3</span>
+                                        <asp:Panel ID="Panel2" runat="server">
+                                            <span class="wishlist-count badge"><asp:Literal ID="lt_cart" runat="server"></asp:Literal></span>
+                                        </asp:Panel>
                                     </div>
                                     <p>Cart</p>
                                 </a>
@@ -441,4 +447,5 @@
 
     </form>
 </body>
+
 </html>

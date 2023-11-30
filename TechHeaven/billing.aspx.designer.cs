@@ -123,6 +123,15 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.TextBox tb_address_floor;
 
         /// <summary>
+        /// RequiredFieldValidator8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator8;
+
+        /// <summary>
         /// tb_city control.
         /// </summary>
         /// <remarks>

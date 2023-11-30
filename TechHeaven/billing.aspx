@@ -49,6 +49,7 @@
                         <asp:TextBox ID="tb_address" runat="server" CssClass="form-control" MaxLength="60" placeholder="Street address or P.O Box"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Address is required!" ControlToValidate="tb_address" ForeColor="Red"></asp:RequiredFieldValidator>
                         <asp:TextBox ID="tb_address_floor" runat="server" CssClass="form-control" MaxLength="60" placeholder="Apt, suite, unit, building, florr, etc"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="Floor is required!" ControlToValidate="tb_address_floor" ForeColor="Red"></asp:RequiredFieldValidator>
 
 
 
@@ -137,59 +138,7 @@
                         <!-- End .table table-summary -->
 
                         <div class="accordion-summary" id="accordion-payment">
-                            <div class="card">
-                                <div class="card-header" id="heading-1">
-                                    <h2 class="card-title">
-                                        <a role="button" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">Direct bank transfer
-                                        </a>
-                                    </h2>
-                                </div>
-                                <!-- End .card-header -->
-                                <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
-                                    <div class="card-body">
-                                        Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                    </div>
-                                    <!-- End .card-body -->
-                                </div>
-                                <!-- End .collapse -->
-                            </div>
-                            <!-- End .card -->
 
-                            <div class="card">
-                                <div class="card-header" id="heading-2">
-                                    <h2 class="card-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">Check payments
-                                        </a>
-                                    </h2>
-                                </div>
-                                <!-- End .card-header -->
-                                <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
-                                    <div class="card-body">
-                                        Ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. 
-                                    </div>
-                                    <!-- End .card-body -->
-                                </div>
-                                <!-- End .collapse -->
-                            </div>
-                            <!-- End .card -->
-
-                            <div class="card">
-                                <div class="card-header" id="heading-3">
-                                    <h2 class="card-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">Cash on delivery
-                                        </a>
-                                    </h2>
-                                </div>
-                                <!-- End .card-header -->
-                                <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-                                    <div class="card-body">
-                                        Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-                                    </div>
-                                    <!-- End .card-body -->
-                                </div>
-                                <!-- End .collapse -->
-                            </div>
-                            <!-- End .card -->
 
                             <div class="card">
                                 <div class="card-header" id="heading-4">

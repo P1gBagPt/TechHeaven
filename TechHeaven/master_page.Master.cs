@@ -8,17 +8,101 @@ using System.Data;
 using System.Xml.Linq;
 using System.Configuration;
 using System.Security.Cryptography;
+using System.Data.SqlClient;
 
 namespace TechHeaven
 {
     public partial class master_page : System.Web.UI.MasterPage
     {
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+            try
+            {
+                if (Session["userId"] != null)
+                {
+                    int id_user = Convert.ToInt32(Session["userId"].ToString());
+
+                    // Chamando um método para obter a contagem de itens no carrinho
+                    int quantidadeItensCarrinho = ObterQuantidadeItensCarrinho(id_user);
+                    int quantidadeItensWishlist = ObterQuantidadeItensWishlist(id_user);
+
+
+                    if (quantidadeItensCarrinho != 0)
+                    {
+                        lt_cart.Text = quantidadeItensCarrinho.ToString();
+                    }
+                    else
+                    {
+                        Panel2.Visible = false;
+                    }
+
+                    if (quantidadeItensWishlist != 0)
+                    {
+                        lt_wishlist.Text = quantidadeItensWishlist.ToString();
+                    }
+                    else
+                    {
+                        Panel1.Visible = false;
+                    }
+                }
+                else
+                {
+                    lt_cart.Visible = false;
+                    lt_wishlist.Visible = false;
+                    Panel1.Visible = false;
+                    Panel2.Visible = false;
+
+                }
+            }
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine(ex.Message);
+            }
+        }
+        private int ObterQuantidadeItensCarrinho(int userId)
+        {
+            // Aqui você deve implementar a lógica para acessar o banco de dados e contar os itens do carrinho para o usuário
+            // Substitua o exemplo abaixo com a consulta real ou a lógica que você está usando
+
+            // Exemplo fictício usando um SqlConnection e SqlCommand
+            string connectionString = ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM cart WHERE userID = @userId AND status = 1", connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+                    int quantidade = (int)command.ExecuteScalar();
+                    return quantidade;
+                }
+            }
         }
 
+
+        private int ObterQuantidadeItensWishlist(int userId)
+        {
+            // Aqui você deve implementar a lógica para acessar o banco de dados e contar os itens do carrinho para o usuário
+            // Substitua o exemplo abaixo com a consulta real ou a lógica que você está usando
+
+            // Exemplo fictício usando um SqlConnection e SqlCommand
+            string connectionString = ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM wishlist WHERE userID = @userId AND status = 1", connection))
+                {
+                    command.Parameters.AddWithValue("@userId", userId);
+                    int quantidade = (int)command.ExecuteScalar();
+                    return quantidade;
+                }
+            }
+        }
         public string EncryptString(string Message)
         {
             string Passphrase = "@Tec!?T3ChHe@v3N";

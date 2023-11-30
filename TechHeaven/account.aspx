@@ -211,7 +211,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Orders</a>
                                     </li>
-
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="wishlist-tab" data-toggle="tab" href="#wishlist" role="tab" aria-controls="wishlist" aria-selected="false">Wishlist</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -432,6 +434,67 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <div class="tab-pane fade" id="wishlist" role="tabpanel" aria-labelledby="wishlist-tab">
+                                    <!--WISHLIST-->
+                                    <div class="row">
+                                        <asp:Panel ID="panel3" runat="server" CssClass="col-md-6">
+                                        </asp:Panel>
+
+                                        <asp:Repeater ID="Repeater3" runat="server">
+                                            <ItemTemplate>
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="col-3">
+
+                                                            </div>
+                                                            <div class="col-9">
+
+                                                            </div>
+                                                            <b>Name: </b>
+                                                            <asp:Label ID="lbl_productName" runat="server"><%# Eval("ProductName") %></asp:Label>
+                                                            <br />
+                                                            <b>Price: </b>
+                                                            <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
+                                                            <br />
+                                                            <!-- Adicione outros campos conforme necessário -->
+
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <!-- Adicione os LinkButtons ou botões conforme necessário -->
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <!-- Adicione os LinkButtons ou botões conforme necessário -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+
+                                    </div>
+                                    <nav aria-label="...">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <asp:LinkButton ID="lbPrevious" runat="server" OnClick="lbPrevious_Click" CssClass="page-link" Text="Previous"></asp:LinkButton>
+                                            </li>
+                                            <asp:DataList ID="rptPaging" runat="server" OnItemCommand="rptPaging_ItemCommand" OnItemDataBound="rptPaging_ItemDataBound" RepeatDirection="Horizontal">
+                                                <ItemTemplate>
+                                                    <li class="page-item">
+                                                        <asp:LinkButton ID="lbPaging" runat="server" CommandArgument='<%# Eval("PageIndex") %>' CommandName="newPage" CssClass="page-link"><%# Eval("PageText") %></asp:LinkButton>
+                                                    </li>
+                                                </ItemTemplate>
+                                            </asp:DataList>
+                                            <li class="page-item">
+                                                <asp:LinkButton ID="lbNext" runat="server" OnClick="lbNext_Click" CssClass="page-link" Text="Next"></asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+
 
 
 
