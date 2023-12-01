@@ -447,27 +447,24 @@
                                                 <div class="col-md-12">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <div class="col-3">
-
-                                                            </div>
-                                                            <div class="col-9">
-
-                                                            </div>
-                                                            <b>Name: </b>
-                                                            <asp:Label ID="lbl_productName" runat="server"><%# Eval("ProductName") %></asp:Label>
-                                                            <br />
-                                                            <b>Price: </b>
-                                                            <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
-                                                            <br />
-                                                            <!-- Adicione outros campos conforme necessário -->
-
                                                             <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <!-- Adicione os LinkButtons ou botões conforme necessário -->
+                                                                <div class="col-md-3">
+                                                                    <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
+                                                                    <img src='data:<%# Eval("productImageContentType") %>;base64,<%# Convert.ToBase64String((byte[])Eval("productImage")) %>' alt='<%# Eval("productName") %>' class="img-fluid" style="height: 128px; width: 182px;">
+                                                                        </a>
                                                                 </div>
-                                                                <div class="col-md-6">
-                                                                    <!-- Adicione os LinkButtons ou botões conforme necessário -->
+
+                                                                <div class="col-md-7">
+                                                                    <b>Name: </b>
+                                                                    <asp:Label ID="lbl_productName" runat="server"><%# Eval("ProductName") %></asp:Label>
+                                                                    <br />
+                                                                    <b>Price: </b>
+                                                                    <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
                                                                 </div>
+
+                                                                <div class="col-md-2">
+                                                                </div>
+
                                                             </div>
                                                         </div>
                                                     </div>

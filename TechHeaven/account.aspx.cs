@@ -26,7 +26,10 @@ namespace TechHeaven
         //Wishlist
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
-        private int _pageSize = 10;
+        private int _pageSize = 6;
+
+
+
         public static string query;
         private int CurrentPage
         {
@@ -478,7 +481,7 @@ namespace TechHeaven
         {
             try
             {
-                string query = "SELECT w.*, p.name AS productName, p.price AS productPrice, p.image AS productImage, p.contenttype AS productImageContentType " +
+                string query = "SELECT w.*, p.id_products, p.name AS productName, p.price AS productPrice, p.image AS productImage, p.contenttype AS productImageContentType " +
                                "FROM wishlist w " +
                                "JOIN products p ON w.productID = p.id_products " +
                                "WHERE w.userID = " + Session["userId"].ToString();

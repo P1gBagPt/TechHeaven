@@ -40,7 +40,7 @@ namespace TechHeaven
             else
             {
                 id_user = Convert.ToInt32(Session["UserId"].ToString());
-                total = 0;
+                email_user = Session["user_email"].ToString();
 
                 try
                 {
@@ -81,7 +81,10 @@ namespace TechHeaven
                         {
                             totali += 20;
                             lbShipping.Text = "Express";
+
                         }
+                        
+
                     }
                     else
                     {
@@ -92,6 +95,7 @@ namespace TechHeaven
 
 
                     ltTotal.Text = totali.ToString();
+                    total = totali;
 
                     query = "SELECT c.id_cart, c.quantity, p.*, p.quantity as quantidade " +
                     "FROM cart c " +
@@ -99,8 +103,6 @@ namespace TechHeaven
                     "WHERE c.userID = " + id_user + " AND c.status = 1";
 
                     BindDataIntoRepeater(query);
-                    //SqlDataSource2.SelectParameters["user_id"].DefaultValue = Session["UserId"].ToString();
-                    // Dentro do método Page_Load
 
 
 
@@ -111,7 +113,7 @@ namespace TechHeaven
                         SqlCommand cmd2 = new SqlCommand();
 
                         cmd2.CommandType = CommandType.StoredProcedure;
-                        cmd2.CommandText = "total_addresses";
+                        cmd2.CommandText = "total_addresses_cards";
 
                         cmd2.Connection = myConn2;
 
@@ -121,13 +123,18 @@ namespace TechHeaven
                         totalRetornoAddresses.Direction = ParameterDirection.Output;
                         cmd2.Parameters.Add(totalRetornoAddresses);
 
+                        SqlParameter totalRetornoCards = new SqlParameter("@totalCards", SqlDbType.Int);
+                        totalRetornoCards.Direction = ParameterDirection.Output;
+                        cmd2.Parameters.Add(totalRetornoCards);
+
                         myConn2.Open();
                         cmd2.ExecuteNonQuery();
                         myConn2.Close();
 
                         int respostaSP = Convert.ToInt32(cmd2.Parameters["@total"].Value);
+                        int respostaCards = Convert.ToInt32(cmd2.Parameters["@totalCards"].Value);
 
-                        Console.WriteLine(respostaSP);
+                       
                         if (respostaSP == 4)
                         {
                             HyperLink1.Enabled = false;
@@ -138,7 +145,6 @@ namespace TechHeaven
                             ddl_address.Enabled = false;
                             ddl_address.Visible = false;
                             proceed = false;
-
                         }
                         else
                         {
@@ -146,10 +152,29 @@ namespace TechHeaven
                             SqlDataSource2.SelectParameters["user_id"].DefaultValue = Session["UserId"].ToString();
                             ddl_address.DataBind();
                         }
+                        Console.WriteLine(respostaCards);
+                        if (respostaCards == 0)
+                        {
+                            DropDownListCards.Enabled = false;
+                            DropDownListCards.Visible = false;
+                            proceed = false;
+                        }
+                        else if (respostaCards == 4)
+                        {
+                            HyperLink2.Enabled = false;
+                            HyperLink2.Visible = false;
+                        }
+                        else
+                        {
+                            SqlDataSource1.SelectParameters["userId"].DefaultValue = Session["UserId"].ToString();
+                            DropDownListCards.DataBind();
+                        }
+
+
                     }
                     catch (Exception ex)
                     {
-                        // Handle the exception
+                        lbShipping.Text = ex.Message;
                     }
 
                 }
@@ -160,6 +185,19 @@ namespace TechHeaven
 
             }
 
+        }
+
+        protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (RadioButtonList1.SelectedValue == "2")
+            {
+                Panel3.Visible = true;
+
+            }
+            else
+            {
+                Panel3.Visible = false;
+            }
         }
 
 
@@ -188,6 +226,7 @@ namespace TechHeaven
             return dt;
         }
 
+        public static int selectedValueCards;
         protected void btn_submit_Click(object sender, EventArgs e)
         {
             if (ddl_address.Text == "")
@@ -199,13 +238,22 @@ namespace TechHeaven
                 proceed = true;
             }
 
-
+            if(RadioButtonList1.SelectedValue == "2" && DropDownListCards.Text == "")
+            {
+                proceed = false;
+            }
+            else
+            {
+                proceed = true;
+                selectedValueCards = Convert.ToInt32(DropDownListCards.SelectedValue);
+            }
 
             if (proceed == true)
             {
 
                 //ORDER INFO
                 int selectedValue = Convert.ToInt32(ddl_address.SelectedValue);
+                int methodPayment = Convert.ToInt32(RadioButtonList1.SelectedValue);
 
                 SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
@@ -215,11 +263,12 @@ namespace TechHeaven
                 cmd.CommandText = "order_proceed";
 
                 cmd.Connection = myConn;
-
+                Console.WriteLine(total);
                 cmd.Parameters.AddWithValue("@userId", id_user);
                 cmd.Parameters.AddWithValue("@total", total);
                 cmd.Parameters.AddWithValue("@data_encomenda", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                cmd.Parameters.AddWithValue("@pagamento", 1);
+                cmd.Parameters.AddWithValue("@pagamento", methodPayment);
+                cmd.Parameters.AddWithValue("@card", selectedValueCards);
                 cmd.Parameters.AddWithValue("@addressID", selectedValue);
 
 
@@ -254,7 +303,15 @@ namespace TechHeaven
                     cmd2.Parameters.AddWithValue("@encomenda_id", encomenda_id);
                     cmd2.Parameters.AddWithValue("@nome", tb_firstname.Text);
                     cmd2.Parameters.AddWithValue("@alcunha", tb_lastname.Text);
-                    cmd2.Parameters.AddWithValue("@rua", tb_address.Text);
+                    // Check for empty string before adding the street address parameter
+                    if (!string.IsNullOrEmpty(tb_address.Text))
+                    {
+                        cmd2.Parameters.AddWithValue("@rua", tb_address.Text);
+                    }
+                    else
+                    {
+                        Console.WriteLine(tb_address.Text);
+                    }
                     cmd2.Parameters.AddWithValue("@apartamento", tb_address_floor.Text);
                     cmd2.Parameters.AddWithValue("@codigoPostal", tb_zipcode.Text);
                     cmd2.Parameters.AddWithValue("@pais", tb_state.Text);
@@ -285,8 +342,6 @@ namespace TechHeaven
                 }
                 try
                 {
-
-
 
                     string html = "<h1 style=\"font-family: Arial, sans-serif;\">Techeaven</h1><br/>" +
                     "<h2>Order Number " + encomenda_id + "</h2><br/><br/>" +
@@ -405,7 +460,6 @@ WHERE c.userID = @id_user
 
         private void BindDataIntoRepeater(string query)
         {
-            total = 0;
             var dt = GetDataFromDb(query);
             _pgsource.DataSource = dt.DefaultView;
             _pgsource.AllowPaging = true;
@@ -474,7 +528,7 @@ WHERE c.userID = @id_user
 
                 // Redirect after sending the email
                 Session["EncomendaID"] = encomenda_id;
-                Server.Transfer("donecheck.aspx");
+                Response.Redirect("donecheckout.aspx");
             }
             catch (Exception ex)
             {

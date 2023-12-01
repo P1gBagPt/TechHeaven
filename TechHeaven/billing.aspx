@@ -11,7 +11,7 @@
                     <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/add_address.aspx">Add address</asp:HyperLink>
                     <asp:DropDownList ID="ddl_address" class="form-select" CssClass="form-control" runat="server" DataTextField="address" DataValueField="id_addresses" DataSourceID="SqlDataSource2"></asp:DropDownList>
 
-                   
+
 
                     <asp:SqlDataSource runat="server" ID="SqlDataSource2" ConnectionString="<%$ ConnectionStrings:techeavenConnectionString %>" SelectCommand="SELECT * FROM [addresses] WHERE [user_id] = @user_id AND status = 1">
                         <SelectParameters>
@@ -111,8 +111,7 @@
                                 <asp:Repeater ID="Repeater1" runat="server">
                                     <ItemTemplate>
                                         <tr>
-
-                                            <td><a href='<%# "produto.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a></td>
+                                            <td><a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a></td>
                                             <td><%# Eval("price") %> €</td>
 
                                         </tr>
@@ -138,56 +137,48 @@
                         <!-- End .table table-summary -->
 
                         <div class="accordion-summary" id="accordion-payment">
-
-
-                            <div class="card">
-                                <div class="card-header" id="heading-4">
-                                    <h2 class="card-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">PayPal <small class="float-right paypal-link">What is PayPal?</small>
-                                        </a>
-                                    </h2>
-                                </div>
-                                <!-- End .card-header -->
-                                <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
-                                    <div class="card-body">
-                                        Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum.
-                                    </div>
-                                    <!-- End .card-body -->
-                                </div>
-                                <!-- End .collapse -->
-                            </div>
-                            <!-- End .card -->
-
                             <div class="card">
                                 <div class="card-header" id="heading-5">
                                     <h2 class="card-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">Credit Card (Stripe)
-										                    <img src="assets/images/payments-summary.png" alt="payments cards">
-                                        </a>
+                                        <asp:RadioButtonList ID="RadioButtonList1" runat="server" CssClass="shipping-options" RepeatDirection="Vertical"
+                                            OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged" AutoPostBack="true">
+                                            <asp:ListItem Text="Paypal" Value="1" Selected="True" />
+                                            <asp:ListItem Text="Credit Card" Value="2" />
+                                        </asp:RadioButtonList>                                   
                                     </h2>
                                 </div>
                                 <!-- End .card-header -->
-                                <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
-                                    <div class="card-body">
-                                        Donec nec justo eget felis facilisis fermentum.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Lorem ipsum dolor sit ame.
+
+                                <asp:Panel ID="Panel3" runat="server" Visible="False">
+
+                                    <div class="card">
+
+                                        <asp:DropDownList ID="DropDownListCards" runat="server" CssClass="form-control" DataTextField="number" DataValueField="id_card" DataSourceID="SqlDataSource1"></asp:DropDownList>
+                                        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:techeavenConnectionString %>" SelectCommand="SELECT * FROM [cards] WHERE [userId] = @userId AND status = 1">
+                                            <SelectParameters>
+                                                <asp:SessionParameter Name="userId" SessionField="UserId" Type="Int32" />
+                                            </SelectParameters>
+                                        </asp:SqlDataSource>
                                     </div>
-                                    <!-- End .card-body -->
-                                </div>
+
+                                </asp:Panel>
+                                <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/add_card.aspx">Add card</asp:HyperLink>
+
                                 <!-- End .collapse -->
                             </div>
+
                             <!-- End .card -->
                         </div>
-                        <!-- End .accordion -->
-
-                        <asp:Button ID="btn_submit" runat="server" CssClass="btn btn-outline-primary-2 btn-order btn-block" Text="Place Order" OnClick="btn_submit_Click"/>
-
-                        
                     </div>
-                    <!-- End .summary -->
-                </aside>
-                <!-- End .col-lg-3 -->
+                    <!-- End .accordion -->
+
+                    <asp:Button ID="btn_submit" runat="server" CssClass="btn btn-outline-primary-2 btn-order btn-block" Text="Place Order" OnClick="btn_submit_Click" />
             </div>
-            <!-- End .row -->
+            <!-- End .summary -->
+            </aside>
+                <!-- End .col-lg-3 -->
         </div>
+        <!-- End .row -->
+    </div>
     </div>
 </asp:Content>

@@ -26,10 +26,6 @@
                                     <div class="row">
                                         <figure class="product-main-image">
                                             <asp:Image ID="main_product_image" Width="100%" Height="100%" runat="server" />
-
-                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                                <i class="icon-arrows"></i>
-                                            </a>
                                         </figure><!-- End .product-main-image -->
 
                                     </div><!-- End .row -->
