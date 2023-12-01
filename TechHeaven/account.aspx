@@ -401,9 +401,7 @@
                                                             <asp:Label ID="lbl_cardType" runat="server"><%# Eval("cardTypeName") %></asp:Label>
 
                                                             <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <asp:LinkButton ID="lb_edit_card" runat="server" OnCommand="lb_edit_card_Command" CommandName="edit_card" CommandArgument='<%# Eval("id") %>'>Edit</asp:LinkButton>
-                                                                </div>
+
                                                                 <div class="col-md-6">
                                                                     <asp:LinkButton ID="lb_delete_card" runat="server" OnCommand="lb_delete_card_Command" CommandName="delete_card" CommandArgument='<%# Eval("id") %>'>Delete</asp:LinkButton>
                                                                 </div>
@@ -422,24 +420,79 @@
 
                                 <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                                     <!--ORDERS-->
-                                    <div class="row">
-                                        <asp:Panel ID="panel1" runat="server" CssClass="col-md-6">
-                                        </asp:Panel>
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    sdf
-                                                </div>
-                                            </div>
+                                    <div class="page-content">
+                                        <div class="container">
+                                            <h2 class="title mb-3">Orders</h2>
+                                            <asp:Panel ID="Panel4" runat="server" Visible="False">
+                                                <h2 class="title mb-3">No orders :(</h2>
+
+                                            </asp:Panel>
+                                            <!-- End .title -->
+                                            <asp:Repeater ID="Repeater4" runat="server" OnItemDataBound="Repeater4_ItemDataBound">
+                                                <ItemTemplate>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="accordion accordion-rounded" id='<%# "accordion-" + Container.ItemIndex %>'>
+                                                                <div class="card card-box card-sm bg-light">
+                                                                    <div class="card-header" id='<%# "heading-" + Container.ItemIndex %>'>
+                                                                        <h2 class="card-title">
+                                                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                                                                href='<%# "#collapse-" + Container.ItemIndex %>'
+                                                                                aria-expanded="false" aria-controls='<%# "collapse-" + Container.ItemIndex %>'>Order #<%# Eval("id_order") %>
+                                                                            </a>
+                                                                        </h2>
+
+                                                                    </div>
+                                                                    <!-- End .card-header -->
+                                                                    <div id='<%# "collapse-" + Container.ItemIndex %>' class="collapse"
+                                                                        aria-labelledby='<%# "heading-" + Container.ItemIndex %>'
+                                                                        data-parent='<%# "#accordion-" + Container.ItemIndex %>'>
+                                                                        <div class="card-body">
+                                                                            <p>Order number: <%# Eval("id_order") %></p>
+                                                                            <p>Date: <%# Eval("order_date", "{0:MM/dd/yyyy}") %></p>
+                                                                            <p>Total: <%# Eval("total") %> €</p>
+                                                                            <p>Payment Method: <%# Eval("pagamento") %></p>
+
+                                                                            <h3>Products</h3>
+
+                                                                            <asp:Repeater ID="Repeater5" runat="server">
+                                                                                <ItemTemplate>
+                                                                                    <p>
+                                                                                        Product Name: <%# Eval("name") %><br />
+                                                                                        Subtotal: <%# Eval("subtotal") %> €<br />
+                                                                                        Brand: <%# Eval("marca_nome") %>
+                                                                                    </p>
+                                                                                </ItemTemplate>
+                                                                            </asp:Repeater>
+                                                                        </div>
+                                                                        <!-- End .card-body -->
+                                                                    </div>
+                                                                    <!-- End .collapse -->
+                                                                </div>
+                                                                <!-- End .card -->
+                                                            </div>
+                                                            <!-- End .accordion -->
+                                                        </div>
+                                                        <!-- End .col-md-6 -->
+                                                    </div>
+                                                    <!-- End .row -->
+                                                </ItemTemplate>
+                                            </asp:Repeater>
                                         </div>
+                                        <!-- End .container -->
+
+
                                     </div>
+                                    <!-- End .page-content -->
+
                                 </div>
 
 
                                 <div class="tab-pane fade" id="wishlist" role="tabpanel" aria-labelledby="wishlist-tab">
                                     <!--WISHLIST-->
                                     <div class="row">
-                                        <asp:Panel ID="panel3" runat="server" CssClass="col-md-6">
+                                        <asp:Panel ID="Panel3" runat="server" CssClass="col-md-12" Visible="False">
+                                            <h2 class="title mb-3">No items on your wishlist</h2>
                                         </asp:Panel>
 
                                         <asp:Repeater ID="Repeater3" runat="server">
@@ -450,11 +503,11 @@
                                                             <div class="row">
                                                                 <div class="col-md-3">
                                                                     <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
-                                                                    <img src='data:<%# Eval("productImageContentType") %>;base64,<%# Convert.ToBase64String((byte[])Eval("productImage")) %>' alt='<%# Eval("productName") %>' class="img-fluid" style="height: 128px; width: 182px;">
-                                                                        </a>
+                                                                        <img src='data:<%# Eval("productImageContentType") %>;base64,<%# Convert.ToBase64String((byte[])Eval("productImage")) %>' alt='<%# Eval("productName") %>' class="img-fluid" style="height: 128px; width: 182px;">
+                                                                    </a>
                                                                 </div>
 
-                                                                <div class="col-md-7">
+                                                                <div class="col-md-5">
                                                                     <b>Name: </b>
                                                                     <asp:Label ID="lbl_productName" runat="server"><%# Eval("ProductName") %></asp:Label>
                                                                     <br />
@@ -462,7 +515,11 @@
                                                                     <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
                                                                 </div>
 
-                                                                <div class="col-md-2">
+                                                                <div class="col-md-3">
+                                                                    <asp:LinkButton ID="lb_add_cart" runat="server" class="btn-product btn-cart" CommandName="add_cart" CommandArgument='<%# Eval("id_products") %>' OnCommand="lb_add_cart_Command">add to cart</asp:LinkButton>
+                                                                </div>
+                                                                <div class="col-1">
+                                                                    <asp:LinkButton ID="lb_remover_wish" runat="server" CssClass="btn-remove" CommandArgument='<%# Eval("id_wish") %>' OnCommand="lb_remover_wish_Command" CommandName="Remover"><i class="icon-close"></i></asp:LinkButton>
                                                                 </div>
 
                                                             </div>
@@ -473,23 +530,25 @@
                                         </asp:Repeater>
 
                                     </div>
-                                    <nav aria-label="...">
-                                        <ul class="pagination">
-                                            <li class="page-item">
-                                                <asp:LinkButton ID="lbPrevious" runat="server" OnClick="lbPrevious_Click" CssClass="page-link" Text="Previous"></asp:LinkButton>
-                                            </li>
-                                            <asp:DataList ID="rptPaging" runat="server" OnItemCommand="rptPaging_ItemCommand" OnItemDataBound="rptPaging_ItemDataBound" RepeatDirection="Horizontal">
-                                                <ItemTemplate>
-                                                    <li class="page-item">
-                                                        <asp:LinkButton ID="lbPaging" runat="server" CommandArgument='<%# Eval("PageIndex") %>' CommandName="newPage" CssClass="page-link"><%# Eval("PageText") %></asp:LinkButton>
-                                                    </li>
-                                                </ItemTemplate>
-                                            </asp:DataList>
-                                            <li class="page-item">
-                                                <asp:LinkButton ID="lbNext" runat="server" OnClick="lbNext_Click" CssClass="page-link" Text="Next"></asp:LinkButton>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                                    <asp:Panel ID="Panel1" runat="server">
+                                        <nav aria-label="...">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <asp:LinkButton ID="lbPrevious" runat="server" OnClick="lbPrevious_Click" CssClass="page-link" Text="Previous"></asp:LinkButton>
+                                                </li>
+                                                <asp:DataList ID="rptPaging" runat="server" OnItemCommand="rptPaging_ItemCommand" OnItemDataBound="rptPaging_ItemDataBound" RepeatDirection="Horizontal">
+                                                    <ItemTemplate>
+                                                        <li class="page-item">
+                                                            <asp:LinkButton ID="lbPaging" runat="server" CommandArgument='<%# Eval("PageIndex") %>' CommandName="newPage" CssClass="page-link"><%# Eval("PageText") %></asp:LinkButton>
+                                                        </li>
+                                                    </ItemTemplate>
+                                                </asp:DataList>
+                                                <li class="page-item">
+                                                    <asp:LinkButton ID="lbNext" runat="server" OnClick="lbNext_Click" CssClass="page-link" Text="Next"></asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </asp:Panel>
                                 </div>
 
 

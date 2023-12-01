@@ -26,12 +26,13 @@
                             </ol>
                         </div>
                         <!-- End .container -->
-                        <asp:Label ID="lbl_erro" runat="server" Visible="False" Enabled="False"></asp:Label>
                     </nav>
                     <!-- End .breadcrumb-nav -->
 
                     <div class="page-content">
                         <div class="container">
+                            <asp:Label ID="lbl_erro" runat="server" Visible="False" Enabled="False"></asp:Label>
+
                             <div class="row">
                                 <div class="col-lg-9">
                                     <div class="toolbox">
@@ -104,7 +105,7 @@
 
                                                         <div class="col-lg-6">
                                                             <div class="product-body product-action-inner">
-                                                                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                                                <asp:LinkButton ID="lb_wishlist" runat="server" OnCommand="lb_wishlist_Command" CommandName="Wishlist" CommandArgument='<%# Eval("id_products") %>' CssClass="btn-product btn-wishlist" title="Add to wishlist"></asp:LinkButton>
                                                                 <div class="product-cat">
                                                                     <a href="#"><%# Eval("category")%></a>
                                                                 </div>
@@ -117,7 +118,7 @@
                                                                 </div>
                                                                 <!-- End .product-content -->
 
-                                                                
+
                                                                 <!-- End .product-nav -->
                                                             </div>
                                                             <!-- End .product-body -->
@@ -142,7 +143,7 @@
                                                     <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
                                                 </asp:LinkButton>
                                             </li>
-                                            
+
 
                                             <asp:DataList ID="rptPaging" runat="server" OnItemCommand="rptPaging_ItemCommand" OnItemDataBound="rptPaging_ItemDataBound" RepeatDirection="Horizontal">
                                                 <ItemTemplate>

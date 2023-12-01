@@ -437,7 +437,73 @@ namespace TechHeaven
             BindDataIntoRepeater(query);
         }
 
+        protected void lb_wishlist_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "Wishlist")
+            {
+                //TEMP
+                try
+                {
+                    if (Session["userId"] == null)
+                    {
+                        Response.Redirect("login.aspx");
+                    }
+                    else
+                    {
 
+                        int id_user = Convert.ToInt32(Session["userId"].ToString());
+                        int productId = int.Parse(e.CommandArgument.ToString());
+
+                        SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+                        SqlCommand myCommand = new SqlCommand();
+                        myCommand.CommandType = CommandType.StoredProcedure;
+                        myCommand.CommandText = "add_wishlist";
+
+                        myCommand.Connection = myConn;
+
+                        myCommand.Parameters.AddWithValue("@idUser", id_user);
+                        myCommand.Parameters.AddWithValue("@idProduto", productId);
+
+                        SqlParameter valor = new SqlParameter();
+                        valor.ParameterName = "@return";
+                        valor.Direction = ParameterDirection.Output;
+                        valor.SqlDbType = SqlDbType.Int;
+
+                        myCommand.Parameters.Add(valor);
+
+                        myConn.Open();
+                        myCommand.ExecuteNonQuery();
+
+                        int resposta = Convert.ToInt32(myCommand.Parameters["@return"].Value);
+
+                        myConn.Close();
+
+                        if (resposta == 1)
+                        {
+                            lbl_erro.Enabled = true;
+                            lbl_erro.Visible = true;
+                            lbl_erro.Text = "Product already on wishlist!";
+                            lbl_erro.ForeColor = System.Drawing.Color.Red;
+                        }
+
+                        if (resposta == 0)
+                        {
+                            lbl_erro.Enabled = true;
+                            lbl_erro.Visible = true;
+                            lbl_erro.Text = "Product added to wishlist!";
+                            lbl_erro.ForeColor = System.Drawing.Color.Green;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lbl_erro.Enabled = true;
+                    lbl_erro.Visible = true;
+                    lbl_erro.Text = ex.Message;
+                }
+            }
+        }
 
         private void SetProductImage(RepeaterItem item)
         {

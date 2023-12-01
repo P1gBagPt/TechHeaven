@@ -28,6 +28,7 @@ namespace TechHeaven
         int _firstIndex, _lastIndex;
         private int _pageSize = 6;
 
+        public static int id_user;
 
 
         public static string query;
@@ -57,6 +58,8 @@ namespace TechHeaven
                 }
                 else
                 {
+                    id_user = Convert.ToInt32(Session["userId"].ToString());
+
                     LoadUserInfo();
 
                 }
@@ -174,7 +177,16 @@ namespace TechHeaven
             public string cardTypeName { get; set; }
         }
 
-
+        public class WishlistItem
+        {
+            public int Id { get; set; }
+            public int ProductId { get; set; }
+            public int UserId { get; set; }
+            public string ProductName { get; set; }
+            public decimal ProductPrice { get; set; }
+            public byte[] ProductImage { get; set; }
+            public string ProductImageContentType { get; set; }
+        }
 
 
         protected void btn_save_Click(object sender, EventArgs e)
@@ -474,6 +486,7 @@ namespace TechHeaven
                 LoadUserAddresses();
                 LoadUserCards();
                 LoadUserWishlist();
+                BindOrders();
             }
         }
 
@@ -487,6 +500,27 @@ namespace TechHeaven
                                "WHERE w.userID = " + Session["userId"].ToString();
 
                 BindDataIntoRepeater(query);
+
+                string query2 = "SELECT COUNT(*) AS TotalItems FROM wishlist w " +
+               "JOIN products p ON w.productID = p.id_products " +
+               "WHERE w.userID = @UserID";
+
+                using (SqlCommand command = new SqlCommand(query2, con))
+                {
+                    // Use um parâmetro para o ID do usuário para evitar injeção de SQL
+                    command.Parameters.AddWithValue("@UserID", Session["userId"]);
+
+                    con.Open();
+                    int totalItems = Convert.ToInt32(command.ExecuteScalar());
+                    if (totalItems == 0)
+                    {
+                        Panel1.Visible = false;
+                        Panel3.Visible = true;
+                    }
+                        con.Close();
+                }
+
+                
             }
             catch (Exception ex)
             {
@@ -627,19 +661,101 @@ namespace TechHeaven
             }
         }
 
-
-
-
-        public class WishlistItem
+        protected void Repeater4_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            public int Id { get; set; }
-            public int ProductId { get; set; }
-            public int UserId { get; set; }
-            public string ProductName { get; set; }
-            public decimal ProductPrice { get; set; }
-            public byte[] ProductImage { get; set; }
-            public string ProductImageContentType { get; set; }
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                // Get the order ID from the data item in the Repeater1 control.
+                DataRowView orderRow = e.Item.DataItem as DataRowView;
+                int orderID = (int)orderRow["id_order"];
+
+                // Find the Repeater5 control inside the current Repeater1 item.
+                Repeater Repeater5 = e.Item.FindControl("Repeater5") as Repeater;
+
+                // Call the DisplayProducts method to populate products for the current order.
+                DisplayProducts(orderID, Repeater5);
+            }
         }
+
+        private void BindOrders()
+        {
+            // Assuming you have a database connection string.
+            string connectionString = ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Fetch the orders from your database, adjust the SQL query as per your database schema.
+                string query = "SELECT id_order, order_date, total, status, payment_methods.name as pagamento " +
+                    "FROM orders " +
+                    "INNER JOIN payment_methods ON orders.payment_methodID = payment_methods.id_payment_method";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable ordersTable = new DataTable();
+                    adapter.Fill(ordersTable);
+
+                    // Bind the orders to the Repeater1 control.
+                    Repeater4.DataSource = ordersTable;
+                    Repeater4.DataBind();
+                }
+            }
+
+
+            string query2 = "SELECT COUNT(*) AS TotalItems " +
+                "FROM orders od " +
+                "WHERE od.userID = @UserID";
+
+            using (SqlCommand command = new SqlCommand(query2, con))
+            {
+                // Use um parâmetro para o ID do usuário para evitar injeção de SQL
+                command.Parameters.AddWithValue("@UserID", Session["userId"]);
+
+                con.Open();
+                int totalItems = Convert.ToInt32(command.ExecuteScalar());
+                if (totalItems != 0)
+                {
+                    Panel4.Visible = false;
+                }
+                con.Close();
+            }
+
+        }
+
+        private void DisplayProducts(int id_order, Repeater Repeater5)
+        {
+            // Assuming you have a database connection string.
+            string connectionString = ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Modify the SQL query to select all products in the shopping cart for the specified order.
+                string query = "SELECT products.name, (products.price * cart.quantity) AS subtotal, brands.brand_name AS marca_nome " +
+                    "FROM cart " +
+                    "INNER JOIN products ON cart.productID = products.id_products " +
+                    "INNER JOIN brands ON products.brand = brands.id_brand " +
+                    "WHERE cart.orderID = @id_order";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id_order", id_order);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable productsTable = new DataTable();
+                    adapter.Fill(productsTable);
+
+                    // Bind the product details to the Repeater5 control inside the accordion.
+                    Repeater5.DataSource = productsTable;
+                    Repeater5.DataBind();
+                }
+            }
+        }
+
+
+      
 
 
 
@@ -652,7 +768,6 @@ namespace TechHeaven
             if (e.CommandName == "delete_address")
             {
                 int addressId = Convert.ToInt32(e.CommandArgument);
-                Console.WriteLine("Address ID: " + addressId); // Add this line
                 // Crie uma conexão com o banco de dados.
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
                 {
@@ -721,6 +836,103 @@ namespace TechHeaven
                         }
                     }
                 }
+            }
+        }
+
+        protected void lb_add_cart_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "add_cart")
+            {
+                int id_user = Convert.ToInt32(Session["userId"].ToString());
+                int productId = int.Parse(e.CommandArgument.ToString());
+                int quantidade = Convert.ToInt32(1);
+
+                SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+                SqlCommand myCommand = new SqlCommand();
+                myCommand.CommandType = CommandType.StoredProcedure;
+                myCommand.CommandText = "add_cart";
+
+                myCommand.Connection = myConn;
+
+                myCommand.Parameters.AddWithValue("@idUser", id_user);
+                myCommand.Parameters.AddWithValue("@idProduto", productId);
+                myCommand.Parameters.AddWithValue("@quantity", quantidade);
+
+                SqlParameter valor = new SqlParameter();
+                valor.ParameterName = "@return";
+                valor.Direction = ParameterDirection.Output;
+                valor.SqlDbType = SqlDbType.Int;
+
+                myCommand.Parameters.Add(valor);
+
+                myConn.Open();
+                myCommand.ExecuteNonQuery();
+
+                int resposta = Convert.ToInt32(myCommand.Parameters["@return"].Value);
+
+                myConn.Close();
+
+                if (resposta == 3)
+                {
+                    lbl_erro.Enabled = true;
+                    lbl_erro.Visible = true;
+                    lbl_erro.Text = "A quantidade do carrinho é o stock existente!";
+                    lbl_erro.ForeColor = System.Drawing.Color.Red;
+                }
+
+                if (resposta == 2)
+                {
+                    lbl_erro.Enabled = true;
+                    lbl_erro.Visible = true;
+                    lbl_erro.Text = "Carrinho atualizado com sucesso!";
+                    lbl_erro.ForeColor = System.Drawing.Color.Green;
+                }
+
+                if (resposta == 1)
+                {
+                    lbl_erro.Enabled = true;
+                    lbl_erro.Visible = true;
+                    lbl_erro.Text = "Produto adicionado ao carrinho!";
+                    lbl_erro.ForeColor = System.Drawing.Color.Green;
+                }
+
+
+
+
+
+
+
+            }
+               
+        }
+
+        protected void lb_remover_wish_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "Remover")
+            {
+                int idCarrinho = Convert.ToInt32(e.CommandArgument);
+
+                // Construa a consulta SQL DELETE com base no ID do carrinho
+                string deleteQuery = "DELETE FROM wishlist WHERE id_wish = @IdCarrinho AND userID = " + id_user;
+
+                using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString()))
+                {
+                    using (SqlCommand cmd = new SqlCommand(deleteQuery, con))
+                    {
+                        cmd.Parameters.AddWithValue("@IdCarrinho", idCarrinho);
+
+                        con.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                }
+
+
+                BindDataIntoRepeater(query);
+
+
+
             }
         }
 
