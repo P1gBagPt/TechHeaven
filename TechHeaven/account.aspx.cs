@@ -26,9 +26,11 @@ namespace TechHeaven
         //Wishlist
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
-        private int _pageSize = 6;
+        private int _pageSize = 3;
 
         public static int id_user;
+
+        private PagedDataSource _pagedDataSource;
 
 
         public static string query;
@@ -63,6 +65,8 @@ namespace TechHeaven
                     LoadUserInfo();
 
                 }
+                BindOrders();
+
             }
             LoadUserInfo();
         }
@@ -808,7 +812,6 @@ namespace TechHeaven
             if (e.CommandName == "delete_card")
             {
                 int cardId = Convert.ToInt32(e.CommandArgument);
-                Console.WriteLine("Address ID: " + cardId); // Add this line
                 // Crie uma conexão com o banco de dados.
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString))
                 {

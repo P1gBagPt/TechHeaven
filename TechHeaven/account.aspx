@@ -478,6 +478,7 @@
                                                     <!-- End .row -->
                                                 </ItemTemplate>
                                             </asp:Repeater>
+
                                         </div>
                                         <!-- End .container -->
 
@@ -500,10 +501,10 @@
                                                 <div class="col-md-12">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <div class="row">
+                                                            <div class="row d-flex align-items-center">
                                                                 <div class="col-md-3">
                                                                     <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
-                                                                        <img src='data:<%# Eval("productImageContentType") %>;base64,<%# Convert.ToBase64String((byte[])Eval("productImage")) %>' alt='<%# Eval("productName") %>' class="img-fluid" style="height: 128px; width: 182px;">
+                                                                        <img src='data:<%# Eval("productImageContentType") %>;base64,<%# Convert.ToBase64String((byte[])Eval("productImage")) %>' alt='<%# Eval("productName") %>' class="img-fluid" style="height: 128px; width: 128px;">
                                                                     </a>
                                                                 </div>
 

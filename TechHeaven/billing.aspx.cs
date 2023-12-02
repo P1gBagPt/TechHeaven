@@ -11,6 +11,7 @@ using System.IO;
 using System.Net.Mail;
 using System.Net;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
+using System.Drawing;
 
 namespace TechHeaven
 {
@@ -23,10 +24,9 @@ namespace TechHeaven
         private DataTable _dtOriginal;
 
         public static int id_user;
-        public static decimal total = 0;
+        public static decimal total = 0, totalaux, userBalance;
         public static string query = "";
         public static bool proceed = false;
-
 
         public static int encomenda_id = 0;
         public static string email_user = "";
@@ -83,7 +83,7 @@ namespace TechHeaven
                             lbShipping.Text = "Express";
 
                         }
-                        
+
 
                     }
                     else
@@ -96,6 +96,7 @@ namespace TechHeaven
 
                     ltTotal.Text = totali.ToString();
                     total = totali;
+                    totalaux = totali;
 
                     query = "SELECT c.id_cart, c.quantity, p.*, p.quantity as quantidade " +
                     "FROM cart c " +
@@ -134,7 +135,7 @@ namespace TechHeaven
                         int respostaSP = Convert.ToInt32(cmd2.Parameters["@total"].Value);
                         int respostaCards = Convert.ToInt32(cmd2.Parameters["@totalCards"].Value);
 
-                       
+
                         if (respostaSP == 4)
                         {
                             HyperLink1.Enabled = false;
@@ -171,6 +172,38 @@ namespace TechHeaven
                         }
 
 
+                        // Suponha que você tenha uma referência ao controle RadioButton1 no seu código-behind.
+
+                        // Obtém o saldo do usuário - você precisará substituir isso pela lógica real de obtenção do saldo do usuário.
+
+
+
+                        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+                        string query2 = "SELECT balance FROM users WHERE id = @UserID";
+
+
+                        using (SqlCommand command = new SqlCommand(query2, con))
+                        {
+                            // Use um parâmetro para o ID do usuário para evitar injeção de SQL
+                            command.Parameters.AddWithValue("@UserID", Session["userId"]);
+
+                            con.Open();
+                            userBalance = Convert.ToDecimal(command.ExecuteScalar());
+
+                            con.Close();
+                        }
+                        CheckBox1.Text = $"User Balance: {userBalance:C2}";  // O formato C2 exibe o saldo como moeda com duas casas decimais.
+
+                        if (userBalance == 0)
+                        {
+                            CheckBox1.Enabled = false;
+                        }
+
+
+
+
+
                     }
                     catch (Exception ex)
                     {
@@ -185,18 +218,54 @@ namespace TechHeaven
 
             }
 
+            if (!IsPostBack)
+            {
+                if (CheckBox1.Checked)
+                {
+                    total -= userBalance;
+                    ltTotal.Text = total.ToString();
+                }
+            }
+
+
+        }
+
+
+        protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBox1.Checked)
+            {
+                total -= userBalance;
+
+                ltTotal.Text = total.ToString();
+            }
+            else
+            {
+                total = totalaux;
+                ltTotal.Text = total.ToString();
+
+            }
         }
 
         protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (CheckBox1.Checked)
+            {
+                total -= userBalance;
+            }
+            ltTotal.Text = total.ToString();
+
             if (RadioButtonList1.SelectedValue == "2")
             {
                 Panel3.Visible = true;
+                HyperLink2.Visible = true;
 
             }
             else
             {
                 Panel3.Visible = false;
+                HyperLink2.Visible = false;
+
             }
         }
 
@@ -238,7 +307,7 @@ namespace TechHeaven
                 proceed = true;
             }
 
-            if(RadioButtonList1.SelectedValue == "2" && DropDownListCards.Text == "")
+            if (RadioButtonList1.SelectedValue == "2" && DropDownListCards.Text == "")
             {
                 proceed = false;
             }
@@ -284,6 +353,13 @@ namespace TechHeaven
                 encomenda_id = Convert.ToInt32(cmd.Parameters["@retorno"].Value);
                 Session["EncomendaID"] = encomenda_id;
                 myConn.Close();
+
+                if (CheckBox1.Checked)
+                {
+                    // Deduct the user's balance
+                    DeductUserBalance(id_user, userBalance);
+                }
+
 
                 try
                 {
@@ -368,7 +444,21 @@ namespace TechHeaven
 
                     }
 
-                    html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+
+
+                    if (CheckBox1.Checked)
+                    {
+
+                        total -= userBalance;
+                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+                        html += string.Format("<h3>Balanced Used: €{0:F2}</h3>", userBalance);
+
+                    }
+                    else
+                    {
+                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+                    }
+
 
                     GerarPdfEnviarEmail(html, encomenda_id, email_user);
 
@@ -457,6 +547,7 @@ WHERE c.userID = @id_user
             public string ContentTypeImagem { get; set; }
         }
 
+       
 
         private void BindDataIntoRepeater(string query)
         {
@@ -538,6 +629,23 @@ WHERE c.userID = @id_user
         }
 
 
+        private void DeductUserBalance(int userId, decimal amountToDeduct)
+        {
+            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+
+            // Assuming you have a stored procedure or query to deduct the balance
+            string query = "UPDATE users SET balance = balance - @Amount WHERE id = @UserId";
+
+            using (SqlCommand command = new SqlCommand(query, con))
+            {
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@Amount", amountToDeduct);
+
+                con.Open();
+                command.ExecuteNonQuery();
+                con.Close();
+            }
+        }
 
 
     }

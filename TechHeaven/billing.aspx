@@ -170,6 +170,14 @@
 
                         <!-- End .card -->
                     </div>
+
+                    <asp:Panel ID="Panel4" runat="server">
+
+                        <asp:CheckBox ID="CheckBox1" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" AutoPostBack="true"/>
+
+                    </asp:Panel>
+
+
                 </div>
                 <!-- End .accordion -->
 
