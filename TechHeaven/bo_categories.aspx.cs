@@ -20,10 +20,10 @@ namespace TechHeaven
 
 
                 string query = @"
-                SELECT c.category_name, COUNT(p.id_products) AS total_products
-                FROM categories c
-                LEFT JOIN products p ON c.id_category = p.category
-                GROUP BY c.category_name;";
+                SELECT c.id_category, c.category_name, COUNT(p.id_products) AS total_products
+FROM categories c
+LEFT JOIN products p ON c.id_category = p.category
+GROUP BY c.id_category, c.category_name;";
 
                 SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["techeavenConnectionString"].ConnectionString);
 
@@ -37,8 +37,9 @@ namespace TechHeaven
                 {
                     var categoria = new categorias();
 
-                    categoria.nome = dr.GetString(0);
-                    categoria.totalProdutos = dr.GetInt32(1);
+                    categoria.id_category = dr.GetInt32(0);
+                    categoria.nome = dr.GetString(1);
+                    categoria.totalProdutos = dr.GetInt32(2);
 
                     list.Add(categoria);
                 }
@@ -56,9 +57,19 @@ namespace TechHeaven
             }
 
         }
+
+        protected void edit_product_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "Edit")
+            {
+                int categoryId = Convert.ToInt32(e.CommandArgument);
+                Response.Redirect($"bo_edit_categories.aspx?categoryId={categoryId}");
+            }
+        }
     }
     public class categorias
     {
+        public int id_category { get; set; }
         public string nome { get; set; }
         public int totalProdutos { get; set; }
     }

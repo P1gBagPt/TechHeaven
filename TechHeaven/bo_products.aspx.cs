@@ -73,10 +73,10 @@ namespace TechHeaven
                     con.Open();
 
                     // Consulta SQL para atualizar o estado do produto.
-                    string query = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
+                    string querySet = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
 
                     // Crie e configure o comando SQL.
-                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    using (SqlCommand cmd = new SqlCommand(querySet, con))
                     {
                         cmd.Parameters.AddWithValue("@produtoID", produtoID);
 
@@ -94,6 +94,7 @@ namespace TechHeaven
                 }
             }
         }
+
 
         // Get data from database/repository
         static DataTable GetDataFromDb(string query)
@@ -251,33 +252,8 @@ namespace TechHeaven
             }
         }
 
-        protected void lb_ativar_desativar_Click(object sender, CommandEventArgs e)
-        {
-            if (e.CommandName == "AtivarDesativar")
-            {
-                int produtoID = Convert.ToInt32(e.CommandArgument);
+        
 
-                using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString()))
-                {
-                    con.Open();
-
-                    string query = "UPDATE products SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE id_products = @produtoID";
-
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        cmd.Parameters.AddWithValue("@produtoID", produtoID);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-
-                        if (rowsAffected > 0)
-                        {
-                            // Update the user interface to reflect the change in the product status, if necessary.
-                            BindDataIntoRepeater(query);
-                        }
-                    }
-                }
-            }
-        }
 
 
     }
