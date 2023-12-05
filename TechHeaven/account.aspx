@@ -230,12 +230,6 @@
                                 <asp:Label ID="lbl_email" runat="server" class="label-user-email"></asp:Label>
                                 <p>Balance</p>
                                 <asp:Label ID="lbl_balance" runat="server" class="label-user-email"></asp:Label>
-
-
-
-
-
-
                             </div>
                         </div>
 

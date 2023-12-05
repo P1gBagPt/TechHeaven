@@ -173,7 +173,19 @@
 
                     <asp:Panel ID="Panel4" runat="server">
 
-                        <asp:CheckBox ID="CheckBox1" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" AutoPostBack="true"/>
+                        <asp:CheckBox ID="CheckBox1" runat="server" OnCheckedChanged="CheckBox1_CheckedChanged" AutoPostBack="true" />
+
+                    </asp:Panel>
+
+                    <asp:Panel ID="Panel6" runat="server">
+                        <h3 class="card-title">NIF</h3>
+                        <asp:CheckBox ID="CheckBox2" runat="server" OnCheckedChanged="CheckBox2_CheckedChanged" AutoPostBack="true" />
+                        <asp:Label ID="lblprofileNIF" runat="server"></asp:Label>
+                    </asp:Panel>
+
+                    <asp:Panel ID="Panel5" runat="server">
+
+                        <asp:TextBox ID="tb_nif_opc" runat="server" MaxLength="9" onkeypress="return isNumber(event)"></asp:TextBox>
 
                     </asp:Panel>
 
@@ -188,4 +200,14 @@
         </div>
         <!-- End .row -->
     </div>
+
+    <script>
+        function isNumber(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
 </asp:Content>

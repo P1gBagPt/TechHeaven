@@ -16,7 +16,7 @@ namespace TechHeaven
     {
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
-        private int _pageSize = 2;
+        private int _pageSize = 9;
         private DataTable _dtOriginal;
         public static string query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
     "FROM products p " +

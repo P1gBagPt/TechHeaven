@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Data.SqlClient;
 using System.Web.Configuration;
 using System.Collections;
+using static TechHeaven.account;
 
 namespace TechHeaven
 {
@@ -65,10 +66,10 @@ namespace TechHeaven
                     LoadUserInfo();
 
                 }
-                BindOrders();
+                //BindOrders();
 
             }
-            LoadUserInfo();
+            //LoadUserInfo();
         }
 
         private void HandlePaging()
@@ -804,6 +805,14 @@ namespace TechHeaven
 
         protected void lb_edit_address_Command(object sender, CommandEventArgs e)
         {
+            if (e.CommandName == "edit_address")
+            {
+
+                int addressId = Convert.ToInt32(e.CommandArgument);
+
+                Response.Redirect($"edit_address.aspx?addressId={addressId}");
+
+            }
 
         }
 
@@ -939,9 +948,6 @@ namespace TechHeaven
             }
         }
 
-        protected void lb_edit_card_Command(object sender, CommandEventArgs e)
-        {
-
-        }
+       
     }
 }

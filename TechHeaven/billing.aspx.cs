@@ -23,7 +23,7 @@ namespace TechHeaven
         private int _pageSize = 12;
         private DataTable _dtOriginal;
 
-        public static int id_user;
+        public static int id_user, nif;
         public static decimal total = 0, totalaux, userBalance;
         public static string query = "";
         public static bool proceed = false;
@@ -180,7 +180,7 @@ namespace TechHeaven
 
                         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
-                        string query2 = "SELECT balance FROM users WHERE id = @UserID";
+                        string query2 = "SELECT balance, NIF FROM users WHERE id = @UserID";
 
 
                         using (SqlCommand command = new SqlCommand(query2, con))
@@ -189,17 +189,36 @@ namespace TechHeaven
                             command.Parameters.AddWithValue("@UserID", Session["userId"]);
 
                             con.Open();
-                            userBalance = Convert.ToDecimal(command.ExecuteScalar());
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    // Retrieve values from the reader
+                                    userBalance = Convert.ToDecimal(reader["balance"]);
+                                    nif = Convert.ToInt32(reader["NIF"]);
+                                }
+                                // Close the reader
+                                reader.Close();
+                            }
 
                             con.Close();
                         }
                         CheckBox1.Text = $"User Balance: {userBalance:C2}";  // O formato C2 exibe o saldo como moeda com duas casas decimais.
-
+                        Console.WriteLine(nif);
                         if (userBalance == 0)
                         {
                             CheckBox1.Enabled = false;
                         }
 
+                        if (nif.ToString() == "" || nif == 0)
+                        {
+                            Panel6.Visible = false;
+                        }
+                        else
+                        {
+                            lblprofileNIF.Text = $"Profile nif: {nif}";  // O formato C2 exibe o saldo como moeda com duas casas decimais.
+                            Console.WriteLine(nif);
+                        }
 
 
 
@@ -230,6 +249,17 @@ namespace TechHeaven
 
         }
 
+        protected void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBox2.Checked)
+            {
+                Panel5.Visible = false;
+            }
+            else
+            {
+                Panel5.Visible = true;
+            }
+        }
 
         protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -360,6 +390,18 @@ namespace TechHeaven
                     DeductUserBalance(id_user, userBalance);
                 }
 
+                if(!CheckBox2.Checked)
+                {
+                    if(tb_nif_opc.Text == "")
+                    {
+                        nif = 0;
+                    }
+                    else
+                    {
+                        nif = int.Parse(tb_nif_opc.Text);
+                    }
+                }
+
 
                 try
                 {
@@ -393,6 +435,7 @@ namespace TechHeaven
                     cmd2.Parameters.AddWithValue("@pais", tb_state.Text);
                     cmd2.Parameters.AddWithValue("@cidade", tb_city.Text);
                     cmd2.Parameters.AddWithValue("@telemovel", tb_phonenumber.Text);
+                    cmd2.Parameters.AddWithValue("@nif", nif);
 
 
                     SqlParameter retorno2 = new SqlParameter("@retorno", SqlDbType.Int);
@@ -420,15 +463,28 @@ namespace TechHeaven
                 {
 
                     string html = "<h1 style=\"font-family: Arial, sans-serif;\">Techeaven</h1><br/>" +
-                    "<h2>Order Number " + encomenda_id + "</h2><br/><br/>" +
-                    "<h3>Personal Information</h3><br/>" +
-                    string.Format("<p>First Name: <b>{0}</b> | Last Name: <b>{1}</b></p><br/>", tb_firstname.Text, tb_lastname.Text) +
-                    string.Format("<p>Phone Number: <b>{0}</b></p><br/><br/>", tb_phonenumber.Text) +
-                    "<h3>Shipping Details</h3><br/>" +
-                    string.Format("<p>Address: <b>{0}</b> | Floor: <b>{1}</b></p><br/>", tb_address.Text, tb_address_floor.Text) +
-                    string.Format("<p>Country: <b>{0}</b> | City: <b>{1}</b></p><br/>", tb_state.Text, tb_city.Text) +
-                    string.Format("<p>Zipcode: <b>{0}</b></p><br/><br/>", tb_zipcode.Text) +
-                    "<h3>Products purchased</h3><br/>";
+               "<h2>Order Number " + encomenda_id + "</h2><br/><br/>" +
+               "<h3>Personal Information</h3><br/>" +
+               string.Format("<p>First Name: <b>{0}</b> | Last Name: <b>{1}</b></p><br/>", tb_firstname.Text, tb_lastname.Text) +
+               string.Format("<p>Phone Number: <b>{0}</b></p>", tb_phonenumber.Text);
+
+                    // Check if NIF exists (not equal to 0)
+                    if (nif != 0)
+                    {
+                        // Include NIF in the HTML
+                        html += string.Format("<br/><p>NIF: <b>{0}</b></p>", nif);
+                    }
+                    else
+                    {
+                        html += "<br/>"; // Add a line break if NIF does not exist
+                    }
+
+                    html += "<br/><h3>Shipping Details</h3><br/>" +
+                            string.Format("<p>Address: <b>{0}</b> | Floor: <b>{1}</b></p><br/>", tb_address.Text, tb_address_floor.Text) +
+                            string.Format("<p>Country: <b>{0}</b> | City: <b>{1}</b></p><br/>", tb_state.Text, tb_city.Text) +
+                            string.Format("<p>Zipcode: <b>{0}</b></p><br/><br/>", tb_zipcode.Text) +
+                            "<h3>Products purchased</h3><br/>";
+
 
                     List<ProdutoCarrinho> produtosNoCarrinho = ObterProdutosDoCarrinho(encomenda_id, id_user);
 
@@ -547,7 +603,6 @@ WHERE c.userID = @id_user
             public string ContentTypeImagem { get; set; }
         }
 
-       
 
         private void BindDataIntoRepeater(string query)
         {

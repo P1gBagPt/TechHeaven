@@ -15134,6 +15134,7 @@
     <Content Include="bo_users.aspx" />
     <Content Include="cart.aspx" />
     <Content Include="donecheckout.aspx" />
+    <Content Include="edit_address.aspx" />
     <Content Include="lib\bootstrap\bootstrap.min.css" />
     <Content Include="lib\isotope\jquery.isotope.min.js" />
     <Content Include="lib\jquery.appear\jquery.appear.min.js" />
@@ -15270,6 +15271,13 @@
     </Compile>
     <Compile Include="donecheckout.aspx.designer.cs">
       <DependentUpon>donecheckout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="edit_address.aspx.cs">
+      <DependentUpon>edit_address.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="edit_address.aspx.designer.cs">
+      <DependentUpon>edit_address.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>
