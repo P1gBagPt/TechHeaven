@@ -42,6 +42,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASPSnippets.FaceBookAPI">
+      <HintPath>..\..\..\..\Downloads\Desktop\AutoParts\AutoParts\bin\ASPSnippets.FaceBookAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="ASPSnippets.GoogleAPI">
+      <HintPath>..\..\..\..\Downloads\Desktop\AutoParts\AutoParts\bin\ASPSnippets.GoogleAPI.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -15132,6 +15138,7 @@
     <Content Include="bo_edit_product.aspx" />
     <Content Include="bo_edit_users.aspx" />
     <Content Include="bo_products.aspx" />
+    <Content Include="bo_reviews.aspx" />
     <Content Include="bo_roles.aspx" />
     <Content Include="bo_sales.aspx" />
     <Content Include="bo_users.aspx" />
@@ -15260,6 +15267,13 @@
     </Compile>
     <Compile Include="bo_products.aspx.designer.cs">
       <DependentUpon>bo_products.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_reviews.aspx.cs">
+      <DependentUpon>bo_reviews.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_reviews.aspx.designer.cs">
+      <DependentUpon>bo_reviews.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_roles.aspx.cs">
       <DependentUpon>bo_roles.aspx</DependentUpon>

@@ -23,6 +23,7 @@ namespace TechHeaven
         public bool tfa { get; set; }
         public bool verify { get; set; }
         public int role { get; set; }
+        public DateTime birthdate { get; set; }
     }
     public partial class bo_edit_users : System.Web.UI.Page
     {
@@ -72,6 +73,21 @@ namespace TechHeaven
                             }
 
 
+                            object respostaBirthdateValue = utilizador.birthdate;
+                            DateTime respostaBirthdate;
+
+                            if (respostaBirthdateValue != DBNull.Value)
+                            {
+                                respostaBirthdate = Convert.ToDateTime(respostaBirthdateValue);
+                                tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd"); // Ajuste o formato conforme necessário
+                            }
+                            else
+                            {
+                                // Lida com o caso em que o valor do banco de dados é nulo
+                                tb_birthdate.Text = string.Empty; // ou outra ação apropriada para o seu aplicativo
+                            }
+
+
                         }
                         else
                         {
@@ -105,7 +121,7 @@ namespace TechHeaven
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = @"SELECT u.id, u.firstName, u.lastName, u.email, u.username, u.phoneNumber, u.NIF, u.verify, u.tfa, u.newsletter, u.roleId FROM users u WHERE u.id = @userId";
+                string query = @"SELECT u.id, u.firstName, u.lastName, u.email, u.username, u.phoneNumber, u.NIF, u.verify, u.tfa, u.newsletter, u.roleId, u.birthdate FROM users u WHERE u.id = @userId";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@userId", userID);
@@ -130,6 +146,7 @@ namespace TechHeaven
                             tfa = reader["tfa"] == DBNull.Value ? false : Convert.ToBoolean(reader["tfa"]),
                             newsletter = reader["newsletter"] == DBNull.Value ? false : Convert.ToBoolean(reader["newsletter"]),
                             role = Convert.ToInt32(reader["roleId"]),
+                            birthdate = reader["birthdate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(reader["birthdate"]),
                         };
 
                     }
@@ -162,6 +179,17 @@ namespace TechHeaven
             myCommand.Parameters.AddWithValue("@username", tb_username.Text);
             myCommand.Parameters.AddWithValue("@phone", tb_phone.Text);
             myCommand.Parameters.AddWithValue("@nif", Convert.ToInt32(tb_nif.Text));
+            if (DateTime.TryParse(tb_birthdate.Text, out DateTime dateValue))
+            {
+                // O valor é uma data válida, então adiciona ao parâmetro
+                myCommand.Parameters.AddWithValue("@date", dateValue);
+            }
+            else
+            {
+                // O valor não é uma data válida, você pode lidar com isso apropriadamente
+                // Por exemplo, exibindo uma mensagem de erro ou definindo um valor padrão
+                myCommand.Parameters.AddWithValue("@date", DBNull.Value); // Define como DBNull ou ajusta conforme necessário
+            }
 
             if (RadioButtonList1.SelectedValue == "0")
             {

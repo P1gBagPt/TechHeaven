@@ -210,6 +210,18 @@ namespace TechHeaven
                 myCommand.Parameters.AddWithValue("@lastName", tb_last_name.Text);
                 myCommand.Parameters.AddWithValue("@phoneNumber", tb_phoneNumber.Text);
                 myCommand.Parameters.AddWithValue("@nif", Convert.ToInt32(tb_NIF.Text));
+                if (DateTime.TryParse(tb_birthdate.Text, out DateTime dateValue))
+                {
+                    // O valor é uma data válida, então adiciona ao parâmetro
+                    myCommand.Parameters.AddWithValue("@date", dateValue);
+                }
+                else
+                {
+                    // O valor não é uma data válida, você pode lidar com isso apropriadamente
+                    // Por exemplo, exibindo uma mensagem de erro ou definindo um valor padrão
+                    myCommand.Parameters.AddWithValue("@date", DBNull.Value); // Define como DBNull ou ajusta conforme necessário
+                }
+
 
 
                 myConn.Open();
@@ -384,6 +396,12 @@ namespace TechHeaven
                 return_total_cards.SqlDbType = SqlDbType.Int;
                 myCommand.Parameters.Add(return_total_cards);
 
+                SqlParameter return_birthdate = new SqlParameter();
+                return_birthdate.ParameterName = "@return_birthdate";
+                return_birthdate.Direction = ParameterDirection.Output;
+                return_birthdate.SqlDbType = SqlDbType.Date;
+                myCommand.Parameters.Add(return_birthdate);
+
                 SqlParameter valor = new SqlParameter();
                 valor.ParameterName = "@return";
                 valor.Direction = ParameterDirection.Output;
@@ -401,6 +419,7 @@ namespace TechHeaven
                 string respostalastName = myCommand.Parameters["@return_lastName"].Value.ToString();
                 string respostausername = myCommand.Parameters["@return_username"].Value.ToString();
                 string respostaPhonenumber = myCommand.Parameters["@return_phone"].Value.ToString();
+
 
                 object resposta_nifValue = myCommand.Parameters["@return_nif"].Value;
 
@@ -444,6 +463,24 @@ namespace TechHeaven
                 int respostaAddress = Convert.ToInt32(myCommand.Parameters["@return_total_address"].Value);
                 int respostaCards = Convert.ToInt32(myCommand.Parameters["@return_total_cards"].Value);
 
+                object respostaBirthdateValue = myCommand.Parameters["@return_birthdate"].Value;
+                DateTime respostaBirthdate;
+
+                if (respostaBirthdateValue is DateTime)
+                {
+                    respostaBirthdate = (DateTime)respostaBirthdateValue;
+                    tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd"); // Ajuste o formato conforme necessário
+                }
+                else if (respostaBirthdateValue != DBNull.Value)
+                {
+                    respostaBirthdate = Convert.ToDateTime(respostaBirthdateValue);
+                    tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd"); // Ajuste o formato conforme necessário
+                }
+                else
+                {
+                    // Lida com o caso em que o valor do banco de dados é nulo
+                    tb_birthdate.Text = string.Empty; // ou outra ação apropriada para o seu aplicativo
+                }
 
                 myConn.Close();
 
@@ -522,10 +559,10 @@ namespace TechHeaven
                         Panel1.Visible = false;
                         Panel3.Visible = true;
                     }
-                        con.Close();
+                    con.Close();
                 }
 
-                
+
             }
             catch (Exception ex)
             {
@@ -760,7 +797,7 @@ namespace TechHeaven
         }
 
 
-      
+
 
 
 
@@ -916,7 +953,7 @@ namespace TechHeaven
 
 
             }
-               
+
         }
 
         protected void lb_remover_wish_Command(object sender, CommandEventArgs e)
@@ -948,6 +985,6 @@ namespace TechHeaven
             }
         }
 
-       
+
     }
 }

@@ -266,6 +266,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-2">
+                                            <label>Birthdate</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="tb_birthdate" runat="server" class="tb-user-info" TextMode="Date"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
                                             <label>Newsletter</label>
                                         </div>
                                         <div class="col-md-4">

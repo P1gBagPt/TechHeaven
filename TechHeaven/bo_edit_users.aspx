@@ -69,6 +69,14 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <p style="text-align: left;">Birthdate</p>
+                                    <asp:TextBox ID="tb_birthdate" runat="server" class="form-control" TextMode="Date"></asp:TextBox>
+                                </div>
+                            </div>
+
+
                             <asp:Label ID="lbl_erro" runat="server"></asp:Label>
 
                             <asp:Button ID="btn_edit" runat="server" class="btn btn-primary" Text="Edit User" OnClick="btn_edit_Click" />
@@ -84,13 +92,13 @@
     </main>
 
     <script>
-function isNumber(event) {
-    var charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    }
-    return true;
-}
+        function isNumber(event) {
+            var charCode = (event.which) ? event.which : event.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
     </script>
 
 </asp:Content>

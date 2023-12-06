@@ -172,6 +172,21 @@
                     </a>
                 </li>
 
+
+
+
+                <!-- REVIEWS -->
+                <!-- REVIEWS -->
+                <!-- REVIEWS -->
+                <!-- REVIEWS -->
+                <!-- REVIEWS -->
+                <!-- REVIEWS -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="bo_reviews.aspx">
+                        <i class="bi bi-chat-quote"></i><span>Reviews</span>
+                    </a>
+                </li>
+
                 <!-- End Forms Nav -->
 
             </ul>
