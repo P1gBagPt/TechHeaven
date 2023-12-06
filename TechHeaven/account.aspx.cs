@@ -402,6 +402,13 @@ namespace TechHeaven
                 return_birthdate.SqlDbType = SqlDbType.Date;
                 myCommand.Parameters.Add(return_birthdate);
 
+                SqlParameter return_register_type = new SqlParameter();
+                return_register_type.ParameterName = "@return_register_type";
+                return_register_type.Direction = ParameterDirection.Output;
+                return_register_type.SqlDbType = SqlDbType.Bit;
+                myCommand.Parameters.Add(return_register_type);
+
+
                 SqlParameter valor = new SqlParameter();
                 valor.ParameterName = "@return";
                 valor.Direction = ParameterDirection.Output;
@@ -457,6 +464,26 @@ namespace TechHeaven
                     // Handle the case where the database value is NULL
                     respostaNewsletter = false; // Set a default value or handle it as per your application logic
                 }
+
+                object registerValue = myCommand.Parameters["@return_register_type"].Value;
+                bool respostaRegister;
+                if (registerValue != DBNull.Value)
+                {
+                    respostaRegister = Convert.ToBoolean(registerValue);
+
+                    if(respostaRegister)
+                    {
+                        lbl_2fa.Visible = false;
+                        lb_save_tfa.Visible = false;
+                    }
+
+                }
+                else
+                {
+                    // Handle the case where the database value is NULL
+                    respostaRegister = false; // Set a default value or handle it as per your application logic
+                }
+
 
                 decimal balanceValue = Convert.ToDecimal(myCommand.Parameters["@return_balance"].Value);
 
@@ -731,10 +758,14 @@ namespace TechHeaven
                 // Fetch the orders from your database, adjust the SQL query as per your database schema.
                 string query = "SELECT id_order, order_date, total, status, payment_methods.name as pagamento " +
                     "FROM orders " +
-                    "INNER JOIN payment_methods ON orders.payment_methodID = payment_methods.id_payment_method";
+                    "INNER JOIN payment_methods ON orders.payment_methodID = payment_methods.id_payment_method " +
+                    "WHERE userID = @userId";
+
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@userId", Session["userId"]);
+
                     SqlDataAdapter adapter = new SqlDataAdapter(command);
                     DataTable ordersTable = new DataTable();
                     adapter.Fill(ordersTable);

@@ -114,6 +114,15 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.LinkButton lb_save_news;
 
         /// <summary>
+        /// lbl_2fa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_2fa;
+
+        /// <summary>
         /// lb_save_tfa control.
         /// </summary>
         /// <remarks>

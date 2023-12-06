@@ -279,13 +279,13 @@
                                         <div class="col-md-4">
                                             <asp:LinkButton ID="lb_save_news" runat="server" OnCommand="lb_save_news_Command" CommandName="news" class="btn-save"></asp:LinkButton>
                                         </div>
-                                        <div class="col-md-2">
-                                            <label>2FA</label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save"></asp:LinkButton>
-
-                                        </div>
+                                            <div class="col-md-2">
+                                                <label>
+                                                <asp:Label ID="lbl_2fa" runat="server" Text="2FA"></asp:Label></label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save"></asp:LinkButton>
+                                            </div>
                                     </div>
                                     <br />
                                     <div class="row">

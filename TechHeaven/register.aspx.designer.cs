@@ -15,6 +15,15 @@ namespace TechHeaven
     {
 
         /// <summary>
+        /// lbl_social control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_social;
+
+        /// <summary>
         /// register_email control.
         /// </summary>
         /// <remarks>
@@ -157,6 +166,24 @@ namespace TechHeaven
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton SubmitRegister;
+
+        /// <summary>
+        /// btn_googleLogin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btn_googleLogin;
+
+        /// <summary>
+        /// btn_facebookRegisto control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btn_facebookRegisto;
 
         /// <summary>
         /// Master property.
