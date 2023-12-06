@@ -279,13 +279,13 @@
                                         <div class="col-md-4">
                                             <asp:LinkButton ID="lb_save_news" runat="server" OnCommand="lb_save_news_Command" CommandName="news" class="btn-save"></asp:LinkButton>
                                         </div>
-                                            <div class="col-md-2">
-                                                <label>
+                                        <div class="col-md-2">
+                                            <label>
                                                 <asp:Label ID="lbl_2fa" runat="server" Text="2FA"></asp:Label></label>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save"></asp:LinkButton>
-                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:LinkButton ID="lb_save_tfa" runat="server" OnCommand="lb_save_tfa_Command" CommandName="tfa" class="btn-save"></asp:LinkButton>
+                                        </div>
                                     </div>
                                     <br />
                                     <div class="row">
@@ -403,7 +403,9 @@
                                                             <asp:Label ID="lbl_cardType" runat="server"><%# Eval("cardTypeName") %></asp:Label>
 
                                                             <div class="row">
-
+                                                                <div class="col-md-6">
+                                                                    <asp:LinkButton ID="lb_edit_card" runat="server" OnCommand="lb_edit_card_Command" CommandName="edit_card" CommandArgument='<%# Eval("id") %>'>Edit</asp:LinkButton>
+                                                                </div>
                                                                 <div class="col-md-6">
                                                                     <asp:LinkButton ID="lb_delete_card" runat="server" OnCommand="lb_delete_card_Command" CommandName="delete_card" CommandArgument='<%# Eval("id") %>'>Delete</asp:LinkButton>
                                                                 </div>

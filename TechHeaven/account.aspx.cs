@@ -987,6 +987,18 @@ namespace TechHeaven
 
         }
 
+        protected void lb_edit_card_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "edit_card")
+            {
+
+                int cardId = Convert.ToInt32(e.CommandArgument);
+
+                Response.Redirect($"edit_card.aspx?cardId={cardId}");
+
+            }
+        }
+
         protected void lb_remover_wish_Command(object sender, CommandEventArgs e)
         {
             if (e.CommandName == "Remover")

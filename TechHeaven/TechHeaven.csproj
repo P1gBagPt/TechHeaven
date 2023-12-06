@@ -300,6 +300,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="2tfa_auth.aspx" />
     <Content Include="account.aspx" />
     <Content Include="activation.aspx" />
     <Content Include="add_address.aspx" />
@@ -15145,6 +15146,7 @@
     <Content Include="cart.aspx" />
     <Content Include="donecheckout.aspx" />
     <Content Include="edit_address.aspx" />
+    <Content Include="edit_card.aspx" />
     <Content Include="lib\bootstrap\bootstrap.min.css" />
     <Content Include="lib\isotope\jquery.isotope.min.js" />
     <Content Include="lib\jquery.appear\jquery.appear.min.js" />
@@ -15158,6 +15160,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2tfa_auth.aspx.cs">
+      <DependentUpon>2tfa_auth.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="2tfa_auth.aspx.designer.cs">
+      <DependentUpon>2tfa_auth.aspx</DependentUpon>
+    </Compile>
     <Compile Include="account.aspx.cs">
       <DependentUpon>account.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -15316,6 +15325,13 @@
     </Compile>
     <Compile Include="edit_address.aspx.designer.cs">
       <DependentUpon>edit_address.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="edit_card.aspx.cs">
+      <DependentUpon>edit_card.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="edit_card.aspx.designer.cs">
+      <DependentUpon>edit_card.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>

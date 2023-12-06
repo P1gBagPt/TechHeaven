@@ -259,6 +259,7 @@ namespace TechHeaven
                 respostanome = myCommand.Parameters["@return_username"].Value.ToString();
                 object twofactorValue = myCommand.Parameters["@return_twofactor"].Value;
                 respostaTwoFactor = twofactorValue != DBNull.Value && Convert.ToBoolean(twofactorValue);
+                Console.WriteLine(respostaTwoFactor);
                 object verifyValue = myCommand.Parameters["@return_verify"].Value;
                 respostaverify = verifyValue != DBNull.Value && Convert.ToBoolean(verifyValue);
                 respostaId = Convert.ToInt32(myCommand.Parameters["@return_id"].Value);
@@ -280,14 +281,75 @@ namespace TechHeaven
                 else
                 {
 
-                    lbl_erro.Text = "Welcome";
+                    if(respostaTwoFactor == true)
+                    {
+                        lbl_erro.Text = "Welcome";
 
-                    Session["isLogged"] = "yes";
-                    Session["userId"] = respostaId;
-                    Session["user_username"] = respostanome;
-                    Session["user_email"] = respostaemail;
-                    Session["twoFactor"] = respostaTwoFactor;
-                    Session["role"] = respostaRole;
+                        Session["tempisLogged"] = "yes";
+                        Session["tempuserId"] = respostaId;
+                        Session["tempuser_username"] = respostanome;
+                        Session["tempuser_email"] = respostaemail;
+                        Session["temptwoFactor"] = respostaTwoFactor;
+                        Session["temprole"] = respostaRole;
+
+                        try
+                        {
+                            Random rand = new Random();
+                            string code = rand.Next(100000, 999999).ToString();
+
+                            // Store the code in the session for verification later
+                            Session["2FACode"] = code;
+
+                            MailMessage mail = new MailMessage();
+                            SmtpClient servidor = new SmtpClient();
+
+                            mail.From = new MailAddress(ConfigurationManager.AppSettings["SMTP_USER"]);
+                            mail.To.Add(new MailAddress(Session["tempuser_email"].ToString()));
+                            mail.Subject = "2TFA Code";
+
+                            mail.IsBodyHtml = true;
+                            mail.Body = "Your 2FA code is: " + code;
+
+
+                            servidor.Host = ConfigurationManager.AppSettings["SMTP_HOST"];
+                            servidor.Port = int.Parse(ConfigurationManager.AppSettings["SMTP_PORT"]);
+                            string smtpUtilizador = ConfigurationManager.AppSettings["SMTP_USER"];
+                            string smtpPassword = ConfigurationManager.AppSettings["SMTP_PASS"];
+
+                            servidor.Credentials = new NetworkCredential(smtpUtilizador, smtpPassword);
+                            servidor.EnableSsl = true;
+
+                            servidor.Send(mail);
+                            //lbl_mensagem.Text = "";
+                            //lbl_mensagem.Enabled = false;
+                            //lbl_mensagem.Visible = false;
+                            lbl_erro.Text = "Code sent sucessfully. Verify your mail invoice";
+                            lbl_erro.ForeColor = System.Drawing.Color.Green;
+                            Session["activation"] = true;
+
+                            Response.Redirect($"2tfa_auth.aspx?encryptedEmail={Server.UrlEncode(Master.EncryptString(respostaemail))}");
+
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            lbl_erro.Text = ex.Message;
+                        }
+                    }
+                    else
+                    {
+                        lbl_erro.Text = "Welcome";
+
+                        Session["isLogged"] = "yes";
+                        Session["userId"] = respostaId;
+                        Session["user_username"] = respostanome;
+                        Session["user_email"] = respostaemail;
+                        Session["twoFactor"] = respostaTwoFactor;
+                        Session["role"] = respostaRole;
+                    }
+
+                    
 
                     Response.Redirect("main_page.aspx");
                 }
