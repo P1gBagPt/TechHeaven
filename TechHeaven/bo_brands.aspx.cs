@@ -18,10 +18,10 @@ namespace TechHeaven
                 List<marcas> list = new List<marcas>();
 
                 string query = @"
-SELECT b.brand_name, COUNT(p.id_products) AS total_products
+SELECT b.id_brand, b.brand_name, COUNT(p.id_products) AS total_products
 FROM brands b
 LEFT JOIN products p ON b.id_brand = p.brand
-GROUP BY b.brand_name;";
+GROUP BY b.id_brand, b.brand_name;";
 
                 SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["techeavenConnectionString"].ConnectionString);
 
@@ -35,8 +35,9 @@ GROUP BY b.brand_name;";
                 {
                     var marca = new marcas();
 
-                    marca.nome = dr.GetString(0);
-                    marca.totalMarcasProdutos = dr.GetInt32(1);
+                    marca.id_brand = dr.GetInt32(0);
+                    marca.nome = dr.GetString(1);
+                    marca.totalMarcasProdutos = dr.GetInt32(2);
 
                     list.Add(marca);
                 }
@@ -51,8 +52,18 @@ GROUP BY b.brand_name;";
             }
         }
 
+        protected void edit_product_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "Edit")
+            {
+                int brandId = Convert.ToInt32(e.CommandArgument);
+                Response.Redirect($"bo_edit_brands.aspx?brandId={brandId}");
+            }
+        }
+
         public class marcas
         {
+            public int id_brand {  get; set; }
             public string nome { get; set; }
             public int totalMarcasProdutos { get; set; }
         }

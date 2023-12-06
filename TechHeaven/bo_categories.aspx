@@ -45,14 +45,14 @@
                                         <tbody>
                                             <tr>
                                                 <td scope="row"><%# Eval("nome") %></td>
-<td scope="row"><%# Eval("totalProdutos") %></td>
-<td scope="row">
-    <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_category") %>'>
+                                                <td scope="row"><%# Eval("totalProdutos") %></td>
+                                                <td scope="row">
+                                                    <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_category") %>'>
         <img src="admin_assets/img/editar.png" alt="Edit" />
-    </asp:LinkButton>
-</td>
+                                                    </asp:LinkButton>
+                                                </td>
 
-                                                
+
                                             </tr>
 
                                         </tbody>
