@@ -83,18 +83,7 @@
                                                                 <div class="product-price">
                                                                     <%# Eval("price")%> €
                                                                 </div>
-                                                                <!-- End .product-price -->
-                                                                <div class="ratings-container">
-                                                                    <div class="ratings">
-                                                                        <div class="ratings-val" style="width: 20%;"></div>
-                                                                        <!-- End .ratings-val -->
-                                                                    </div>
-                                                                    <!-- End .ratings -->
-                                                                    <span class="ratings-text">( 2 Reviews )</span>
-                                                                </div>
-                                                                <!-- End .rating-container -->
-
-
+                                                              
                                                                 <!-- End .product-action -->
 
                                                                 <asp:LinkButton ID="lb_add_cart" runat="server" class="btn-product btn-cart" CommandName="add_cart" CommandArgument='<%# Eval("id_products") %>' OnCommand="lb_add_cart_Command">add to cart</asp:LinkButton>

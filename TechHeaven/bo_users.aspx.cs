@@ -17,9 +17,11 @@ namespace TechHeaven
         int _firstIndex, _lastIndex;
         private int _pageSize = 10;
         public static string search;
-        public static string query = "SELECT u.id, u.email, u.firstName, u.lastName, u.username, u.NIF, u.verify, u.tfa, u.newsletter, r.role_name AS role " +
-            "FROM users u " +
-            "LEFT JOIN roles r ON u.roleId = r.id_role;";
+        public static string query = "SELECT u.id, u.email, u.firstName, u.lastName, u.username, u.NIF, u.verify, u.tfa, u.newsletter, r.role_name AS role, COUNT(o.id_order) AS totalOrders " +
+    "FROM users u " +
+    "LEFT JOIN roles r ON u.roleId = r.id_role " +
+    "LEFT JOIN orders o ON u.id = o.userID " +
+    "GROUP BY u.id, u.email, u.firstName, u.lastName, u.username, u.NIF, u.verify, u.tfa, u.newsletter, r.role_name;";
 
         private int CurrentPage
         {

@@ -48,11 +48,11 @@
                                         <!-- End .product-title -->
 
                                         <div class="ratings-container">
-                                            <div class="ratings">
-                                                <div class="ratings-val" style="width: 80%;"></div>
+                                                <p>
+                                                    <asp:Label ID="lbl_classificacao_media" runat="server" Text="0 stars &#9733;"></asp:Label>
+
+                                                </p>
                                                 <!-- End .ratings-val -->
-                                            </div>
-                                            <!-- End .ratings -->
                                             <a class="ratings-text" href="#product-review-link" id="review-link">
                                                 <asp:Label ID="lbl_reviewsProd" runat="server"></asp:Label></a>
                                         </div>

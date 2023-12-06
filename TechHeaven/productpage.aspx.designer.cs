@@ -51,6 +51,15 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.Label lbl_nome;
 
         /// <summary>
+        /// lbl_classificacao_media control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbl_classificacao_media;
+
+        /// <summary>
         /// lbl_reviewsProd control.
         /// </summary>
         /// <remarks>

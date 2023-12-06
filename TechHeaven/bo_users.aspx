@@ -41,6 +41,7 @@
                                                 <th scope="col">NIF</th>
                                                 <th scope="col">FTA</th>
                                                 <th scope="col">Newsletter</th>
+                                                <th scope="col">Purchases</th>
                                                 <th scope="col">Editar</th>
 
                                             </tr>
@@ -62,13 +63,17 @@
                                                 </td>
                                                 <td scope="row">
                                                     <%# Eval("tfa") != DBNull.Value 
-        ? (Eval("tfa") != null && Convert.ToBoolean(Eval("tfa")) ? "Sim" : "Não") 
+        ? (Eval("tfa") != null && Convert.ToBoolean(Eval("tfa")) ? "Yes" : "No") 
         : "No" %>
                                                 </td>
                                                 <td scope="row">
                                                     <%# Eval("newsletter") != DBNull.Value 
-        ? (Eval("newsletter") != null && Convert.ToBoolean(Eval("newsletter")) ? "Sim" : "Não") 
+        ? (Eval("newsletter") != null && Convert.ToBoolean(Eval("newsletter")) ? "Yes" : "No") 
         : "No" %>
+                                                </td>
+
+                                                <td scope="row">
+                                                    <%# Eval("totalOrders") %>
                                                 </td>
 
                                                 <td scope="row">

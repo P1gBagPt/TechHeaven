@@ -23,6 +23,12 @@ namespace TechHeaven
     "LEFT JOIN categories c ON p.category = c.id_category " +
     "WHERE status = 'true' AND quantity > 0;";
 
+        public static string queryAUX = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "WHERE status = 'true' AND quantity > 0;";
+
+
 
         public static string orderByClause = "";
         public static string categotiaFilter = "";
@@ -52,7 +58,10 @@ namespace TechHeaven
             BindDataIntoRepeater(query);
 
 
-
+            if (Request.QueryString["categoryID"] != null)
+            {
+                Console.WriteLine("sadasdasd");
+            }
 
 
 
@@ -324,11 +333,8 @@ namespace TechHeaven
         {
             if (e.CommandName == "Clear")
             {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0;";
-                BindDataIntoRepeater(query);
+
+                BindDataIntoRepeater(queryAUX);
             }
         }
 
@@ -339,15 +345,13 @@ namespace TechHeaven
                 marcaFilter = "";
                 categotiaFilter = e.CommandArgument.ToString();
 
-
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0 AND category = '" + categotiaFilter + "'" + orderByClause;
+                    "FROM products p " +
+                    "LEFT JOIN categories c ON p.category = c.id_category " +
+                    "WHERE status = 'true' AND quantity > 0 AND c.category_name = '" + categotiaFilter + "'" + orderByClause;
 
                 // Bind products based on the selected category
                 BindDataIntoRepeater(query);
-
             }
         }
 
@@ -361,23 +365,23 @@ namespace TechHeaven
                 if (string.IsNullOrEmpty(categotiaFilter))
                 {
                     query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-        "FROM products p " +
-        "INNER JOIN categories c ON p.category = c.id_category " +  // Corrected JOIN condition
-        "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = '" + marcaFilter + "' " + orderByClause;  // Corrected WHERE condition, assuming brand is a string
-
+                        "FROM products p " +
+                        "INNER JOIN categories c ON p.category = c.id_category " +
+                        "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = '" + marcaFilter + "' " + orderByClause;
                 }
                 else
                 {
-
                     query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                    "FROM products p WHERE status = 'true' AND quantity > 0 AND category = '" + categotiaFilter + "' AND brand = " + marcaFilter + " " + orderByClause;
-
+                        "FROM products p " +
+                        "LEFT JOIN categories c ON p.category = c.id_category " +
+                        "WHERE status = 'true' AND quantity > 0 AND c.category_name = '" + categotiaFilter + "' AND p.brand = '" + marcaFilter + "' " + orderByClause;
                 }
 
                 // Bind data based on the selected brand
                 BindDataIntoRepeater(query);
             }
         }
+
 
         protected void sortby_SelectedIndexChanged(object sender, EventArgs e)
         {

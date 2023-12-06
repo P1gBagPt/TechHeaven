@@ -239,30 +239,42 @@ namespace TechHeaven
             {
                 SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
-                string query2 = "SELECT COUNT(*) FROM review_classification WHERE status = 1 AND productID = @productId";
+                // Query to get the count and average classification
+                string query = "SELECT COUNT(*) AS TotalReviews, AVG(classification) AS AverageClassification FROM review_classification WHERE status = 1 AND productID = @productId";
 
-                using (SqlCommand command = new SqlCommand(query2, con))
+                using (SqlCommand command = new SqlCommand(query, con))
                 {
                     // Use a parameter for the product ID to avoid SQL injection
                     command.Parameters.AddWithValue("@productId", productId);
 
                     con.Open();
-                    // Use ExecuteScalar to get a single value (the count)
-                    int totalReviews = (int)command.ExecuteScalar();
+                    // Use ExecuteReader to get both count and average
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            // Get the count
+                            int totalReviews = Convert.ToInt32(reader["TotalReviews"]);
+
+                            // Get the average classification
+                            decimal averageClassification = Convert.ToDecimal(reader["AverageClassification"]);
+
+                            if (totalReviews > 0)
+                            {
+                                lbl_total_reviews.Text = $"Reviews ({totalReviews})";
+                                lbl_reviews_nav_total.Text = $"Reviews ({totalReviews})";
+                                lbl_classificacao_media.Text = averageClassification.ToString() + " stars &#9733;";
+                            }
+                            else
+                            {
+                                lbl_total_reviews.Text = "Reviews (0)";
+                                lbl_reviews_nav_total.Text = "Reviews (0)";
+                                lbl_classificacao_media.Text = "0";
+                            }
+                        }
+                    }
+
                     con.Close();
-
-                    if (totalReviews > 0)
-                    {
-                        lbl_total_reviews.Text = "Reviews (" + totalReviews.ToString() + ")";
-                        lbl_reviews_nav_total.Text = "Reviews (" + totalReviews.ToString() + ")";
-                    }
-                    else
-                    {
-                        lbl_total_reviews.Text = "Reviews (0)";
-                        lbl_reviews_nav_total.Text = "Reviews (0)";
-                    }
-
-
                 }
             }
             catch (Exception ex)
@@ -270,6 +282,7 @@ namespace TechHeaven
                 // Handle the exception (e.g., log it or display an error message)
             }
         }
+
 
 
         private void HandlePaging()
