@@ -44,8 +44,8 @@
                                     <ItemTemplate>
                                         <tbody>
                                             <tr>
-                                                <td scope="row"><%# Eval("nome") %></td>
-                                                <td scope="row"><%# Eval("totalProdutos") %></td>
+                                                <td scope="row"><%# Eval("category_name") %></td>
+                                                <td scope="row"><%# Eval("total_products") %></td>
                                                 <td scope="row">
                                                     <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_category") %>'>
         <img src="admin_assets/img/editar.png" alt="Edit" />
@@ -58,9 +58,25 @@
                                         </tbody>
 
                                     </ItemTemplate>
-
                                 </asp:Repeater>
                             </table>
+                            <nav aria-label="...">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <asp:LinkButton ID="lbPrevious" runat="server" OnClick="lbPrevious_Click" CssClass="page-link" Text="Previous"></asp:LinkButton>
+                                    </li>
+                                    <asp:DataList ID="rptPaging" runat="server" OnItemCommand="rptPaging_ItemCommand" OnItemDataBound="rptPaging_ItemDataBound" RepeatDirection="Horizontal">
+                                        <ItemTemplate>
+                                            <li class="page-item">
+                                                <asp:LinkButton ID="lbPaging" runat="server" CommandArgument='<%# Eval("PageIndex") %>' CommandName="newPage" CssClass="page-link"><%# Eval("PageText") %></asp:LinkButton>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:DataList>
+                                    <li class="page-item">
+                                        <asp:LinkButton ID="lbNext" runat="server" OnClick="lbNext_Click" CssClass="page-link" Text="Next"></asp:LinkButton>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
 
