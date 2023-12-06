@@ -15133,6 +15133,7 @@
     <Content Include="bo_edit_users.aspx" />
     <Content Include="bo_products.aspx" />
     <Content Include="bo_roles.aspx" />
+    <Content Include="bo_sales.aspx" />
     <Content Include="bo_users.aspx" />
     <Content Include="cart.aspx" />
     <Content Include="donecheckout.aspx" />
@@ -15266,6 +15267,13 @@
     </Compile>
     <Compile Include="bo_roles.aspx.designer.cs">
       <DependentUpon>bo_roles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="bo_sales.aspx.cs">
+      <DependentUpon>bo_sales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="bo_sales.aspx.designer.cs">
+      <DependentUpon>bo_sales.aspx</DependentUpon>
     </Compile>
     <Compile Include="bo_users.aspx.cs">
       <DependentUpon>bo_users.aspx</DependentUpon>
