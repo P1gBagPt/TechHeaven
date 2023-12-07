@@ -86,7 +86,7 @@
                                                     <asp:Image ID="imgEstado" runat="server" ImageUrl='<%# Convert.ToBoolean(Eval("status")) ? "admin_assets/img/sim.png" : "admin_assets/img/nao.png" %>' />
                                                 </td>
                                                 <td scope="row">
-                                                    <asp:LinkButton ID="lb_activate_deactivate" runat="server" CssClass='<%# Convert.ToBoolean(Eval("status")) ? "btn btn-danger" : "btn btn-success" %>' CommandArgument='<%# Eval("id_products") %>' OnCommand="lb_activate_deactivate_Command" CommandName="AtivarDesativar"><%# Convert.ToBoolean(Eval("status")) ? "Desativar" : "Ativar" %></asp:LinkButton>
+                                                    <asp:LinkButton ID="lb_activate_deactivate" runat="server" CssClass='<%# Convert.ToBoolean(Eval("status")) ? "btn btn-danger" : "btn btn-success" %>' CommandArgument='<%# Eval("id_products") %>' OnCommand="lb_activate_deactivate_Command" CommandName="AtivarDesativar"><%# Convert.ToBoolean(Eval("status")) ? "Deactivate" : "Active" %></asp:LinkButton>
                                                 </td>
   
                                             </tr>

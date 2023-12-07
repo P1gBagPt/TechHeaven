@@ -73,9 +73,9 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <a class="dropdown-item d-flex align-items-center" href="account.aspx">
                                     <i class="bi bi-person"></i>
-                                    <span>Perfil</span>
+                                    <span>Account</span>
                                 </a>
                             </li>
                             <li>
@@ -84,8 +84,10 @@
 
                             <li>
 
-                                <asp:Button ID="btn_logout" runat="server" CssClass="btn btn-link d-flex align-items-center" Text="Sign Out" OnClick="btn_logout_Click" />
-                                <i class="bi bi-box-arrow-right"></i>
+                                <asp:LinkButton ID="lb_logout" runat="server" CssClass="dropdown-item d-flex align-items-center" OnCommand="lb_logout_Command" CommandName="Logout">
+                                    <i class="bi bi-box-arrow-right"></i>
+<span>Logout</span>
+                                </asp:LinkButton>
 
 
                             </li>
@@ -184,6 +186,19 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="bo_reviews.aspx">
                         <i class="bi bi-chat-quote"></i><span>Reviews</span>
+                    </a>
+                </li>
+
+
+                <!-- NEWSLETTER -->
+                <!-- NEWSLETTER -->
+                <!-- NEWSLETTER -->
+                <!-- NEWSLETTER -->
+                <!-- NEWSLETTER -->
+                <!-- NEWSLETTER -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="bo_newsletter.aspx">
+                        <i class="bi bi-newspaper"></i><span>Newsletter</span>
                     </a>
                 </li>
 

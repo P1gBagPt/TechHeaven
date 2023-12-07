@@ -14,9 +14,13 @@ namespace TechHeaven
 
         }
 
-        protected void btn_logout_Click(object sender, EventArgs e)
-        {
+       
 
+        protected void lb_logout_Command(object sender, CommandEventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("main_page.aspx");
         }
     }
 }

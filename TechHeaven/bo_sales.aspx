@@ -6,11 +6,11 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Encomendas</h1>
+            <h1>Orders</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index_admin.aspx">Inicio</a></li>
-                    <li class="breadcrumb-item active">Encomendas</li>
+                    <li class="breadcrumb-item"><a href="main_page_admin.aspx">Home</a></li>
+                    <li class="breadcrumb-item active">Orders</li>
                 </ol>
             </nav>
         </div>
@@ -22,7 +22,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Encomendas</h5>
+                            <h5 class="card-title">Orders</h5>
 
 
 

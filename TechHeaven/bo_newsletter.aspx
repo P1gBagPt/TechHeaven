@@ -1,17 +1,18 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/master_page_admin.Master" AutoEventWireup="true" CodeBehind="bo_brands.aspx.cs" Inherits="TechHeaven.bo_brands" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/master_page_admin.Master" AutoEventWireup="true" CodeBehind="bo_newsletter.aspx.cs" Inherits="TechHeaven.bo_newsletter" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
+
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Brands</h1>
+            <h1>Newsletters</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="main_page_admin.aspx">Home</a></li>
-                    <li class="breadcrumb-item active">Brands</li>
+                    <li class="breadcrumb-item active">Newsletter</li>
                 </ol>
             </nav>
         </div>
@@ -23,38 +24,52 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Brands</h5>
+                            <h5 class="card-title">Newsletters</h5>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="bo_add_newsletter.aspx">Add newsletter</a>
+                                </div>
 
-                            <a href="bo_add_brand.aspx">Add brand</a>
+                            </div>
+                            <!--<a href="bo_adicionar_produto.aspx">Adicionar produto</a>-->
 
+                            <!-- Primary Color Bordered Table -->
                             <table class="table table-bordered border-primary">
                                 <asp:Repeater ID="Repeater1" runat="server">
                                     <HeaderTemplate>
                                         <thead>
                                             <tr>
-                                                <th scope="col" style="color: blue;">Brand name</th>
-                                                <th scope="col" style="color: blue;">Total of products linked to that brand</th>
-                                                <th scope="col" style="color: blue;">Edit</th>
+                                                <th scope="col">Send</th>
+                                                <th scope="col">Created By</th>
+                                                <th scope="col">Creation Date</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Newsletter</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Delete</th>
+
                                             </tr>
                                         </thead>
                                     </HeaderTemplate>
-
                                     <ItemTemplate>
                                         <tbody>
                                             <tr>
-                                                <th scope="row"><%# Eval("brand_name")%></th>
-                                                <th scope="row"><%# Eval("total_products")%></th>
                                                 <td scope="row">
-                                                    <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_brand") %>'>
-<img src="admin_assets/img/editar.png" alt="Edit" />
-                                                    </asp:LinkButton>
+                                                    <asp:LinkButton ID="lb_send_email" runat="server" OnCommand="lb_send_email_Command" CommandName="Send" CommandArgument='<%# Eval("id_newsletter") %>'>Send</asp:LinkButton>
+                                                </td>
+                                                <td scope="row"><%# Eval("fistNameUser") + " " + Eval("lastNameUser") %></td>
+                                                <td scope="row"><%# Eval("creation_date", "{0:dd/MM/yyyy}") %></td>
+                                                <td scope="row"><%# Eval("title")%></td>
+                                                
+                                                <td scope="row"><%# Eval("news")%></td>
+                                                <td scope="row">
+                                                    <asp:Image ID="imgEstado" runat="server" ImageUrl='<%# Convert.ToBoolean(Eval("status")) ? "admin_assets/img/sim.png" : "admin_assets/img/nao.png" %>' />
+                                                </td>
+                                                <td scope="row">
+                                                    <asp:LinkButton ID="lb_activate_deactivate" runat="server" CssClass='<%# Convert.ToBoolean(Eval("status")) ? "btn btn-danger" : "btn btn-success" %>' CommandArgument='<%# Eval("id_newsletter") %>' OnCommand="lb_activate_deactivate_Command" CommandName="AtivarDesativar"><%# Convert.ToBoolean(Eval("status")) ? "Deactivate" : "Activate" %></asp:LinkButton>
                                                 </td>
                                             </tr>
-
                                         </tbody>
-
                                     </ItemTemplate>
-
                                 </asp:Repeater>
                             </table>
                             <nav aria-label="...">
@@ -74,12 +89,13 @@
                                     </li>
                                 </ul>
                             </nav>
+                            <!-- End Primary Color Bordered Table -->
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
+
 
     </main>
 
