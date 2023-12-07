@@ -33,7 +33,7 @@ namespace TechHeaven
         public static string orderByClause = "";
         public static string categotiaFilter = "";
         public static string marcaFilter = "";
-        public static int categoryId;
+        public static int categoryId, brandId;
         public static string procurar;
 
 
@@ -60,7 +60,41 @@ namespace TechHeaven
 
             if (Request.QueryString["categoryID"] != null)
             {
-                Console.WriteLine("sadasdasd");
+                categoryId = Convert.ToInt32(Request.QueryString["categoryID"]);
+
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId;
+
+                BindDataIntoRepeater(query);
+
+            }
+
+            if (Request.QueryString["brandID"] != null)
+            {
+                brandId = Convert.ToInt32(Request.QueryString["brandID"]);
+
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "WHERE status = 'true' AND quantity > 0 AND brand = " + brandId;
+
+                BindDataIntoRepeater(query);
+
+            }
+
+            if (Request.QueryString["searchProduct"] != null)
+            {
+                procurar = Request.QueryString["searchProduct"];
+
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+     "FROM products p " +
+     "LEFT JOIN categories c ON p.category = c.id_category " +
+     "WHERE status = 'true' AND quantity > 0 AND (p.name LIKE '%" + procurar + "%')";
+
+                BindDataIntoRepeater(query);
+
             }
 
 
@@ -333,8 +367,12 @@ namespace TechHeaven
         {
             if (e.CommandName == "Clear")
             {
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "WHERE status = 'true' AND quantity > 0;";
 
-                BindDataIntoRepeater(queryAUX);
+                BindDataIntoRepeater(query);
             }
         }
 
@@ -342,13 +380,25 @@ namespace TechHeaven
         {
             if (e.CommandName == "Category")
             {
-                marcaFilter = "";
-                categotiaFilter = e.CommandArgument.ToString();
+                //brandId = null;
+                string argumentAsString = e.CommandArgument.ToString();
 
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                    "FROM products p " +
-                    "LEFT JOIN categories c ON p.category = c.id_category " +
-                    "WHERE status = 'true' AND quantity > 0 AND c.category_name = '" + categotiaFilter + "'" + orderByClause;
+                if (int.TryParse(argumentAsString, out categoryId))
+                {
+                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " " + orderByClause;
+                }
+                else
+                {
+                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"WHERE status = 'true' AND quantity > 0 AND category = " + argumentAsString + " " + orderByClause;
+                }
+
+
 
                 // Bind products based on the selected category
                 BindDataIntoRepeater(query);
@@ -408,20 +458,33 @@ namespace TechHeaven
             }
 
 
+
+            if(categoryId != 0 && brandId != 0)
+            {
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+     "FROM products p " +
+     "LEFT JOIN categories c ON p.category = c.id_category " +
+     "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " AND brand = " + brandId + " " + orderByClause;
+
+                BindDataIntoRepeater(query);
+            }
+            else if (categoryId != 0)
+            {
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+     "FROM products p " +
+     "LEFT JOIN categories c ON p.category = c.id_category " +
+     "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " " + orderByClause;
+
+                BindDataIntoRepeater(query);
+
+            }
+
             if (!string.IsNullOrEmpty(categotiaFilter) && !string.IsNullOrEmpty(marcaFilter))
             {
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
                    "FROM products p WHERE status = 'true' AND quantity > 0 AND category = '" + categotiaFilter + "' AND brand = " + marcaFilter + " " + orderByClause;
             }
-            else if (!string.IsNullOrEmpty(categotiaFilter))
-            {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-     "FROM products p " +
-     "LEFT JOIN categories c ON p.category = c.id_category " +
-     "WHERE status = 'true' AND quantity > 0 AND category = '" + categotiaFilter + "'" + orderByClause;
-
-            }
-            else if (!string.IsNullOrEmpty(marcaFilter))
+            /*else if (!string.IsNullOrEmpty(marcaFilter))
             {
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
      "FROM products p " +
@@ -435,7 +498,7 @@ namespace TechHeaven
     "FROM products p " +
     "LEFT JOIN categories c ON p.category = c.id_category " +
     "WHERE status = 'true' AND quantity > 0 " + orderByClause;
-            }
+            }*/
 
 
             BindDataIntoRepeater(query);

@@ -237,5 +237,11 @@ namespace TechHeaven
             Session.Abandon();
             Response.Redirect("main_page.aspx");
         }
+
+        protected void lb_search_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("all_products.aspx?searchProduct=" + tb_search.Text);
+
+        }
     }
 }

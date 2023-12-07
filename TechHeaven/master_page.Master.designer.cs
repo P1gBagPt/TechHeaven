@@ -42,6 +42,24 @@ namespace TechHeaven
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// lb_search control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lb_search;
+
+        /// <summary>
+        /// tb_search control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_search;
+
+        /// <summary>
         /// lbl_logout_user control.
         /// </summary>
         /// <remarks>
