@@ -31,8 +31,6 @@ namespace TechHeaven
 
 
         public static string orderByClause = "";
-        public static string categotiaFilter = "";
-        public static string marcaFilter = "";
         public static int categoryId, brandId;
         public static string procurar;
 
@@ -373,6 +371,10 @@ namespace TechHeaven
     "WHERE status = 'true' AND quantity > 0;";
 
                 BindDataIntoRepeater(query);
+
+                categoryId = 0;
+                brandId = 0;
+
             }
         }
 
@@ -385,10 +387,23 @@ namespace TechHeaven
 
                 if (int.TryParse(argumentAsString, out categoryId))
                 {
-                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+
+                    if (brandId != 0)
+                    {
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "WHERE status = 'true' AND quantity > 0 AND p.category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+                    }
+                    else
+                    {
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
 "FROM products p " +
 "LEFT JOIN categories c ON p.category = c.id_category " +
 "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " " + orderByClause;
+                    }
+
+
                 }
                 else
                 {
@@ -409,22 +424,34 @@ namespace TechHeaven
         {
             if (e.CommandName == "Brand")
             {
-                marcaFilter = e.CommandArgument.ToString();
+                string argumenttAsString = e.CommandArgument.ToString();
 
-                // Update the query based on whether a category filter is selected
-                if (string.IsNullOrEmpty(categotiaFilter))
+                if (int.TryParse(argumenttAsString, out brandId))
                 {
-                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+                    if (categoryId != 0)
+                    {
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+                        "FROM products p " +
+                        "LEFT JOIN categories c ON p.category = c.id_category " +
+                        "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+                    }
+                    else
+                    {
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
                         "FROM products p " +
                         "INNER JOIN categories c ON p.category = c.id_category " +
-                        "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = '" + marcaFilter + "' " + orderByClause;
+                        "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId + " " + orderByClause;
+                    }
+
                 }
                 else
                 {
+
+
                     query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                        "FROM products p " +
-                        "LEFT JOIN categories c ON p.category = c.id_category " +
-                        "WHERE status = 'true' AND quantity > 0 AND c.category_name = '" + categotiaFilter + "' AND p.brand = '" + marcaFilter + "' " + orderByClause;
+                       "FROM products p " +
+                       "INNER JOIN categories c ON p.category = c.id_category " +
+                       "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + argumenttAsString + " " + orderByClause;
                 }
 
                 // Bind data based on the selected brand
@@ -459,7 +486,7 @@ namespace TechHeaven
 
 
 
-            if(categoryId != 0 && brandId != 0)
+            if (categoryId != 0 && brandId != 0)
             {
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
      "FROM products p " +
@@ -479,28 +506,7 @@ namespace TechHeaven
 
             }
 
-            if (!string.IsNullOrEmpty(categotiaFilter) && !string.IsNullOrEmpty(marcaFilter))
-            {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                   "FROM products p WHERE status = 'true' AND quantity > 0 AND category = '" + categotiaFilter + "' AND brand = " + marcaFilter + " " + orderByClause;
-            }
-            /*else if (!string.IsNullOrEmpty(marcaFilter))
-            {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-     "FROM products p " +
-     "LEFT JOIN categories c ON p.category = c.id_category " +
-     "WHERE status = 'true' AND quantity > 0 AND brand = '" + marcaFilter + "'" + orderByClause;
-
-            }
-            else
-            {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0 " + orderByClause;
-            }*/
-
-
+  
             BindDataIntoRepeater(query);
         }
 
