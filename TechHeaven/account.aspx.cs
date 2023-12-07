@@ -471,7 +471,7 @@ namespace TechHeaven
                 {
                     respostaRegister = Convert.ToBoolean(registerValue);
 
-                    if(respostaRegister)
+                    if (respostaRegister)
                     {
                         lbl_2fa.Visible = false;
                         lb_save_tfa.Visible = false;
@@ -563,10 +563,13 @@ namespace TechHeaven
         {
             try
             {
-                string query = "SELECT w.*, p.id_products, p.name AS productName, p.price AS productPrice, p.image AS productImage, p.contenttype AS productImageContentType " +
-                               "FROM wishlist w " +
-                               "JOIN products p ON w.productID = p.id_products " +
-                               "WHERE w.userID = " + Session["userId"].ToString();
+                string query = "SELECT w.*, p.id_products, p.name AS productName, p.price AS productPrice, " +
+                    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image AS productImage, p.contenttype AS productImageContentType " +
+                    "FROM wishlist w " +
+                    "JOIN products p ON w.productID = p.id_products " +
+                    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +  // Add a space here
+                    "WHERE w.userID = " + Session["userId"].ToString();
+
 
                 BindDataIntoRepeater(query);
 
@@ -999,6 +1002,65 @@ namespace TechHeaven
             }
         }
 
+        protected void Repeater3_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                DataRowView dataItem = e.Item.DataItem as DataRowView;
+
+                if (dataItem != null)
+                {
+                    Label lblPrice = (Label)e.Item.FindControl("lbl_productPrice");
+                    Label lblDiscountedPrice = (Label)e.Item.FindControl("lblDiscountedPrice");
+
+                    // Verifica se "productPrice" é DBNull ou nulo antes de tentar converter
+                    if (dataItem["productPrice"] != DBNull.Value && dataItem["productPrice"] != null)
+                    {
+                        decimal originalPrice = Convert.ToDecimal(dataItem["productPrice"]);
+
+                        // Verifica se há promoção e calcula o preço com desconto
+                        if (dataItem["discounted_price"] != DBNull.Value && dataItem["discounted_price"] != null)
+                        {
+                            decimal discountedPrice = Convert.ToDecimal(dataItem["discounted_price"]);
+
+                            lblDiscountedPrice.Text = string.Format("{0:N2} €", discountedPrice); // Ajusta para exibir apenas duas casas decimais
+                            lblDiscountedPrice.Visible = true;
+
+                            // Aplica a classe CSS "old-price" ao lblPrice
+                            lblPrice.CssClass = "old-price";
+                        }
+                        else
+                        {
+                            lblDiscountedPrice.Visible = false;
+                        }
+
+                        // Agora, define o lblPrice, independentemente de haver desconto ou não
+                        lblPrice.Text = string.Format("{0:C}", originalPrice);
+                    }
+                }
+            }
+        }
+
+
+
+        protected string FormatPrice(object price, object discountedPrice)
+        {
+            decimal decimalValue;
+
+            if (discountedPrice != null && decimal.TryParse(discountedPrice.ToString(), out decimalValue))
+            {
+                return string.Format("{0:C}", decimalValue);
+            }
+            else if (price != null && decimal.TryParse(price.ToString(), out decimalValue))
+            {
+                return string.Format("{0:C}", decimalValue);
+            }
+            else
+            {
+                return string.Empty; // ou outra mensagem de erro, se necessário
+            }
+        }
+
         protected void lb_remover_wish_Command(object sender, CommandEventArgs e)
         {
             if (e.CommandName == "Remover")
@@ -1006,13 +1068,14 @@ namespace TechHeaven
                 int idCarrinho = Convert.ToInt32(e.CommandArgument);
 
                 // Construa a consulta SQL DELETE com base no ID do carrinho
-                string deleteQuery = "DELETE FROM wishlist WHERE id_wish = @IdCarrinho AND userID = " + id_user;
+                string deleteQuery = "DELETE FROM wishlist WHERE id_wish = @IdCarrinho AND userID = @UserId";
 
                 using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ToString()))
                 {
                     using (SqlCommand cmd = new SqlCommand(deleteQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@IdCarrinho", idCarrinho);
+                        cmd.Parameters.AddWithValue("@UserId", id_user);
 
                         con.Open();
                         int rowsAffected = cmd.ExecuteNonQuery();
@@ -1020,13 +1083,17 @@ namespace TechHeaven
                     }
                 }
 
+                string query = "SELECT w.*, p.id_products, p.name AS productName, p.price AS productPrice, " +
+                    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image AS productImage, p.contenttype AS productImageContentType " +
+                    "FROM wishlist w " +
+                    "JOIN products p ON w.productID = p.id_products " +
+                    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +  // Add a space here
+                    "WHERE w.userID = " + Session["userId"].ToString();
 
                 BindDataIntoRepeater(query);
-
-
-
             }
         }
+
 
 
     }

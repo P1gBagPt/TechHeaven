@@ -78,6 +78,15 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.Label lbl_preco;
 
         /// <summary>
+        /// lblDiscountedPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblDiscountedPrice;
+
+        /// <summary>
         /// tb_quantidade control.
         /// </summary>
         /// <remarks>

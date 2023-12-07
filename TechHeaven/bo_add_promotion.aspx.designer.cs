@@ -11,35 +11,26 @@ namespace TechHeaven
 {
 
 
-    public partial class bo_edit_product
+    public partial class bo_add_promotion
     {
 
         /// <summary>
-        /// lb_add_promo control.
+        /// img_product control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lb_add_promo;
+        protected global::System.Web.UI.WebControls.Image img_product;
 
         /// <summary>
-        /// tb_nome control.
+        /// lbl_product_info control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_nome;
-
-        /// <summary>
-        /// RequiredFieldValidator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.Label lbl_product_info;
 
         /// <summary>
         /// tb_numero_artigo control.
@@ -51,121 +42,85 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.TextBox tb_numero_artigo;
 
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// rfv_tb_numero_artigo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfv_tb_numero_artigo;
 
         /// <summary>
-        /// tb_preco control.
+        /// tb_start control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_preco;
+        protected global::System.Web.UI.WebControls.TextBox tb_start;
 
         /// <summary>
-        /// RequiredFieldValidator3 control.
+        /// rfv_start control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfv_start;
 
         /// <summary>
-        /// tb_stock control.
+        /// tb_end control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_stock;
+        protected global::System.Web.UI.WebControls.TextBox tb_end;
 
         /// <summary>
-        /// RequiredFieldValidator4 control.
+        /// rfv_end control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator4;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfv_end;
 
         /// <summary>
-        /// ddl_categoria control.
+        /// lb_current_price control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_categoria;
+        protected global::System.Web.UI.WebControls.Label lb_current_price;
 
         /// <summary>
-        /// SqlDataSource1 control.
+        /// Panel1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
+        protected global::System.Web.UI.WebControls.Panel Panel1;
 
         /// <summary>
-        /// fu_imagem control.
+        /// lb_new_price control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fu_imagem;
+        protected global::System.Web.UI.WebControls.Label lb_new_price;
 
         /// <summary>
-        /// ddl_marca control.
+        /// lb_preview control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddl_marca;
-
-        /// <summary>
-        /// SqlDataSource2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource2;
-
-        /// <summary>
-        /// tb_descricao control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_descricao;
-
-        /// <summary>
-        /// lbl_nao_imagem control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbl_nao_imagem;
-
-        /// <summary>
-        /// productImage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image productImage;
+        protected global::System.Web.UI.WebControls.LinkButton lb_preview;
 
         /// <summary>
         /// lbl_erro control.
@@ -177,12 +132,12 @@ namespace TechHeaven
         protected global::System.Web.UI.WebControls.Label lbl_erro;
 
         /// <summary>
-        /// btn_editar control.
+        /// btn_promocao control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btn_editar;
+        protected global::System.Web.UI.WebControls.Button btn_promocao;
     }
 }

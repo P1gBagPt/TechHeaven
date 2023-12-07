@@ -18,16 +18,61 @@ namespace TechHeaven
         int _firstIndex, _lastIndex;
         private int _pageSize = 9;
         private DataTable _dtOriginal;
-        public static string query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0;";
+        public static string query = @"
+    SELECT
+        p.id_products,
+        p.name,
+        p.description,
+        p.quantity,
+        c.category_name as category,
+        p.brand,
+        p.status,
+        p.product_code AS codigoArtigo,
+        p.price,
+        CASE
+            WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100)
+            ELSE NULL
+        END AS discounted_price,
+        p.image,
+        p.contenttype,
+        p.creation_date
+    FROM
+        products p
+    LEFT JOIN
+        categories c ON p.category = c.id_category
+    LEFT JOIN
+        promotions pr ON p.id_products = pr.productID
+    WHERE
+        p.status = 'true' AND p.quantity > 0;
+";
 
-        public static string queryAUX = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0;";
-
+        public static string queryAUX = @"
+    SELECT
+        p.id_products,
+        p.name,
+        p.description,
+        p.quantity,
+        c.category_name as category,
+        p.brand,
+        p.status,
+        p.product_code AS codigoArtigo,
+        p.price,
+        CASE
+            WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100)
+            ELSE NULL
+        END AS discounted_price,
+        p.image,
+        p.contenttype,
+        p.creation_date
+    FROM
+        products p
+    LEFT JOIN
+        categories c ON p.category = c.id_category
+    LEFT JOIN
+        promotions pr ON p.id_products = pr.productID
+    WHERE
+        p.status = 'true' AND p.quantity > 0;
+";
 
 
         public static string orderByClause = "";
@@ -60,10 +105,14 @@ namespace TechHeaven
             {
                 categoryId = Convert.ToInt32(Request.QueryString["categoryID"]);
 
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
     "FROM products p " +
     "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId;
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND p.quantity > 0 AND category = " + categoryId;
+
+
 
                 BindDataIntoRepeater(query);
 
@@ -281,7 +330,62 @@ namespace TechHeaven
         {
             SetProductImage(e.Item);
 
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                DataRowView dataItem = e.Item.DataItem as DataRowView;
+
+                if (dataItem != null)
+                {
+                    Label lblPrice = (Label)e.Item.FindControl("lblPrice");
+                    Label lblDiscountedPrice = (Label)e.Item.FindControl("lblDiscountedPrice");
+
+                    // Verifica se "price" é DBNull ou nulo antes de tentar converter
+                    if (dataItem["price"] != DBNull.Value && dataItem["price"] != null)
+                    {
+                        decimal originalPrice = Convert.ToDecimal(dataItem["price"]);
+
+                        // Verifica se há promoção e calcula o preço com desconto
+                        if (dataItem["discounted_price"] != DBNull.Value && dataItem["discounted_price"] != null)
+                        {
+                            decimal discountedPrice = Convert.ToDecimal(dataItem["discounted_price"]);
+                            lblDiscountedPrice.Text = discountedPrice.ToString("N2") + "€"; // Ajusta para exibir apenas duas casas decimais
+                            lblDiscountedPrice.Visible = true;
+
+                            // Aplica a classe CSS "old-price" ao lblPrice
+                            lblPrice.CssClass = "old-price";
+                        }
+                        else
+                        {
+                            lblDiscountedPrice.Visible = false;
+                        }
+
+                        // Agora, define o lblPrice, independentemente de haver desconto ou não
+                        lblPrice.Text = FormatPrice(originalPrice, null);
+                    }
+                }
+            }
         }
+
+
+        protected string FormatPrice(object price, object discountedPrice)
+        {
+            decimal decimalValue;
+
+            if (discountedPrice != null && decimal.TryParse(discountedPrice.ToString(), out decimalValue))
+            {
+                return string.Format("{0:C}", decimalValue);
+            }
+            else if (price != null && decimal.TryParse(price.ToString(), out decimalValue))
+            {
+                return string.Format("{0:C}", decimalValue);
+            }
+            else
+            {
+                return string.Empty; // ou outra mensagem de erro, se necessário
+            }
+        }
+
+
 
         protected void lb_add_cart_Command(object sender, CommandEventArgs e)
         {
@@ -365,10 +469,33 @@ namespace TechHeaven
         {
             if (e.CommandName == "Clear")
             {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0;";
+                query = @"
+    SELECT
+        p.id_products,
+        p.name,
+        p.description,
+        p.quantity,
+        c.category_name as category,
+        p.brand,
+        p.status,
+        p.product_code AS codigoArtigo,
+        p.price,
+        CASE
+            WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100)
+            ELSE NULL
+        END AS discounted_price,
+        p.image,
+        p.contenttype,
+        p.creation_date
+    FROM
+        products p
+    LEFT JOIN
+        categories c ON p.category = c.id_category
+    LEFT JOIN
+        promotions pr ON p.id_products = pr.productID
+    WHERE
+        p.status = 'true' AND p.quantity > 0;
+";
 
                 BindDataIntoRepeater(query);
 
@@ -390,27 +517,43 @@ namespace TechHeaven
 
                     if (brandId != 0)
                     {
-                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+
+
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
     "FROM products p " +
     "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0 AND p.category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND p.quantity > 0 AND category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+
+
                     }
                     else
                     {
-                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-"FROM products p " +
-"LEFT JOIN categories c ON p.category = c.id_category " +
-"WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " " + orderByClause;
+
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND p.quantity > 0 AND category = " + categoryId + " " + orderByClause;
+
+
                     }
 
 
                 }
                 else
                 {
-                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-"FROM products p " +
-"LEFT JOIN categories c ON p.category = c.id_category " +
-"WHERE status = 'true' AND quantity > 0 AND category = " + argumentAsString + " " + orderByClause;
+                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND p.quantity > 0 AND category = " + argumentAsString + " " + orderByClause;
+
+
+
                 }
 
 
@@ -430,28 +573,43 @@ namespace TechHeaven
                 {
                     if (categoryId != 0)
                     {
-                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                        "FROM products p " +
-                        "LEFT JOIN categories c ON p.category = c.id_category " +
-                        "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND p.quantity > 0 AND category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
+
+
                     }
                     else
                     {
-                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                        "FROM products p " +
-                        "INNER JOIN categories c ON p.category = c.id_category " +
-                        "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId + " " + orderByClause;
+
+                        query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId + " " + orderByClause;
+
+
+
+
                     }
 
                 }
                 else
                 {
 
+                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 AND category = " + argumenttAsString + " " + orderByClause;
 
-                    query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-                       "FROM products p " +
-                       "INNER JOIN categories c ON p.category = c.id_category " +
-                       "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + argumenttAsString + " " + orderByClause;
+
+
                 }
 
                 // Bind data based on the selected brand
@@ -488,10 +646,12 @@ namespace TechHeaven
 
             if (categoryId != 0 && brandId != 0)
             {
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-     "FROM products p " +
-     "LEFT JOIN categories c ON p.category = c.id_category " +
-     "WHERE status = 'true' AND quantity > 0 AND category = " + categoryId + " AND brand = " + brandId + " " + orderByClause;
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 AND category = " + categoryId + " AND p.brand = " + brandId + " " + orderByClause;
 
                 BindDataIntoRepeater(query);
             }
@@ -504,9 +664,17 @@ namespace TechHeaven
 
                 BindDataIntoRepeater(query);
 
+            }else if(brandId != 0)
+            {
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId + " " + orderByClause;
             }
 
-  
+
             BindDataIntoRepeater(query);
         }
 

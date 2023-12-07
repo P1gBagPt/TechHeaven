@@ -23,6 +23,7 @@ namespace TechHeaven
             public string descricao { get; set; }
             public string categoria { get; set; }
             public string marca { get; set; }
+            public decimal discounted_price { get; set; }
         }
         public static int productId, totalReviews;
 
@@ -75,7 +76,20 @@ namespace TechHeaven
                         lbl_descricao.Text = product.descricao;
 
                         // Se não for revenda, exibir apenas o preço normal sem rasurar
-                        lbl_preco.Text = string.Format("{0:N2} €", product.preco);
+                        
+
+                        if(product.discounted_price != 0)
+                        {
+                            lbl_preco.Text = string.Format("{0:N2} €", product.preco);
+                            lbl_preco.CssClass = "old-price";
+
+                            lblDiscountedPrice.Visible = true;
+                            lblDiscountedPrice.Text = product.discounted_price.ToString("N2") + "€";
+                        }
+                        else
+                        {
+                            lbl_preco.Text = string.Format("{0:N2} €", product.preco);
+                        }
 
                         //lbl_preco.Text = product.preco.ToString();
                         //lbl_codigo_artigo.Text = product.codigoArtigo;
@@ -366,6 +380,7 @@ namespace TechHeaven
             {
                 DataRowView drv = e.Item.DataItem as DataRowView;
 
+
                 if (drv != null)
                 {
                     // Get the creation date of the review
@@ -393,22 +408,24 @@ namespace TechHeaven
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"
-    SELECT
-        p.id_products,
-        p.quantity,
-        p.name,
-        p.product_code AS codigoArtigo,
-        p.price,
-        p.description,
-        c.category_name AS categoria_nome,
-        b.brand_name AS marca_nome
-    FROM products p
-    JOIN categories c ON p.category = c.id_category
-    JOIN brands b ON p.brand = b.id_brand
-    WHERE p.id_products = @productId";
-
-
-
+SELECT
+    p.id_products,
+    p.quantity,
+    p.name,
+    p.product_code AS codigoArtigo,
+    p.price,
+    CASE
+        WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100)
+        ELSE NULL
+    END AS discounted_price,
+    p.description,
+    c.category_name AS categoria_nome,
+    b.brand_name AS marca_nome
+FROM products p
+JOIN categories c ON p.category = c.id_category
+JOIN brands b ON p.brand = b.id_brand
+LEFT JOIN promotions pr ON p.id_products = pr.productID
+WHERE p.id_products = @productId";
 
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@productId", productId);
@@ -429,10 +446,10 @@ namespace TechHeaven
                             preco = Convert.ToDecimal(reader["price"]),
                             descricao = reader["description"].ToString(),
                             categoria = reader["categoria_nome"].ToString(),
-                            marca = reader["marca_nome"].ToString(), // Obtém o nome da marca
+                            marca = reader["marca_nome"].ToString(),
+                            discounted_price = DBNull.Value.Equals(reader["discounted_price"]) ? 0 : Convert.ToDecimal(reader["discounted_price"]),
                         };
                     }
-
 
                     reader.Close();
                 }
@@ -444,6 +461,7 @@ namespace TechHeaven
 
             return product;
         }
+
 
         protected void lb_categoria_Command(object sender, CommandEventArgs e)
         {

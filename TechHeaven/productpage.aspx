@@ -48,18 +48,20 @@
                                         <!-- End .product-title -->
 
                                         <div class="ratings-container">
-                                                <p>
-                                                    <asp:Label ID="lbl_classificacao_media" runat="server" Text="0 stars &#9733;"></asp:Label>
+                                            <p>
+                                                <asp:Label ID="lbl_classificacao_media" runat="server" Text="0 stars &#9733;"></asp:Label>
 
-                                                </p>
-                                                <!-- End .ratings-val -->
+                                            </p>
+                                            <!-- End .ratings-val -->
                                             <a class="ratings-text" href="#product-review-link" id="review-link">
                                                 <asp:Label ID="lbl_reviewsProd" runat="server"></asp:Label></a>
                                         </div>
                                         <!-- End .rating-container -->
+                                  
 
                                         <div class="product-price">
                                             <asp:Label ID="lbl_preco" runat="server"></asp:Label>
+                                            <asp:Label ID="lblDiscountedPrice" runat="server" Visible="false"></asp:Label>
                                         </div>
                                         <!-- End .product-price -->
 
@@ -168,10 +170,10 @@
                                                             <h4><%# Eval("UserName") %></h4>
                                                             <div class="ratings-container">
 
-                                                                    <p><%# Eval("Rating") %> stars &#9733;</p>
+                                                                <p><%# Eval("Rating") %> stars &#9733;</p>
 
-                                                                    <!-- End .ratings-val -->
-                                                         
+                                                                <!-- End .ratings-val -->
+
                                                                 <!-- End .ratings -->
                                                             </div>
                                                             <!-- End .rating-container -->

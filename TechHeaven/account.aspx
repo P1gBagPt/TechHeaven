@@ -500,7 +500,7 @@
                                             <h2 class="title mb-3">No items on your wishlist</h2>
                                         </asp:Panel>
 
-                                        <asp:Repeater ID="Repeater3" runat="server">
+                                        <asp:Repeater ID="Repeater3" runat="server" OnItemDataBound="Repeater3_ItemDataBound">
                                             <ItemTemplate>
                                                 <div class="col-md-12">
                                                     <div class="card">
@@ -517,7 +517,10 @@
                                                                     <asp:Label ID="lbl_productName" runat="server"><%# Eval("ProductName") %></asp:Label>
                                                                     <br />
                                                                     <b>Price: </b>
-                                                                    <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
+                                                                    <div class="product-price">
+                                                                        <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
+                                                                        <asp:Label ID="lblDiscountedPrice" runat="server" Visible="false"></asp:Label>
+                                                                    </div>
                                                                 </div>
 
                                                                 <div class="col-md-3">

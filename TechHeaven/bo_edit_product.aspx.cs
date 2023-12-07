@@ -249,5 +249,14 @@ namespace TechHeaven
                 myConn.Close();
             }
         }
+
+        protected void lb_add_promo_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
+        {
+            if (e.CommandName == "Promo")
+            {
+
+                Response.Redirect($"bo_add_promotion.aspx?productId={productId}");
+            }
+        }
     }
 }
