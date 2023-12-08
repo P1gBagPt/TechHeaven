@@ -68,10 +68,27 @@ namespace TechHeaven
                 }
 
 
-                string query1 = "SELECT TOP 6 p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0;";
+                string query1 = "SELECT TOP 6 " +
+     "p.id_products, " +
+     "p.name, " +
+     "p.description, " +
+     "p.quantity, " +
+     "c.category_name as category, " +
+     "p.brand, " +
+     "p.status, " +
+     "p.product_code AS codigoArtigo, " +
+     "p.price, " +
+     "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, " +
+     "p.image, " +
+     "p.contenttype, " +
+     "p.creation_date " +
+     "FROM products p " +
+     "LEFT JOIN categories c ON p.category = c.id_category " +
+     "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+     "WHERE p.status = 'true' AND p.quantity > 0 " +
+     "ORDER BY p.creation_date DESC;";  // Order by creation_date in descending order
+
+
 
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
@@ -96,11 +113,14 @@ namespace TechHeaven
                 }
 
 
-                string query = "SELECT TOP 8 p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
- "FROM products p " +
- "LEFT JOIN categories c ON p.category = c.id_category " +
- "WHERE status = 'true' AND quantity > 0 " +
- "ORDER BY NEWID();";
+                string query = "SELECT TOP 8 p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+     "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+     "FROM products p " +
+     "LEFT JOIN categories c ON p.category = c.id_category " +
+     "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+     "WHERE p.status = 'true' AND p.quantity > 0 " +
+     "ORDER BY NEWID();";
+
 
 
                 using (SqlConnection con = new SqlConnection(connectionString))
@@ -135,6 +155,10 @@ namespace TechHeaven
             }
         }
 
+        protected bool ShowDiscountedPrice(object discountedPrice)
+        {
+            return discountedPrice != DBNull.Value && Convert.ToDecimal(discountedPrice) > 0;
+        }
 
         protected string GetBase64Image(object imageData, object contentType)
         {

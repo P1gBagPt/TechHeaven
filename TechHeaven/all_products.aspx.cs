@@ -122,10 +122,18 @@ namespace TechHeaven
             {
                 brandId = Convert.ToInt32(Request.QueryString["brandID"]);
 
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-    "FROM products p " +
-    "LEFT JOIN categories c ON p.category = c.id_category " +
-    "WHERE status = 'true' AND quantity > 0 AND brand = " + brandId;
+                //            query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
+                //"FROM products p " +
+                //"LEFT JOIN categories c ON p.category = c.id_category " +
+                //"WHERE status = 'true' AND quantity > 0 AND brand = " + brandId;
+
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId;
+
 
                 BindDataIntoRepeater(query);
 
@@ -135,10 +143,13 @@ namespace TechHeaven
             {
                 procurar = Request.QueryString["searchProduct"];
 
-                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, p.image, p.contenttype, p.creation_date " +
-     "FROM products p " +
-     "LEFT JOIN categories c ON p.category = c.id_category " +
-     "WHERE status = 'true' AND quantity > 0 AND (p.name LIKE '%" + procurar + "%')";
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+        "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+        "FROM products p " +
+        "LEFT JOIN categories c ON p.category = c.id_category " +
+        "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+        "WHERE p.status = 'true' AND p.quantity > 0 AND (p.name LIKE '%" + procurar + "%')";
+
 
                 BindDataIntoRepeater(query);
 

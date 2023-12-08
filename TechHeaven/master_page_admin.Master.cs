@@ -11,7 +11,10 @@ namespace TechHeaven
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["isLogged"] == null || (int)Session["role"] != 1)
+            {
+                Response.Redirect("login.aspx");
+            }
         }
 
        

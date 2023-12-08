@@ -18,24 +18,23 @@
                             }
                         }
                     }'>
-                <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-1.png);">
+                <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-2.png);">
                     <div class="container intro-content">
                         <div class="row justify-content-end">
                             <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                                <h3 class="intro-subtitle text-third">Deals and Promotions</h3>
+                                <h3 class="intro-subtitle text-third">Beats</h3>
                                 <!-- End .h3 intro-subtitle -->
                                 <h1 class="intro-title">Beats by</h1>
                                 <h1 class="intro-title">Dre Studio 3</h1>
                                 <!-- End .intro-title -->
 
                                 <div class="intro-price">
-                                    <sup class="intro-old-price">$349,95</sup>
-                                    <span class="text-third">$279<sup>.99</sup>
+                                    <span class="text-primary">325<sup>.00</sup> €
                                     </span>
                                 </div>
                                 <!-- End .intro-price -->
 
-                                <a href="category.html" class="btn btn-primary btn-round">
+                                <a href="all_products.aspx?brandID=1" class="btn btn-primary btn-round">
                                     <span>Shop More</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
@@ -48,26 +47,25 @@
                 </div>
                 <!-- End .intro-slide -->
 
-                <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-2.png);">
+                <div class="intro-slide" style="background-image: url(assets/images/demos/demo-4/slider/slide-1.png);">
                     <div class="container intro-content">
                         <div class="row justify-content-end">
                             <div class="col-auto col-sm-7 col-md-6 col-lg-5">
-                                <h3 class="intro-subtitle text-primary">New Arrival</h3>
+                                <h3 class="intro-subtitle text-primary">Apple Products</h3>
                                 <!-- End .h3 intro-subtitle -->
-                                <h1 class="intro-title">Apple iPad Pro
+                                <h1 class="intro-title">Apple 15 Pro
                                     <br>
-                                    12.9 Inch, 64GB </h1>
+                                    6.1´, 128GB </h1>
                                 <!-- End .intro-title -->
 
                                 <div class="intro-price">
-                                    <sup>Today:</sup>
-                                    <span class="text-primary">$999<sup>.99</sup>
+                                    <span class="text-primary">1249<sup>.00</sup> €
                                     </span>
                                 </div>
                                 <!-- End .intro-price -->
 
                                 <a href="category.html" class="btn btn-primary btn-round">
-                                    <span>Shop More</span>
+                                    <span>Shop Now</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
                             </div>
@@ -165,16 +163,9 @@
                             <ItemTemplate>
                                 <div class="product product-2">
                                     <figure class="product-media">
-
-
                                         <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
                                             <asp:Image ID="img_produto_carrousel" runat="server" CssClass="product-image" Style="width: 279.41px; height: 279.41px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
-
                                         </a>
-
-
-
-
                                     </figure>
                                     <!-- End .product-media -->
 
@@ -189,16 +180,20 @@
                                         <!-- End .product-title -->
                                         <div class="product-price">
                                             <%--PRICE--%>
-                                            <%# Eval("price") %> €
+                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("{0:C}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
+
+                                            <asp:Label ID="lblDiscountedPrice" runat="server" Visible='<%# ShowDiscountedPrice(Eval("discounted_price")) %>'>
+                        <%# string.Format("{0:C}", Eval("discounted_price")) %>
+                                            </asp:Label>
                                         </div>
                                         <!-- End .product-price -->
-
                                     </div>
                                     <!-- End .product-body -->
                                 </div>
                                 <!-- End .product -->
                             </ItemTemplate>
                         </asp:Repeater>
+
 
                     </div>
                     <!-- End .owl-carousel -->
@@ -299,7 +294,7 @@
                                             <asp:Image ID="img_produto" runat="server" CssClass="product-image" Style="width: 279.41px; height: 279.41px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
                                         </a>
 
-                                        
+
 
                                         <div class="product-action">
                                             <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
@@ -313,10 +308,16 @@
                                             <%# Eval("category") %>
                                         </div>
                                         <!-- End .product-cat -->
-                                        <h3 class="product-title"><a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a></h3></a></h3>
-                                        <!-- End .product-title -->
+                                        <h3 class="product-title"><a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a></h3>
+                                        </a></h3>
+                                            <!-- End .product-title -->
                                         <div class="product-price">
-                                            <span class="new-price"><%# Eval("price") %> €</span>
+                                            <%--PRICE--%>
+                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("{0:C}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
+
+                                            <asp:Label ID="lblDiscountedPrice" runat="server" Visible='<%# ShowDiscountedPrice(Eval("discounted_price")) %>'>
+        <%# string.Format("{0:C}", Eval("discounted_price")) %>
+                                            </asp:Label>
                                         </div>
                                         <!-- End .product-price -->
                                     </div>
@@ -380,7 +381,7 @@
                     </div>
                     <!-- End .col-sm-6 col-lg-3 -->
 
-                    
+
 
                     <div class="col-sm-6 col-lg-3">
                         <div class="icon-box icon-box-side">

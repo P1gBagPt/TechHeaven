@@ -277,9 +277,9 @@
                 <div class="footer-middle">
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-6">
                                 <div class="widget widget-about">
-                                    <img src="assets/images/demos/demo-4/logo-footer.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                                    <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
                                     <p>Techeaven is where you will find the cheapest technology on the market.</p>
                                     <div class="widget-call">
                                         <i class="icon-phone"></i>
@@ -293,25 +293,9 @@
                             </div>
                             <!-- End .col-sm-6 col-lg-3 -->
 
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="widget">
-                                    <h4 class="widget-title">Useful Links</h4>
-                                    <!-- End .widget-title -->
+                           
 
-                                    <ul class="widget-list">
-                                        <li><a href="about.html">About Molla</a></li>
-                                        <li><a href="faq.html">FAQ</a></li>
-                                        <li><a href="contact.html">Contact us</a></li>
-                                    </ul>
-                                    <!-- End .widget-list -->
-                                </div>
-                                <!-- End .widget -->
-                            </div>
-                            <!-- End .col-sm-6 col-lg-3 -->
-
-      
-
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-6">
                                 <div class="widget">
                                     <h4 class="widget-title">My Account</h4>
                                     <!-- End .widget-title -->
@@ -370,5 +354,17 @@
 
     </form>
 </body>
-
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/65413989f2439e1631ea6bbd/1he3chgh0';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </html>
