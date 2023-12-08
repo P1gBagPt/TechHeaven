@@ -186,7 +186,7 @@ namespace TechHeaven
             decimal newPrice = CurrentPrice - (CurrentPrice * (promotionPercentage / 100));
 
             // Display the new price in the lb_new_price label
-            lb_new_price.Text = newPrice.ToString("F2");
+            lb_new_price.Text = newPrice.ToString("N2") + " €";
 
             Panel1.Visible = true;
 
@@ -234,6 +234,9 @@ namespace TechHeaven
                     command.ExecuteNonQuery();
                 }
             }
+
+
+            Response.Redirect("bo_products.aspx");
         }
 
 

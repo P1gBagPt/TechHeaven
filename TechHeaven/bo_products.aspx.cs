@@ -19,10 +19,13 @@ namespace TechHeaven
         int _firstIndex, _lastIndex;
         private int _pageSize = 10;
         public static string search;
-        public static string query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
+        public static string query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, " +
+            "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, " +
+            "p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
             "FROM products p " +
             "LEFT JOIN categories c ON p.category = c.id_category " +
-            "LEFT JOIN brands b ON p.brand = b.id_brand;";
+            "LEFT JOIN brands b ON p.brand = b.id_brand " +
+            "LEFT JOIN promotions pr ON p.id_products = pr.productID;";
         private int CurrentPage
         {
             get
@@ -239,20 +242,76 @@ namespace TechHeaven
             {
                 search = tb_search.Text;
 
-                
-                query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
-            "FROM products p " +
-            "LEFT JOIN categories c ON p.category = c.id_category " +
-            "LEFT JOIN brands b ON p.brand = b.id_brand " +
-            "WHERE status = 'true' AND(p.name LIKE '%" + search + "%' OR p.product_code LIKE '%" + search + "%')";
-                
+
+                query = "SELECT p.id_products, p.quantity, p.name, p.product_code AS codigoArtigo, p.price, " +
+    "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, " +
+    "p.description, p.status, c.category_name AS category, b.brand_name AS brand " +
+    "FROM products p " +
+    "LEFT JOIN categories c ON p.category = c.id_category " +
+    "LEFT JOIN brands b ON p.brand = b.id_brand " +
+    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+    "WHERE p.status = 'true' AND (p.name LIKE '%" + search + "%' OR p.product_code LIKE '%" + search + "%')";
+
+
                 BindDataIntoRepeater(query);
 
 
             }
         }
 
-        
+        private void RemovePromotion(int productId)
+        {
+            // Crie uma conexão com o banco de dados.
+            using (SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["techeavenConnectionString"].ToString()))
+            {
+                // Abra a conexão.
+                con.Open();
+
+                // Consulta SQL para excluir a promoção do produto.
+                string queryRemovePromo = "DELETE FROM promotions WHERE productID = @productId";
+
+                // Crie e configure o comando SQL.
+                using (SqlCommand cmd = new SqlCommand(queryRemovePromo, con))
+                {
+                    cmd.Parameters.AddWithValue("@productId", productId);
+
+                    // Execute a consulta.
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    // Verifique se a consulta foi executada com sucesso.
+                    if (rowsAffected > 0)
+                    {
+                        // A promoção foi removida com sucesso.
+                    }
+                    else
+                    {
+                        // Não foi possível remover a promoção.
+                        // Você pode adicionar um tratamento de erro ou log aqui.
+                    }
+                }
+            }
+        }
+
+        protected void lb_remove_promo_Command(object sender, CommandEventArgs e)
+        {
+            if (e.CommandName == "RemovePromo")
+            {
+                int productId = Convert.ToInt32(e.CommandArgument);
+
+                // Lógica para remover a promoção do produto
+                RemovePromotion(productId);
+
+                // Atualizar a interface do usuário se necessário
+                BindDataIntoRepeater(query);
+            }
+        }
+
+        protected bool HasPromo(object discountedPrice)
+        {
+            // Verifique se o preço descontado não é nulo
+            return discountedPrice != DBNull.Value && Convert.ToDecimal(discountedPrice) > 0;
+        }
+
 
 
 
