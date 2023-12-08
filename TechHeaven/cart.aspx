@@ -80,8 +80,8 @@
                                                         <td class="product-col">
                                                             <div class="product">
                                                                 <figure class="product-media">
-                                                                    <a href="'<%# "productpage.aspx?productId=" + Eval("id_products") %>'">
-                                                                        <img src='data:<%# Eval("contenttype") %>;base64,<%# Convert.ToBase64String((byte[])Eval("image")) %>' alt='<%# Eval("name") %>' class="img-fluid">
+                                                                    <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
+                                                                        <img src='data:<%# Eval("contenttype") %>;base64,<%# Convert.ToBase64String((byte[])Eval("image")) %>' alt='<%# Eval("name") %>' class="img-fluid" style="width: 60px; height: 68.06px;">
                                                                     </a>
                                                                 </figure>
 
@@ -92,7 +92,14 @@
                                                             </div>
                                                             <!-- End .product -->
                                                         </td>
-                                                        <td class="price-col"><%# Eval("price") %> €</td>
+
+                                                        <td class="price-col">
+                                                            <div class="product-price">
+                                                                <asp:Label ID="lbl_productPrice" runat="server"></asp:Label>
+                                                                <asp:Label ID="lblDiscountedPrice" runat="server" Visible="false"></asp:Label>
+                                                            </div>
+                                                        </td>
+
                                                         <td class="quantity-col">
                                                             <div class="cart-product-quantity">
                                                                 <asp:LinkButton ID="lb_diminuir" runat="server" class="quantity-button decrement-button" CommandName="Diminuir" CommandArgument='<%# Eval("id_products") + "," + Eval("id_cart") %>' OnCommand="lb_diminuir_Command">-</asp:LinkButton>

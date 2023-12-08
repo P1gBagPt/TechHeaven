@@ -17,14 +17,14 @@ namespace TechHeaven
 {
     public partial class billing : System.Web.UI.Page
     {
-
+        public static decimal totalPrice;
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
         private int _pageSize = 12;
         private DataTable _dtOriginal;
 
         public static int id_user, nif;
-        public static decimal total = 0, totalaux, userBalance;
+        public static decimal totalaux, userBalance;
         public static string query = "";
         public static bool proceed = false;
 
@@ -39,30 +39,46 @@ namespace TechHeaven
             }
             else
             {
+                totalPrice = 0;
+                totalaux = 0;
                 id_user = Convert.ToInt32(Session["UserId"].ToString());
                 email_user = Session["user_email"].ToString();
 
                 try
                 {
-                    SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
+                    //SqlConnection myConn = new SqlConnection(ConfigurationManager.ConnectionStrings["TecHeavenConnectionString"].ConnectionString);
 
-                    SqlCommand cmd = new SqlCommand();
+                    //SqlCommand cmd = new SqlCommand();
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "cart_total";
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.CommandText = "cart_total";
 
-                    cmd.Connection = myConn;
+                    //cmd.Connection = myConn;
 
-                    cmd.Parameters.AddWithValue("@userId", id_user);
+                    //cmd.Parameters.AddWithValue("@userId", id_user);
 
-                    SqlParameter totalRetorno = new SqlParameter("@total", SqlDbType.Float);
-                    totalRetorno.Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add(totalRetorno);
+                    //SqlParameter totalRetorno = new SqlParameter("@total", SqlDbType.Float);
+                    //totalRetorno.Direction = ParameterDirection.Output;
+                    //cmd.Parameters.Add(totalRetorno);
 
-                    myConn.Open();
-                    cmd.ExecuteNonQuery();
-                    myConn.Close();
-                    decimal totali = (cmd.Parameters["@total"].Value != DBNull.Value) ? Convert.ToDecimal(cmd.Parameters["@total"].Value) : 0;
+                    //myConn.Open();
+                    //cmd.ExecuteNonQuery();
+                    //myConn.Close();
+                    //decimal totali = (cmd.Parameters["@total"].Value != DBNull.Value) ? Convert.ToDecimal(cmd.Parameters["@total"].Value) : 0;
+
+         
+                    //ltTotal.Text = totali.ToString();
+                    //totalPrice = totali;
+                    //totalaux = totali;
+
+                    query = "SELECT c.id_cart, c.quantity, p.*, " +
+                        "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.quantity as quantidade " +
+                    "FROM cart c " +
+                    "INNER JOIN products p ON c.productID = p.id_products " +
+                    "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+                    "WHERE c.userID = " + id_user + " AND c.status = 1";
+
+                    BindDataIntoRepeater(query);
 
                     if (Session["shipping"] != null)
                     {
@@ -74,38 +90,19 @@ namespace TechHeaven
                         }
                         else if (shippingValue == "10") // Ajuste esses valores com base nos seus custos de envio reais
                         {
-                            totali += 10;
+                            totalPrice += 10;
                             lbShipping.Text = "Standard";
+                            ltTotal.Text = totalPrice.ToString("N2");
                         }
                         else if (shippingValue == "20")
                         {
-                            totali += 20;
+                            totalPrice += 20;
                             lbShipping.Text = "Express";
-
+                            ltTotal.Text = totalPrice.ToString("N2");
                         }
-
+                        totalaux = totalPrice;
 
                     }
-                    else
-                    {
-                        // Tratar o caso em que a chave "shipping" não existe na sessão
-                        // Por exemplo, você pode definir um valor padrão ou gerar um erro adequado.
-                    }
-
-
-
-                    ltTotal.Text = totali.ToString();
-                    total = totali;
-                    totalaux = totali;
-
-                    query = "SELECT c.id_cart, c.quantity, p.*, p.quantity as quantidade " +
-                    "FROM cart c " +
-                    "INNER JOIN products p ON c.productID = p.id_products " +
-                    "WHERE c.userID = " + id_user + " AND c.status = 1";
-
-                    BindDataIntoRepeater(query);
-
-
 
                     try
                     {
@@ -241,8 +238,8 @@ namespace TechHeaven
             {
                 if (CheckBox1.Checked)
                 {
-                    total -= userBalance;
-                    ltTotal.Text = total.ToString();
+                    totalPrice -= userBalance;
+                    ltTotal.Text = totalPrice.ToString("N2");
                 }
             }
 
@@ -265,14 +262,14 @@ namespace TechHeaven
         {
             if (CheckBox1.Checked)
             {
-                total -= userBalance;
+                totalPrice -= userBalance;
 
-                ltTotal.Text = total.ToString();
+                ltTotal.Text = totalPrice.ToString("N2");
             }
             else
             {
-                total = totalaux;
-                ltTotal.Text = total.ToString();
+                totalPrice = totalaux;
+                ltTotal.Text = totalPrice.ToString("N2");
 
             }
         }
@@ -281,9 +278,9 @@ namespace TechHeaven
         {
             if (CheckBox1.Checked)
             {
-                total -= userBalance;
+                totalPrice -= userBalance;
             }
-            ltTotal.Text = total.ToString();
+            ltTotal.Text = totalPrice.ToString("N2");
 
             if (RadioButtonList1.SelectedValue == "2")
             {
@@ -362,9 +359,9 @@ namespace TechHeaven
                 cmd.CommandText = "order_proceed";
 
                 cmd.Connection = myConn;
-                Console.WriteLine(total);
+                Console.WriteLine(totalPrice);
                 cmd.Parameters.AddWithValue("@userId", id_user);
-                cmd.Parameters.AddWithValue("@total", total);
+                cmd.Parameters.AddWithValue("@total", totalPrice);
                 cmd.Parameters.AddWithValue("@data_encomenda", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 cmd.Parameters.AddWithValue("@pagamento", methodPayment);
                 cmd.Parameters.AddWithValue("@card", selectedValueCards);
@@ -493,7 +490,7 @@ namespace TechHeaven
                         html += $"<img src=\"data:{produto.ContentTypeImagem};base64,{Convert.ToBase64String(produto.Imagem)}\" style=\"max-width: 100px; margin-right: 10px; border: 1px solid black;\" />";
 
 
-                        html += string.Format("<p>Product Name: <b>{0}</b> | Brand: <b>{1}</b> | Product Code: <b>{2}</b> <br/> Stock: <b>{3}</b> | Total: <b>€{4:F2}</b></p>",
+                        html += string.Format("<p>Product Name: <b>{0}</b> | Brand: <b>{1}</b> | Product Code: <b>{2}</b> <br/> Quantity: <b>{3}</b> | Total: <b>€{4:F2}</b></p>",
                             produto.NomeProduto, produto.Marca, produto.NumeroArtigo, produto.Quantidade, produto.PrecoTotal);
 
                         html += "<hr style=\"border: 1px solid #ddd;\"/>";
@@ -505,14 +502,14 @@ namespace TechHeaven
                     if (CheckBox1.Checked)
                     {
 
-                        total -= userBalance;
-                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+                        totalPrice -= userBalance;
+                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", totalPrice, 1);
                         html += string.Format("<h3>Balanced Used: €{0:F2}</h3>", userBalance);
 
                     }
                     else
                     {
-                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", total, 1);
+                        html += string.Format("<h3>Total order: €{0:F2}</h3><p> Payment Method: <b>{1}</b></p>", totalPrice, 1);
                     }
 
 
@@ -548,6 +545,10 @@ namespace TechHeaven
     SELECT
     p.name AS NomeProduto,
     p.price AS PrecoArtigo,
+    CASE
+        WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100)
+            ELSE NULL
+    END AS discounted_price,
     c.quantity AS Quantidade,
     m.brand_name AS Marca,
     p.product_code AS NumeroArtigo,
@@ -557,6 +558,7 @@ namespace TechHeaven
 FROM cart c
 INNER JOIN products p ON c.productID = p.id_products
 INNER JOIN brands m ON p.brand = m.id_brand
+LEFT JOIN promotions pr ON p.id_products = pr.productID
 WHERE c.userID = @id_user
     AND c.orderID = @encomenda_id";
 
@@ -578,7 +580,8 @@ WHERE c.userID = @id_user
                                 NumeroArtigo = reader["NumeroArtigo"].ToString(),
                                 PrecoTotal = Convert.ToDecimal(reader["PrecoTotal"]),
                                 Imagem = reader["ImagemProduto"] as byte[],
-                                ContentTypeImagem = reader["ContentTypeImagem"].ToString()
+                                ContentTypeImagem = reader["ContentTypeImagem"].ToString(),
+                                discounted_price = DBNull.Value.Equals(reader["discounted_price"]) ? 0 : Convert.ToDecimal(reader["discounted_price"]),
                             };
                             produtos.Add(produto);
                         }
@@ -591,6 +594,44 @@ WHERE c.userID = @id_user
             return produtos;
         }
 
+        
+        protected void Repeater1_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                DataRowView drv = e.Item.DataItem as DataRowView;
+
+                // Retrieve controls from the RepeaterItem
+                Label lblPreco = (Label)e.Item.FindControl("lbl_preco");
+                Label lblDiscountedPrice = (Label)e.Item.FindControl("lblDiscountedPrice");
+                Label lblTotalPrice = (Label)e.Item.FindControl("lblTotalPrice");
+
+                // Assuming "price" and "discounted_price" are columns in your DataTable
+                decimal regularPrice = Convert.ToDecimal(drv["price"]);
+                decimal discountedPrice = DBNull.Value.Equals(drv["discounted_price"]) ? 0 : Convert.ToDecimal(drv["discounted_price"]);
+
+                // Display regular price
+                lblPreco.Text = string.Format("{0:N2} €", regularPrice);
+
+                // Display discounted price if available
+                if (discountedPrice > 0)
+                {
+                    lblPreco.CssClass = "old-price"; // Optional: Apply a CSS class for styling
+                    lblDiscountedPrice.Visible = true;
+                    lblDiscountedPrice.Text = string.Format("{0:N2} €", discountedPrice);
+                }
+
+                // Assuming "quantity" is a column in your DataTable
+                int quantity = Convert.ToInt32(drv["quantity"]);
+                totalPrice += (discountedPrice > 0) ? discountedPrice * quantity : regularPrice * quantity;
+
+                // Display the total price
+                ltTotal.Text = string.Format("{0:N2} €", totalPrice);
+            }
+        }
+
+
+
         public class ProdutoCarrinho
         {
             public string NomeProduto { get; set; }
@@ -601,6 +642,7 @@ WHERE c.userID = @id_user
             public decimal PrecoTotal { get; set; }
             public byte[] Imagem { get; set; }
             public string ContentTypeImagem { get; set; }
+            public decimal discounted_price { get; set; }
         }
 
 

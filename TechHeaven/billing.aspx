@@ -105,20 +105,25 @@
                                 <th>Total</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            <asp:Repeater ID="Repeater1" runat="server">
+                            <asp:Repeater ID="Repeater1" runat="server" OnItemDataBound="Repeater1_ItemDataBound">
                                 <ItemTemplate>
                                     <tr>
                                         <td><a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'><%# Eval("name") %></a></td>
-                                        <td><%# Eval("price") %> €</td>
-
+                                        <td>
+                                            <div class="product-price">
+                                                <asp:Label ID="lbl_preco" runat="server"></asp:Label>
+                                                <asp:Label ID="lblDiscountedPrice" runat="server" Visible="false"></asp:Label>
+                                            </div>
+                                        </td>
+                                        <td colspan="2">x <%# Eval("quantity") %>
+</td>
                                     </tr>
+                                    
+                                        
+                                    
                                 </ItemTemplate>
                             </asp:Repeater>
-
-
-
                             <tr>
                                 <td>Shipping:</td>
                                 <td>
@@ -128,11 +133,13 @@
                             <tr class="summary-total">
                                 <td>Total:</td>
                                 <td>
-                                    <asp:Literal ID="ltTotal" runat="server"></asp:Literal>€</td>
+                                    <asp:Literal ID="ltTotal" runat="server"></asp:Literal>€
+                                </td>
                             </tr>
                             <!-- End .summary-total -->
                         </tbody>
                     </table>
+
                     <!-- End .table table-summary -->
 
                     <div class="accordion-summary" id="accordion-payment">
