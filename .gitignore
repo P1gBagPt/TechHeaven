@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /TechHeaven/PDFS
+/TechHeaven/Reports/SummaryReport.pdf
+/TechHeaven/Reports/SummaryReport.pdf
