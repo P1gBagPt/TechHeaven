@@ -73,18 +73,40 @@ namespace TechHeaven
                             }
 
 
+                            //object respostaBirthdateValue = utilizador.birthdate;
+                            //DateTime respostaBirthdate;
+
+                            //if (respostaBirthdateValue != DBNull.Value)
+                            //{
+                            //    respostaBirthdate = Convert.ToDateTime(respostaBirthdateValue);
+                            //    tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd"); // Ajuste o formato conforme necessário
+                            //}
+                            //else
+                            //{
+                            //    // Lida com o caso em que o valor do banco de dados é nulo
+                            //    tb_birthdate.Text = string.Empty; // ou outra ação apropriada para o seu aplicativo
+                            //}
+
+
                             object respostaBirthdateValue = utilizador.birthdate;
                             DateTime respostaBirthdate;
 
-                            if (respostaBirthdateValue != DBNull.Value)
+                            if (respostaBirthdateValue != DBNull.Value && respostaBirthdateValue is DateTime)
                             {
-                                respostaBirthdate = Convert.ToDateTime(respostaBirthdateValue);
-                                tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd"); // Ajuste o formato conforme necessário
+                                respostaBirthdate = (DateTime)respostaBirthdateValue;
+
+                                if (respostaBirthdate != DateTime.MinValue)
+                                {
+                                    tb_birthdate.Text = respostaBirthdate.ToString("yyyy-MM-dd");
+                                }
+                                else
+                                {
+                                    tb_birthdate.Text = string.Empty;
+                                }
                             }
                             else
                             {
-                                // Lida com o caso em que o valor do banco de dados é nulo
-                                tb_birthdate.Text = string.Empty; // ou outra ação apropriada para o seu aplicativo
+                                tb_birthdate.Text = string.Empty; // Deixa a TextBox vazia quando o valor for DBNull ou não for DateTime
                             }
 
 
@@ -178,7 +200,14 @@ namespace TechHeaven
             myCommand.Parameters.AddWithValue("@email", tb_email.Text);
             myCommand.Parameters.AddWithValue("@username", tb_username.Text);
             myCommand.Parameters.AddWithValue("@phone", tb_phone.Text);
-            myCommand.Parameters.AddWithValue("@nif", Convert.ToInt32(tb_nif.Text));
+            if (!string.IsNullOrEmpty(tb_nif.Text))
+            {
+                myCommand.Parameters.AddWithValue("@nif", Convert.ToInt32(tb_nif.Text));
+            }
+            else
+            {
+                myCommand.Parameters.AddWithValue("@nif", 0);
+            }
             if (DateTime.TryParse(tb_birthdate.Text, out DateTime dateValue))
             {
                 // O valor é uma data válida, então adiciona ao parâmetro

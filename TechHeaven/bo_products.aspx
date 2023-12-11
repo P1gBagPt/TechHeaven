@@ -76,7 +76,7 @@
                                                 <td scope="row"><%# Eval("name")%></td>
                                                 <td scope="row"><%# Eval("codigoArtigo")%></td>
                                                 <td scope="row"><%# Eval("price")%> €</td>
-                                                <td scope="row"><%# Eval("description")%></td>
+                                                <td scope="row"><%# LimitDescription(Eval("description"), 50) %></td>
                                                 <td scope="row"><%# Eval("category")%></td>
                                                 <td scope="row">
                                                     <asp:LinkButton ID="edit_product" runat="server" OnCommand="edit_product_Command" CommandName="Edit" CommandArgument='<%# Eval("id_products") %>'>

@@ -69,7 +69,7 @@
 
                             <asp:Label ID="lbl_erro" runat="server"></asp:Label>
 
-                            <asp:Button ID="btn_editar" runat="server" class="btn btn-primary" Text="Editar Produto" OnClick="btn_editar_Click" />
+                            <asp:Button ID="btn_editar" runat="server" class="btn btn-primary" Text="Edit product" OnClick="btn_editar_Click" />
 
 
                         </div>

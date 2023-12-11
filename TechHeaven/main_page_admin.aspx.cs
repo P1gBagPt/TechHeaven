@@ -48,7 +48,7 @@ namespace TechHeaven
                         if (result != null)
                         {
                             // Exibir o total de vendas na página
-                            h6_TotalVendas.InnerText = $"{result:C}";
+                            h6_TotalVendas.InnerText = $"{result:N2} €";
                         }
                         else
                         {

@@ -16,7 +16,7 @@ namespace TechHeaven
     {
         readonly PagedDataSource _pgsource = new PagedDataSource();
         int _firstIndex, _lastIndex;
-        private int _pageSize = 9;
+        private int _pageSize = 6;
         private DataTable _dtOriginal;
         public static string query = @"
     SELECT
@@ -219,6 +219,16 @@ namespace TechHeaven
 
             }
         }
+        protected string LimitarDescricao(string descricao, int tamanhoMaximo)
+        {
+            if (descricao.Length > tamanhoMaximo)
+            {
+                // Limita a descrição ao tamanho máximo e adiciona "..." no final
+                return descricao.Substring(0, tamanhoMaximo) + "...";
+            }
+
+            return descricao;
+        }
 
         static DataTable GetDataFromDb(string query)
         {
@@ -377,18 +387,28 @@ namespace TechHeaven
             }
         }
 
+        public string LimitDescription(object description, int maxLength)
+        {
+            if (description == null)
+                return string.Empty;
 
+            string desc = description.ToString();
+            if (desc.Length > maxLength)
+                return desc.Substring(0, maxLength) + "...";
+            else
+                return desc;
+        }
         protected string FormatPrice(object price, object discountedPrice)
         {
             decimal decimalValue;
 
             if (discountedPrice != null && decimal.TryParse(discountedPrice.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else if (price != null && decimal.TryParse(price.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else
             {
@@ -675,7 +695,8 @@ namespace TechHeaven
 
                 BindDataIntoRepeater(query);
 
-            }else if(brandId != 0)
+            }
+            else if (brandId != 0)
             {
                 query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
 "CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
@@ -683,6 +704,15 @@ namespace TechHeaven
 "LEFT JOIN categories c ON p.category = c.id_category " +
 "LEFT JOIN promotions pr ON p.id_products = pr.productID " +
 "WHERE p.status = 'true' AND p.quantity > 0 AND p.brand = " + brandId + " " + orderByClause;
+            }
+            else
+            {
+                query = "SELECT p.id_products, p.name, p.description, p.quantity, c.category_name as category, p.brand, p.status, p.product_code AS codigoArtigo, p.price, " +
+"CASE WHEN pr.discount_percent IS NOT NULL AND pr.status = 1 THEN p.price - (p.price * pr.discount_percent / 100) ELSE NULL END AS discounted_price, p.image, p.contenttype, p.creation_date " +
+"FROM products p " +
+"LEFT JOIN categories c ON p.category = c.id_category " +
+"LEFT JOIN promotions pr ON p.id_products = pr.productID " +
+"WHERE p.status = 'true' AND p.quantity > 0 "+ orderByClause;
             }
 
 

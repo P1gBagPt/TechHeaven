@@ -15,6 +15,11 @@ namespace TechHeaven
             {
                 Response.Redirect("login.aspx");
             }
+            else
+            {
+                lbl_username.Text = Session["user_username"].ToString();
+                lbl_username2.Text = Session["user_username"].ToString();
+            }
         }
 
        

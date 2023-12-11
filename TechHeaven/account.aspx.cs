@@ -1035,7 +1035,7 @@ namespace TechHeaven
                         }
 
                         // Agora, define o lblPrice, independentemente de haver desconto ou não
-                        lblPrice.Text = string.Format("{0:C}", originalPrice);
+                        lblPrice.Text = string.Format("€{0:N2}", originalPrice);
                     }
                 }
             }
@@ -1049,11 +1049,11 @@ namespace TechHeaven
 
             if (discountedPrice != null && decimal.TryParse(discountedPrice.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else if (price != null && decimal.TryParse(price.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else
             {

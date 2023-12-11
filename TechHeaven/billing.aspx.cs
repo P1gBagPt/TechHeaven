@@ -200,7 +200,7 @@ namespace TechHeaven
 
                             con.Close();
                         }
-                        CheckBox1.Text = $"User Balance: {userBalance:C2}";  // O formato C2 exibe o saldo como moeda com duas casas decimais.
+                        CheckBox1.Text = $"User Balance: {userBalance:N2} €";  // O formato C2 exibe o saldo como moeda com duas casas decimais.
                         Console.WriteLine(nif);
                         if (userBalance == 0)
                         {

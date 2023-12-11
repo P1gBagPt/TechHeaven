@@ -164,7 +164,7 @@
                                 <div class="product product-2">
                                     <figure class="product-media">
                                         <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
-                                            <asp:Image ID="img_produto_carrousel" runat="server" CssClass="product-image" Style="width: 279.41px; height: 279.41px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
+                                            <asp:Image ID="img_produto_carrousel" runat="server" CssClass="product-image" Style="width: 279.41px; height: 185px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
                                         </a>
                                     </figure>
                                     <!-- End .product-media -->
@@ -180,10 +180,10 @@
                                         <!-- End .product-title -->
                                         <div class="product-price">
                                             <%--PRICE--%>
-                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("{0:C}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
+                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("€{0:N2}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
 
                                             <asp:Label ID="lblDiscountedPrice" runat="server" Visible='<%# ShowDiscountedPrice(Eval("discounted_price")) %>'>
-                        <%# string.Format("{0:C}", Eval("discounted_price")) %>
+                        <%# string.Format("€{0:N2}", Eval("discounted_price")) %>
                                             </asp:Label>
                                         </div>
                                         <!-- End .product-price -->
@@ -291,7 +291,7 @@
                                 <div class="product product-2">
                                     <figure class="product-media">
                                         <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
-                                            <asp:Image ID="img_produto" runat="server" CssClass="product-image" Style="width: 279.41px; height: 279.41px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
+                                            <asp:Image ID="img_produto" runat="server" CssClass="product-image" Style="width: 279.41px; height: 250px;" ImageUrl='<%# GetBase64Image(Eval("image"), Eval("contenttype")) %>' />
                                         </a>
 
 
@@ -313,10 +313,10 @@
                                             <!-- End .product-title -->
                                         <div class="product-price">
                                             <%--PRICE--%>
-                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("{0:C}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
+                                            <asp:Label ID="lblPrice" runat="server" Text='<%# string.Format("€{0:N2}", Eval("price")) %>' CssClass='<%# ShowDiscountedPrice(Eval("discounted_price")) ? "old-price" : "" %>'></asp:Label>
 
                                             <asp:Label ID="lblDiscountedPrice" runat="server" Visible='<%# ShowDiscountedPrice(Eval("discounted_price")) %>'>
-        <%# string.Format("{0:C}", Eval("discounted_price")) %>
+        <%# string.Format("€{0:N2}", Eval("discounted_price")) %>
                                             </asp:Label>
                                         </div>
                                         <!-- End .product-price -->

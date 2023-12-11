@@ -131,9 +131,9 @@
                                         <h2 class="section-title">
 
 
-                                            <asp:Button ID="btn_esvaziar" runat="server" class="btn btn-outline-dark-2" Text="Esvaziar Carrinho" OnClick="btn_esvaziar_Click" />
+                                            <asp:Button ID="btn_esvaziar" runat="server" class="btn btn-outline-dark-2" Text="Empty Cart" OnClick="btn_esvaziar_Click" />
 
-                                            <asp:Button ID="btn_continuar_comprar" runat="server" class="btn btn-outline-dark-2" Text="Continuar a comprar" OnClick="btn_continuar_comprar_Click" />
+                                            <asp:Button ID="btn_continuar_comprar" runat="server" class="btn btn-outline-dark-2" Text="Continue shopping" OnClick="btn_continuar_comprar_Click" />
                                         </a>
 
 

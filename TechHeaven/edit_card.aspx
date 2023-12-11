@@ -79,7 +79,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                                <asp:LinkButton ID="submit_card" class="btn btn-success btn-register btn-block btn-lg text-body" runat="server" OnClick="submit_card_Click">Edit Card <i class="fa-solid fa-plus"></i></asp:LinkButton>
+                                <asp:LinkButton ID="submit_card" class="btn btn-success btn-register btn-block btn-lg text-body" runat="server" OnClick="submit_card_Click" style="background-color: #4C89E9; border: 1px #4C89E9;">Edit Card <i class="fa-solid fa-plus"></i></asp:LinkButton>
                             </div>
 
 

@@ -119,7 +119,7 @@
                                           
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="expiration" ForeColor="Red" Display="Dynamic">
                                                 <span>
-                                                    <asp:Label ID="Label6" runat="server" Text="Please enter a cvv"></asp:Label>
+                                                    <asp:Label ID="Label6" runat="server" Text="Please enter a expiration date"></asp:Label>
                                                     <i class="fa-solid fa-circle-exclamation" style="color: #8c1818;"></i>
                                                 </span>
                                             </asp:RequiredFieldValidator>

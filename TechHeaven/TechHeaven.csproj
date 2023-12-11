@@ -15204,6 +15204,8 @@
     <Content Include="donecheckout.aspx" />
     <Content Include="edit_address.aspx" />
     <Content Include="edit_card.aspx" />
+    <Content Include="forgotpassword.aspx" />
+    <Content Include="inputnewpass.aspx" />
     <Content Include="lib\bootstrap\bootstrap.min.css" />
     <Content Include="lib\isotope\jquery.isotope.min.js" />
     <Content Include="lib\jquery.appear\jquery.appear.min.js" />
@@ -15410,6 +15412,20 @@
     </Compile>
     <Compile Include="edit_card.aspx.designer.cs">
       <DependentUpon>edit_card.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="forgotpassword.aspx.cs">
+      <DependentUpon>forgotpassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="forgotpassword.aspx.designer.cs">
+      <DependentUpon>forgotpassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="inputnewpass.aspx.cs">
+      <DependentUpon>inputnewpass.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="inputnewpass.aspx.designer.cs">
+      <DependentUpon>inputnewpass.aspx</DependentUpon>
     </Compile>
     <Compile Include="login.aspx.cs">
       <DependentUpon>login.aspx</DependentUpon>

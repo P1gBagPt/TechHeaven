@@ -146,7 +146,7 @@ namespace TechHeaven
 
         private void DisplayProductInfo(Product product)
         {
-            lb_current_price.Text = $"{product.Price:C}";
+            lb_current_price.Text = $"{product.Price:N2} €";
 
             // Get brand and category names
             string brandName = GetBrandName(product.Brand);
@@ -155,7 +155,7 @@ namespace TechHeaven
             // Display extended product information on the page
             lbl_product_info.Text = $"Product Name: {product.Name}<br/>" +
                 $"Description: {product.Description}<br/>" +
-                $"Price: {product.Price:C}<br/>" +
+                $"Price: {product.Price:N2} €<br/>" +
                 $"Quantity: {product.Quantity}<br/>" +
                 $"Category: {categoryName}<br/>" + // Display category name
                 $"Brand: {brandName}<br/>"; // Display brand name

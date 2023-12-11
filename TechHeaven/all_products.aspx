@@ -71,7 +71,7 @@
                                                                     <span class="product-label label-new">New</span>
                                                                 </asp:Panel>
                                                                 <a href='<%# "productpage.aspx?productId=" + Eval("id_products") %>'>
-                                                                    <asp:Image ID="img_produto" runat="server" class="product-image" Style="width: 202.75px; height: 202.75px" />
+                                                                    <asp:Image ID="img_produto" runat="server" class="product-image"/>
                                                                 </a>
                                                             </figure>
                                                             <!-- End .product-media -->
@@ -105,7 +105,7 @@
                                                                 <!-- End .product-title -->
 
                                                                 <div class="product-content">
-                                                                    <p><%# Eval("description")%> </p>
+                                                                    <p><%# LimitarDescricao(Eval("description").ToString(), 100) %></p>
                                                                 </div>
                                                                 <!-- End .product-content -->
 

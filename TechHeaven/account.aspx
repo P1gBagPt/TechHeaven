@@ -132,7 +132,7 @@
         .btn-save {
             appearance: none;
             backface-visibility: hidden;
-            background-color: #5cb85c;
+            background-color: #4C89E9;
             border-style: none;
             box-shadow: none;
             box-sizing: border-box;
@@ -518,7 +518,7 @@
                                                                     <br />
                                                                     <b>Price: </b>
                                                                     <div class="product-price">
-                                                                        <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "{0:C}") %></asp:Label>
+                                                                        <asp:Label ID="lbl_productPrice" runat="server"><%# Eval("ProductPrice", "€{0:N2}") %></asp:Label>
                                                                         <asp:Label ID="lblDiscountedPrice" runat="server" Visible="false"></asp:Label>
                                                                     </div>
                                                                 </div>

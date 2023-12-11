@@ -60,6 +60,17 @@ namespace TechHeaven
                 Response.Redirect($"bo_edit_product.aspx?productId={productId}");
             }
         }
+        public string LimitDescription(object description, int maxLength)
+        {
+            if (description == null)
+                return string.Empty;
+
+            string desc = description.ToString();
+            if (desc.Length > maxLength)
+                return desc.Substring(0, maxLength) + "...";
+            else
+                return desc;
+        }
 
         protected void lb_activate_deactivate_Command(object sender, CommandEventArgs e)
         {

@@ -74,7 +74,7 @@
                  <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                      <div class="card" style="border-radius: 15px; background-color: #f8f8f8;">
                          <div class="card-body p-5">
-                             <h2 class="text-uppercase text-center mb-5">Add address <i class="fa-regular fa-house"></i></h2>
+                             <h2 class="text-uppercase text-center mb-5">Edit address <i class="fa-regular fa-house"></i></h2>
 
                              <div class="form-group">
                                  <h5>Full name (First and Last)</h5>

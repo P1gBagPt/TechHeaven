@@ -281,11 +281,11 @@ namespace TechHeaven
 
             if (discountedPrice != null && decimal.TryParse(discountedPrice.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else if (price != null && decimal.TryParse(price.ToString(), out decimalValue))
             {
-                return string.Format("{0:C}", decimalValue);
+                return string.Format("€{0:N2}", decimalValue);
             }
             else
             {
